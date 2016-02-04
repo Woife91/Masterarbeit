@@ -42,7 +42,11 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+<<<<<<< HEAD
 # Latex Files
+=======
+# Latex files
+>>>>>>> origin/master
 *.*~ 
 *.aux 
 *.log 
@@ -70,7 +74,15 @@ Temporary Items
 *.tps 
 *blx.bib 
 *.run.xml
+<<<<<<< HEAD
 *.lof
 *.lot
 *.pdf
 *.synctex.gz
+=======
+*.pdf
+*.synctex.gz
+*.lof
+*.lot
+*.bib.bak
+>>>>>>> origin/master
