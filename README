@@ -1,0 +1,47 @@
+StudDipl - LaTex Templates zum Erstellen von Studien- und Diplomarbeiten
+am Lehrstuhl fuer Graphische Datenverarbeitung
+
+1.0  08.01.2003  cnvogelg
+
+1. Einrichten
+-------------
+
+Einfach das gesamte Verzeichnis in das eigene Projektverzeichnis kopieren
+und loslegen:
+
+ cd ~
+ mkdir DA
+ cd DA
+ cp -r ~gdv/Templates/StudDipl/* .
+ make
+
+2. Anpassen
+-----------
+
+- In "Deckblatt.tex" und "Arbeit.tex" den eigenen Namen und den Titel der
+Arbeit u. ae. Daten eintragen
+
+- In "Literatur.bib" die Literaturliste eintragen
+
+- Der eigentliche Text wird in "chapters" und "appendices" abgelegt. Fuer jedes
+Kapitel gibt es eine eigene Datei: c1.tex, c2.tex... a1.tex, a2.tex....
+Die Dateien werden automatisch
+
+- Bilder werden als PNG in "pictures" abgelegt. Sie koennen mit
+  \cvPic[Breite]{FileNameOhneEndung}{Titel des Bildes}
+  eingebunden und mit
+  \ref{FileNameOhneEndung} referenziert werden.
+
+- XFig Diagramme werden als *.fig in "figures" abgelegt. Sie koennen mit
+  \cvFig{FileNameOhneEndung}{Titel des Diagramms}
+  eingebunden werden. Referenzierung analog.
+
+- GNU Plots liegen unter "plots". Einbinden mit:
+  \cvPlot[Breite]{FileNameOhneEndung}{Titel des Plots}
+
+- Source Code kann mit \begin{cvSrcBox} ... \end{cvSrcBox} integriert werden
+
+- Siehe Beispiele in den Dateien!!
+
+- Hilfe zum Makesystem: "make help" aufrufen!
+

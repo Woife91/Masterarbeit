@@ -1,0 +1,237 @@
+% Arbeit.tex
+% LaTeX-Hauptdatei fuer Studien/Diplomarbeiten am IMMD 9
+% geschrieben von Wolfgang Heidrich <wgheidri@immd9.informatik.uni-erlangen.de>
+% erweitert von Christian Vogelgsang <cnvogelg@immd9.informatik.uni-erlangen.de>
+% benoetigt LaTeX 2e (z.B. in teTeX)
+
+% --- Style + Optionen ---
+% Font: 11pt bevorzugt, 10pt fuer besonders lange Arbeiten.
+%       12pt nur in Ausnahmefaellen.
+\documentclass[11pt, twoside, openright]{studdipl} 
+
+% --- Paketauswahlt ---
+% a4wide: breites Papierformat
+% german: Deutsche Ueberschriften
+% epsfig: figures mit EPS Bilder
+\usepackage{a4wide,german}
+\usepackage{graphicx}
+\usepackage{color}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage[german]{babel} %english language support
+\usepackage{a4wide} % enlarges the A4 printing area
+\usepackage{abbrevs} % defines abbreviation macros
+\usepackage{amsmath} % mathematic formulas
+\usepackage{amssymb} % mathematic special characters
+\usepackage{dsfont}  % double stroke font (e.g. for mathematical sets)
+\usepackage{ifthen}
+\usepackage{float} % 3 different styles of float environments (tables or figures): plain, boxed and ruled
+\usepackage{color} % displaying colors
+\definecolor{mygray}{rgb}{0.5,.5,.5} % color define
+\usepackage[absolute]{textpos} % absolute positioning of text
+\usepackage[amssymb,thinqspace]{SIunits} % formatting support for the Systeme International d?Unites (SI)
+\usepackage[printonlyused]{acronym} % management of acronyms and acronym lists (only used acronyms are printed in the list)
+\usepackage{listings}  % embed listings (must be included before the package algorithm!
+\usepackage{fancyhdr}% for funny headlines and footers
+\usepackage{multirow} % tune tables
+\usepackage[hang,small,bf]{caption} % smaller captions
+\usepackage{vmargin} % pageaylout - borders
+\usepackage{setspace} % Zeilenabstände..
+\usepackage{titlesec} % formatting of sections etc.
+\usepackage[colorlinks=true,
+            citecolor=black,
+            linkcolor=black,   % color of hyperref links
+            urlcolor=black,       % color of page of \url{...}
+            breaklinks=true    % break links if exceeding a single line
+]{hyperref}
+\usepackage[numbers]{natbib}
+\usepackage{natbib}
+\usepackage{engord} %english ordered numbers
+\usepackage{soul}
+\usepackage{captcont}
+
+\pdfcompresslevel=0
+\pdfoutput=1
+\pdfcatalog{ /PageMode   /UseOutlines}
+
+\usepackage[absolute]{textpos}
+\usepackage{pdfpages}
+\usepackage{csvsimple}
+
+
+\newcommand{\citeeig}[1]{\citeauthor{#1} \cite{#1}}
+\newcommand{\trade}{\textsuperscript{\textregistered}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --- CV Config: ---
+
+% --- weitere Pakete ---
+
+% inputenc: direkte Eingabe von Umlauten erlaubt!
+\usepackage[isolatin]{inputenc}
+% huebsche Rahmen fuer Sourcecodebloecke
+\usepackage{fancybox}
+% erlaubt innerhalb eines Figure blocks mehrere Subfigures
+\usepackage{subfig}  % urspruenglich subfigure
+% verwende PostScript-Fonts
+%\usepackage{pslatex}
+\usepackage{times}
+%\usepackage{dfadobe}           % ditto
+
+% --- neue Environments ---
+
+% \begin{cvSrcBox}.....\end{cvSrcBox} 
+% Dies erzeugt eine Verbatim-Box mit einem Rahmen drumherum.
+% Sie ist gut fuer Quelltextausschnitte geeignet!
+\newenvironment{cvSrcBox}%
+{\VerbatimEnvironment \begin{Sbox}\begin{minipage}{15cm}\begin{Verbatim}}%
+{\end{Verbatim}\end{minipage}\end{Sbox}\setlength{\fboxsep}{3mm}\fbox{\TheSbox}}
+
+% --- neue Kommandos ---
+
+% \cvFig <file> <caption>
+% Erzeugt eine Figure Umgebung mit einer xfig-Darstellung
+% Die .fig Datei muss im Verzeichnis "figures" liegen
+% Es wird automatisch ein Label mit dem Namen der Date erzeugt!
+% Den Dateinamen ohne Endung .fig angeben!
+\newcommand{\cvFig}[2]{\begin{figure}\begin{center}\input{figures/#1.tex}\end{center}\caption{\label{#1}#2}\end{figure}}
+
+% \cvPic [width] <file> <caption>
+% Erzeugt analog wie cvFig eine figure, doch diesmal mit einem
+% Bild. Das Bild wird als PNG Datei in "pictures" abgelegt und
+% dort automatisch nach EPS konvertiert.
+\newcommand{\cvPic}[3][7cm]{\begin{figure}\begin{center}\includegraphics[width=#1]{pictures/#2.ps}\end{center}\caption{\label{#2}#3}\end{figure}}
+
+% \cvPlot [width] <file> <caption>
+% Erzeugt analog wie cvFig eine figure, doch diesmal mit einem
+% Bild. Das Bild wird von GNUplot aus einer .plt-Datei erzeugt
+\newcommand{\cvPlot}[3][10cm]{\begin{figure}\begin{center}\includegraphics[width=#1]{plots/#2.ps}\end{center}\caption{\label{#2}#3}\end{figure}}
+
+% --- Optionen ---
+% steuert das Figure Placement auf den Seiten
+\renewcommand{\floatpagefraction}{0.8}
+
+% definiert die Kopfzeile
+\lhead[]{\fancyplain{}{\rightmark}}
+\rhead[{\fancyplain{}{\leftmark}}]{}
+
+% --- CV Config Ende ---
+
+% Ein wenig liberalere spacing rules
+\frenchspacing
+
+% Erlaube groessere Freiraeume zwischen Woertern.
+% (wichtig fuer Deutsche Texte wegen der grossen durchschnittlichen
+% Wortlaenge). Fuer Englische Arbeiten moeglicherweise weglassen.
+\sloppy
+
+% -------------- Konfiguration ------------------------------------------------
+% hier werden die individuellen Parameter der Arbeit festgelegt
+% -> ALSO AENDERN!
+
+% Typ der Arbeit auswaehlen:
+%\thesistype{Studienarbeit}
+\thesistype{Masterarbeit}
+
+% Titel der Arbeit
+\title{Farbnormalisierung für die automatische Klassifikation von Knochenmarkzellen}
+
+% AutorIn <- Dein Name :-)
+\author{Wolfgang Aichinger}
+
+% Dein Geburtsdatum
+\birthday{16. April 1991}
+
+% Dein Geburtsort:
+\birthplace{Deggendorf}
+
+% DeinE BetreuerIn:
+\supervisor{Dipl.-Inf. Sebastian Krappe}
+
+% Beginn der Arbeit
+\bdate{02. November 2015}
+
+% Abgabetermin
+\edate{02. Mai 2016}
+
+% -------------- Ende der Konfiguration ---------------------------------------
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{5}
+
+\begin{document}
+
+% DRAFT MODE
+% Erzeugt eine Ueberschrift mit dem Datum des Drafts. Muss fuer die
+% endgueltige Version natuerlich auskommentiert werden!!!
+%\draft
+
+% Der "Vorspann" hat roemische Seitennummern 
+\prepages
+
+% Damit wird die zweite Titelseite erstellt (die erste ist ja in einem
+% separaten File)
+\maketitle
+
+% eine Leerseite
+\vspace*{10cm} \newpage
+
+% Inhaltsverzeichnis
+\tableofcontents\newpage
+% Verzeichnis aller Zeichnungen - optional
+\listoffigures\newpage
+% Verzeichnis aller Tabellen - optional
+\listoftables\newpage
+
+% eine Leerseite
+\vspace*{10cm} \newpage
+
+% der eigentliche Text hat arabische Nummern
+\mainbody
+
+% sorgt dafuer, dass alle Eintraege der Literature.bib im 
+% Literaturverzeichnis aufgefuehrt werden
+\nocite{*}
+
+% ---------- Kapitel ---------
+% Die Datei Chapter.tex wird automatisch erzeugt!
+
+%\setlength{\parskip}{-0.5ex plus1ex}
+
+\newpage
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\include{chapters/Einleitung}
+\include{chapters/Grundlagen}
+\include{chapters/StandTechnik}
+\include{chapters/Material}
+\include{chapters/Ergebnisse}
+%\include{chapters/Diskussion}
+\include{chapters/Ausblick}
+%\include{chapters/Zusammenfasung}
+
+
+% ---------- Anhang ----------
+% Die Datei Appendix.tex wird automatisch erzeugt!
+
+%\begin{appendix}
+%\input{appendices/Anhang}
+%\end{appendix}
+
+% ----------------------------
+
+% Erzeugt das Literaturverzeichnis
+%\bibliographystyle{plain}
+%\bibliography{Literatur}
+\newpage
+\phantomsection \label{bibliography}
+\addcontentsline{toc}{chapter}{Literaturverzeichnis} 
+\bibliographystyle{plainnat} %numbers, order: alphabetical
+\bibliography{bib/quellen}
+
+% Erzeugt eine Seite mit der Erklaerung
+\declaration{nutzung}
+
+\end{document}
