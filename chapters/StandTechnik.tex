@@ -15,19 +15,90 @@ M_{a} = k_{M}M//
 S_{a} = k_{S}S
 \end{equation}
 $L_{a}$, $M_{a}$ und $S_{a}$ sind hierbei die angepassten Signale. $k_{L}$, $K_{M}$ und $k_{S}$ sind hingegen die unabhängigen Skalierungsfaktoren.
-Für die Bestimmung dieser Faktoren gibt es unterschiedliche Möglichkeiten. Zum einen können sie die Inversen des angenommenen Weißpunktes der Szene sein, zum anderen als Inverse des jeweils maximalen Werts des Kanals.
+%Für die Bestimmung dieser Faktoren gibt es unterschiedliche Möglichkeiten. Zum einen können sie die Inversen des angenommenen Weißpunktes der Szene sein, zum anderen als Inverse des jeweils maximalen Werts des Kanals.
+Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Im Kern wird davon ausgegangen, dass die durchschnittliche Reflektanz in einer Szene Grau entspricht. \color{red} Achtung dies ist ein wörtliches Zitat aus MA Bindl, abklären inwieweit zitierfähig \color{black} Variationen gibt es u.a. bei der Wahl von Grau. 
+Im einfachsten Fall können die Skalierungsfaktoren entsprechend \label{equ:grey_world} berechnet werden. Hierbei entspricht $m_{L1}$ dem Mittelwert des L-Kanals einer Referenzaufnahme, $m_{L2}$ dem Mittelwert des L-Kanals aus einer Testaufnahme, usw.  
+\begin{equation}\label{equ:grey_world}
+k_{L}L = fract{m_{L2}}{m_{L1}}//
+k_{M}M = fract{m_{M2}}{m_{M1}}//
+k_{S}S = fract{m_{S2}}{m_{S1}}
+\end{equation}
 
-Farbkonstanzalgorithmen
+Farbkonstanzmodelle treffen Annahmen über das Verhalten von reflektiertem Licht, was sie ungeeignet für die Mikroskopie macht, da hier transmittiertes Licht detektiert wird.
 
 
 \section[Farbnormalisierung in der Mikroskopie]{Farbnormalisierung in der Mikroskopie}\label{sec:mikroskopie_normalisierung}
+Für Farbnormalisierung im vorliegenden Anwendungsgebiet wird in der Regel der Ansatz verfolgt, ein Bild an ein gegebenes Referenzbild anzugleichen. 
+Während die Methoden in den Abschnitten \ref{sec:farbranking} und \ref{sec:color_deconvolution} eine Farbraumtransformation erfordern, benötigt das Farbranking (\ref{sec:farbranking}) keine Vorverarbeitungsschritte.
 
 \subsection{Farbranking}\label{sec:farbranking}
+Beim Farbranking werden zunächst die Intensitäten in allen Kanälen jeweils für das Eingangs- und Ausgangsbild sortiert. Anschließend werden für jedes Pixel zunächst die Positionen in den sortierten Listen ermittelt. Die Farbintensitäten bekommen am Ende die Werte zugewiesen, welche sich in den Listen des Referenzbildes an den gleichen Stellen befinden. Dieser Zusammenhang ist in Graphik \ref{fig:farbranking} für den Fall von Grauwertbildern mit Größe 3x3 dargestellt. Dabei entspricht Bild A dem Referenzbild und Bild B dem Eingangsbild. B' beschreibt das angepasste Ausgabebild. 
+
+\begin{figure}[h]
+\center
+\includegraphics[width = 0.9\textwidth]{pics/StandTechnik/Farbranking_Ablauf}
+\caption[Farbranking]{Links sind die beiden Eingangs- und Referenzbild dargestellt, in der Mitte die sortierten Listen und rechts das Ausgabebild. Die farbigen Pfeile sollen den Ablauf nach dem Erstellen der sortierten Listen verdeutlichen zeigen. Dabei wird der Pixel links oben im Bild behandelt. Rot: Finden des Pixelwertes in der sortierten Liste. Blau: Wahl des positionsgleichen Wertes aus dem Referenzbild. Grün: Übertrag dieses Wertes an die gleiche Stelle in Bild B' \label{fig:farbranking}}
+\end{figure}
 
 \subsection[Farbtransfer nach Reinhard]{Farbtransfer nach Reinhard}\label{sec:reinhard}
 \color{red}
 Reinhard allgemein + Anpassung an Mikroskopie(Mikroskopische Trainingsbilder)
 \color{black}
+Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \color{red} Reinhard \color{black}vorgeschlagen. Das Ziel ist es, die Anpassung mit möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder am besten erfüllt ist der von \color{red}Rudermann\color{black}vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
+\begin{itemize}
+\item{RGB $\rightarrow$ XYZ(Tristimulusraum): 
+
+$\begin{bmatrix}
+X\\Y\\Z
+\end{bmatrix}
+= 
+\begin{bmatrix}
+0.5141 & 0.3239 & 0.1604\\
+0.2651 & 0.6702 & 0.0641\\
+0.0241 & 0.1228 & 0.8444
+\end{bmatrix}
+\begin{bmatrix}
+R\\G\\B
+\end{bmatrix}
+$
+}
+\item{XYZ $\rightarrow$ LMS\ref{sec:allgemeine_normalisierung}}
+
+$\begin{bmatrix}
+L\\M\\S
+\end{bmatrix}
+= 
+\begin{bmatrix}
+0.3897 & 0.6890 & -0.0787\\
+-0.2298 & 1.1834 & 0.0464\\
+0.000 & 0.000 & 1.0000
+\end{bmatrix}
+\begin{bmatrix}
+X\\Y\\Z
+\end{bmatrix}
+$
+\item{Logarithmus auf dem LMS-Raum}
+\item{Logarithmierter LMS $\rightarrow L\alpha\beta$}
+
+$\begin{bmatrix}
+L\\\alpha\\\beta
+\end{bmatrix}
+= 
+\begin{bmatrix}
+\frac{1}{\sqrt{3}} & 0 & 0\\
+0 & \frac{1}{\sqrt{6}} & 0\\
+0 & 0 & \frac{1}{\sqrt{2}}
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 & 1\\
+1 & 1 & -2\\
+1 & -1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+log(L)\\log(M)\\log(S)
+\end{bmatrix}
+$
+\end{itemize}
 
 \subsection{Color Deconvolution}\label{sec:color_deconvolution}
 
