@@ -9,22 +9,22 @@ Referenz auf MA Bindl?
 Das menschliche Gehirn ist innerhalb gewisser Grenzen in der Lage, die Farbe eines Objektes unabhängig von dessen Beleuchtung zu bestimmen. Diese Fähigkeit ist die Grundlage für eine Gruppe von Ansätzen, die als Farbkonstanzalgorithmen bezeichnet werden.
 
 Das menschliche Auge ist das Vorbild für den sogenannten LMS-Farbraum. Die drei Kanäle entsprechen dabei den unterschiedlichen Zapfen, die auf lang-, mittel- und kurzwelliges Licht reagieren. Nach den Erkenntnissen von Johannes von Kries werden die unterschiedlichen Signale unabhängig voneinander vom Gehirn angepasst. Dieser Zusammenhang wird in der folgenden Formel \ref{equ:kries} dargestellt.
-\begin{equation}\label{equ:kries}
-L_{a} = k_{L}L//
-M_{a} = k_{M}M//
-S_{a} = k_{S}S
-\end{equation}
+\begin{align}\label{equ:kries}
+L_{a} & = k_{L}L\\
+M_{a} & = k_{M}M\\
+S_{a} & = k_{S}S
+\end{align}
 $L_{a}$, $M_{a}$ und $S_{a}$ sind hierbei die angepassten Signale. $k_{L}$, $K_{M}$ und $k_{S}$ sind hingegen die unabhängigen Skalierungsfaktoren.
 %Für die Bestimmung dieser Faktoren gibt es unterschiedliche Möglichkeiten. Zum einen können sie die Inversen des angenommenen Weißpunktes der Szene sein, zum anderen als Inverse des jeweils maximalen Werts des Kanals.
 Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Im Kern wird davon ausgegangen, dass die durchschnittliche Reflektanz in einer Szene Grau entspricht. \color{red} Achtung dies ist ein wörtliches Zitat aus MA Bindl, abklären inwieweit zitierfähig \color{black} Variationen gibt es u.a. bei der Wahl von Grau. 
 Im einfachsten Fall können die Skalierungsfaktoren entsprechend \label{equ:grey_world} berechnet werden. Hierbei entspricht $m_{L1}$ dem Mittelwert des L-Kanals einer Referenzaufnahme, $m_{L2}$ dem Mittelwert des L-Kanals aus einer Testaufnahme, usw.  
-\begin{equation}\label{equ:grey_world}
-k_{L}L = fract{m_{L2}}{m_{L1}}//
-k_{M}M = fract{m_{M2}}{m_{M1}}//
-k_{S}S = fract{m_{S2}}{m_{S1}}
-\end{equation}
+\begin{align}\label{equ:grey_world}
+k_{L}L & = \frac{m_{L2}}{m_{L1}}\\
+k_{M}M & = \frac{m_{M2}}{m_{M1}}\\
+k_{S}S & = \frac{m_{S2}}{m_{S1}}
+\end{align}
 
-Farbkonstanzmodelle treffen Annahmen über das Verhalten von reflektiertem Licht, was sie ungeeignet für die Mikroskopie macht, da hier transmittiertes Licht detektiert wird.
+Farbkonstanzmodelle treffen Annahmen über das Verhalten von reflektiertem Licht, was sie ungeeignet für die Mikroskopie macht, da hier transmittiertes Licht detektiert wird \cite{khan2014nonlinear}
 
 
 \section[Farbnormalisierung in der Mikroskopie]{Farbnormalisierung in der Mikroskopie}\label{sec:mikroskopie_normalisierung}
@@ -32,13 +32,19 @@ Für Farbnormalisierung im vorliegenden Anwendungsgebiet wird in der Regel der An
 Während die Methoden in den Abschnitten \ref{sec:farbranking} und \ref{sec:color_deconvolution} eine Farbraumtransformation erfordern, benötigt das Farbranking (\ref{sec:farbranking}) keine Vorverarbeitungsschritte.
 
 \subsection{Farbranking}\label{sec:farbranking}
-Beim Farbranking werden zunächst die Intensitäten in allen Kanälen jeweils für das Eingangs- und Ausgangsbild sortiert. Anschließend werden für jedes Pixel zunächst die Positionen in den sortierten Listen ermittelt. Die Farbintensitäten bekommen am Ende die Werte zugewiesen, welche sich in den Listen des Referenzbildes an den gleichen Stellen befinden. Dieser Zusammenhang ist in Graphik \ref{fig:farbranking} für den Fall von Grauwertbildern mit Größe 3x3 dargestellt. Dabei entspricht Bild A dem Referenzbild und Bild B dem Eingangsbild. B' beschreibt das angepasste Ausgabebild. 
+Farbranking ist ein Verfahren, das von \citeeig{kothari2011automatic} eingeführt wurde. Hierbei werden zunächst die Intensitäten in allen Kanälen jeweils für das Eingangs- und Ausgangsbild sortiert. Anschließend werden für jedes Pixel zunächst die Positionen in den sortierten Listen ermittelt. Die Farbintensitäten bekommen am Ende die Werte zugewiesen, welche sich in den Listen des Referenzbildes an den gleichen Stellen befinden. Dieser Zusammenhang ist in Graphik \ref{fig:farbranking} für den Fall von Grauwertbildern mit Größe 3x3 dargestellt. Dabei entspricht Bild A dem Referenzbild und Bild B dem Eingangsbild. B' beschreibt das angepasste Ausgabebild. 
 
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.9\textwidth]{pics/StandTechnik/Farbranking_Ablauf}
 \caption[Farbranking]{Links sind die beiden Eingangs- und Referenzbild dargestellt, in der Mitte die sortierten Listen und rechts das Ausgabebild. Die farbigen Pfeile sollen den Ablauf nach dem Erstellen der sortierten Listen verdeutlichen zeigen. Dabei wird der Pixel links oben im Bild behandelt. Rot: Finden des Pixelwertes in der sortierten Liste. Blau: Wahl des positionsgleichen Wertes aus dem Referenzbild. Grün: Übertrag dieses Wertes an die gleiche Stelle in Bild B' \label{fig:farbranking}}
 \end{figure}
+
+Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Referenzbild zu sehr unterscheiden. In diesem Fall kommt es zu Artefakten, bei denen monochrome Flächen nach der Anpassung starke Unterschiede aufweisen.
+
+\color{red}
+evtl. Beispielbild
+\color{black}
 
 \subsection[Farbtransfer nach Reinhard]{Farbtransfer nach Reinhard}\label{sec:reinhard}
 \color{red}
@@ -47,8 +53,8 @@ Reinhard allgemein + Anpassung an Mikroskopie(Mikroskopische Trainingsbilder)
 Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \color{red} Reinhard \color{black}vorgeschlagen. Das Ziel ist es, die Anpassung mit möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder am besten erfüllt ist der von \color{red}Rudermann\color{black}vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
 \begin{itemize}
 \item{RGB $\rightarrow$ XYZ(Tristimulusraum): 
-
-$\begin{bmatrix}
+\begin{equation}\label{equ:rgb_xyz}
+\begin{bmatrix}
 X\\Y\\Z
 \end{bmatrix}
 = 
@@ -60,11 +66,12 @@ X\\Y\\Z
 \begin{bmatrix}
 R\\G\\B
 \end{bmatrix}
-$
+\end{equation}
 }
 \item{XYZ $\rightarrow$ LMS\ref{sec:allgemeine_normalisierung}}
 
-$\begin{bmatrix}
+\begin{equation}\label{equ:xyz_lms}
+\begin{bmatrix}
 L\\M\\S
 \end{bmatrix}
 = 
@@ -76,11 +83,12 @@ L\\M\\S
 \begin{bmatrix}
 X\\Y\\Z
 \end{bmatrix}
-$
+\end{equation}
 \item{Logarithmus auf dem LMS-Raum}
 \item{Logarithmierter LMS $\rightarrow L\alpha\beta$}
 
-$\begin{bmatrix}
+\begin{equation}\label{equ:lms_lab}
+\begin{bmatrix}
 L\\\alpha\\\beta
 \end{bmatrix}
 = 
@@ -97,16 +105,119 @@ L\\\alpha\\\beta
 \begin{bmatrix}
 log(L)\\log(M)\\log(S)
 \end{bmatrix}
-$
+\end{equation}
 \end{itemize}
 
+Die Umrechnung in \ref{equ:lms_lab} basiert auf einer Hauptachsentransformation, welche von \color{red} Rudermann(muss noch in die Bibliographie)\color{black} auf einem Datensatz natürlicher Fotos durchgeführt wurde. Die Eigenvektoren der gemittelten Kovarianzmatrix finden sich in der Rotationsmatrix dieser Transformation. Reinhard(\color{red} Bibliographie\color{black}) schlägt vor, die Histogramme der dekorrelierten Kanäle einzeln anzupassen. In seinem Verfahren werden Mittelwert und Standardabweichung angepasst. \color{red} evtl. kompletten Abschnitt zu Möglichkeiten Histogramme zu beeinflussen: -Equalisation, Spezifikation, Übertrag von Features (wie hier), Bspline(wie bei Khan) \color{black}
+
 \subsection{Color Deconvolution}\label{sec:color_deconvolution}
+Die sogenannte Color Deconvolution ist spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel quantitative Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
+
+Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz \ref{equ:lambert_beer}, wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also R,G oder B. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
+
+\begin{equation}\label{equ:lambert_beer}
+I_k = I_{0,k}e^{-Ac_k}
+\end{equation} 
+
+Der Zusammenhang zwischen der Menge an Farbstoff und der detektierten Intensität ist also nicht linear. Aus diesem Grund wird das Bild zunächst mit Hilfe des Logarithmus in den sogenannten OD-Raum (Optical Density) transferiert \ref{equ:od}.
+
+\begin{equation}\label{equ:od}
+OD_k = -log\left(\frac{I_k}{I_{0,k}}\right) = Ac_k
+\end{equation} 
+
+
+\citeeig{khan2014nonlinear} drücken die Zusammenhänge für die Color Deconvolution in Anlehnung an \citeauthor{ruifrok2001quantification} in Matrixschreibweise folgendermaßen aus:
+
+\begin{equation}\label{equ:beer_matrix}
+\Psi = e^{-\mathbf{S}\hat\Psi} 
+\end{equation}
+
+In Formel \ref{equ:beer_matrix} steht $\mathbf{S}$ für die sogenannte Stainmatrix, welche in Formel \ref{equ:stainmatrix} noch genauer beschrieben wird. Sie beinhaltet die Absorptionsfaktoren der vorkommenden Farbstoffe für die einzelnen Kanäle. $\Psi$ beschreibt den ursprünglichen Farbraum, also RGB und $\hat\Psi$ den neuen Farbraum. 
+
+\begin{equation}\label{equ:stainmatrix}
+\mathbf{S} =
+\begin{bmatrix}
+\bar s_{r,1} & \bar s_{g,1} & \bar s_{b,1}\\
+\bar s_{r,2} & \bar s_{g,2} & \bar s_{b,2}\\
+\bar s_{r,3} & \bar s_{g,3} & \bar s_{b,3}
+\end{bmatrix}
+\end{equation}
+
+Formel \ref{equ:beer_matrix} lässt sich umstellen nach $\hat\Psi$ \ref{equ:color_deconvolution}
+
+\begin{align}\label{equ:color_deconvolution}
+\hat \Psi(c) & = \mathbf{D}\Phi(c) \\
+\textrm{Es gelten } \mathbf{D} & = \mathbf{S}^{-1} \\
+\textrm{und } \Phi(c) & = - log(\Psi(c))
+\end{align}
+
+Der hier als $\Phi$ bezeichnete Farbraum beschreibt damit den OD-Wert(\ref{equ:od}). 
+Ein entscheidender Punkt bei CD liegt in der Bestimmung der Stainvektoren. In den folgenden Abschnitten \ref{sec:stains_färbung} und \ref{sec:stains_bild} werden unterschiedliche Möglichkeiten vorgestellt, diese zu bestimmen.
 
 \subsubsection{Stainvektoren für eine Färbung}\label{sec:stains_färbung}
-\subsubsection{Stainvektoren für ein Bild}\label{sec:stains_bild}
+Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau zu kommen, wird von \citeauthor{ruifrok2001quantification} vorgeschlagen. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrix vor und nach dem Normierungsschritt sind in den Formeln \ref{equ:stain_hedab} und \ref{equ:stain_hedab_norm} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
+
+\begin{align}\label{equ:stain_hedab}
+\mathbf{S} & = 
+\begin{bmatrix}
+0.18 & 0.20 & 0.08\\
+0.01 & 0.13 & 0.01\\
+0.10 & 0.21 & 0.29
+\end{bmatrix}
+\\
+\mathbf{S_{norm}} & = 
+\begin{bmatrix}
+0.65 & 0.70 & 0.29\\
+0.07 & 0.99 & 0.11\\
+0.27 & 0.57 & 0.78
+\end{bmatrix}
+\end{align}
+
+Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, wobei sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind also von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden.  
+
+\subsubsection{Spezifische Stainvektoren für ein Bild}\label{sec:stains_bild}
+
+Es gibt Versuche, die Vektoren für jedes Bild neu zu bestimmen, welche implizit davon ausgehen, dass es Pixel im Bild gibt, welche eindeutig einem Farbstoff zuzuordnen sind. Es sollte also Stellen geben, an denen keine Überlappung stattfindet. 
+
 \paragraph{Macenko}\label{sec:macenko}
+
+Zunächst einmal soll der Vorschlag von \citeeig{macenko2009method} vorgestellt werden, welcher die folgenden Schritte umfasst:
+\begin{itemize}
+\item{Start: RGB-Bild}
+\item{RGB $\rightarrow$ OD}
+\item{Betrachten aller Werte mit OD-Intensität größer einem Schwellwert $\beta$, wobei 0.15 empirisch als optimaler Schwellwert bestimmt wurde. Durch dieses Vorgehen sollen nur Pixel mit relevanter Farbinformation berücksichtigt werden.}
+\item{Berechnen der Korrelationsmatrix und der zugehörigen SVD(Singular Value Decomposition)}
+\item{Berechnen einer Ebene aus den zwei Eigenvektoren, die zu den beiden größten Eigenwerten gehören.}
+\item{Projektion aller OD-Pixel auf diese Ebene}
+\item{Histogramm über die Winkel, welche die projizierten Pixel mit dem ersten Eigenvektor einschließen}
+\item{Bestimmen des robusten Minimum und Maximum in diesem Histogramm}
+\item{Rücktransformation in den OD-Raum, Minimum und Maximum entsprechen den Stainvektoren}
+\end{itemize} 
+
+Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist.
+
+\citeauthor{macenko2009method} liefern auch einen Ansatz für die Normalisierung. Hierbei wird für jeden vorkommenden Farbstoff ein Histogram berechnet, welches jedoch nur jene Pixel berücksichtigt, die überwiegend diesen Farbstoff beinhalten.
+Die Histogramme werden anschließend so skaliert, dass alle das gleiche Pseudomaximum haben um sie miteinander vergleichbar zu machen. Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten und dieser Effekt reduziert. Allerdings wird nicht berücksichtigt, dass sich die Proben auch inhaltlich stark unterscheiden könnten.
+
 \paragraph{Khan}\label{sec:khan}
 
+Eine andere Methode, welche auf Maschinellem Lernen basiert, wird von \citeeig{khan2014nonlinear} vorgeschlagen. Hierbei soll ein Klassifikator trainiert werden, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört.
 
+\citeauthor{khan2014nonlinear} führen als bildspezifisches Merkmal einen sogenannten "Stain Color Descriptor"(SCD) ein.
+Sei
 
+$\mathbf{I} = \lbrace I_1,I_2,\ldots,I_k \rbrace$,
+
+ein Set von $k$ Trainingsbildern, dann gibt es ein Set korrespondierender SCDs
+
+$\mathbf{\hat H} = \lbrace \hat{H_1},\hat{H_1},\ldots,\hat{H_k}\rbrace$.
+
+Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Oct-Tree quantisiert. Der Farbraum wird zunächst in acht Unterräume unterteilt, was durch eine gleichmäßige Unterteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. Das Ziel von \citeauthor{khan2014nonlinear} ist ein Oct-Tree mit 255 Blättern \color{red}(rechnerisch gar nicht möglich, $Sum != 1+x*7, x \in \mathbb{N}$)\color{black} weshalb sie nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügen, solange bis sie die gewünschte Zahl erreicht haben.
+
+Die Quantisierung jedes Bildes ergibt ein Set 
+$\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r \> 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
+\begin{equation}\label{equ:khan_dimreduc}
+\hat{H_i} = \mathbf{E}^r_h\left(H_i - \bar{H}\right)
+\end{equation}
+ 
 
