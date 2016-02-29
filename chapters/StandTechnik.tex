@@ -6,6 +6,8 @@ Gray World Assumption, Farbkonstanz
 
 Referenz auf MA Bindl?
 \color{black}
+
+\subsection{Farbkonstanzalgorithmen}\label{sec:farbkonstanz}
 Das menschliche Gehirn ist innerhalb gewisser Grenzen in der Lage, die Farbe eines Objektes unabhängig von dessen Beleuchtung zu bestimmen. Diese Fähigkeit ist die Grundlage für eine Gruppe von Ansätzen, die als Farbkonstanzalgorithmen bezeichnet werden.
 
 Das menschliche Auge ist das Vorbild für den sogenannten LMS-Farbraum. Die drei Kanäle entsprechen dabei den unterschiedlichen Zapfen, die auf lang-, mittel- und kurzwelliges Licht reagieren. Nach den Erkenntnissen von Johannes von Kries werden die unterschiedlichen Signale unabhängig voneinander vom Gehirn angepasst. Dieser Zusammenhang wird in der folgenden Formel \ref{equ:kries} dargestellt.
@@ -26,6 +28,50 @@ k_{S}S & = \frac{m_{S2}}{m_{S1}}
 
 Farbkonstanzmodelle treffen Annahmen über das Verhalten von reflektiertem Licht, was sie ungeeignet für die Mikroskopie macht, da hier transmittiertes Licht detektiert wird \cite{khan2014nonlinear}
 
+\subsection{Histogrammanpassung}\label{sec:histogramm}
+Histogramme sind eine Möglichkeit zur Beschreibung eines Bildes, weswegen viele Farbanpassungsalgorithmen darauf basieren, diese zu vereinheitlichen. Im folgenden sollen einige Möglichkeiten vorgestellt, wie diese Anpassung aussehen kann. Der Fokus liegt hierbei nicht auf einem verwendeten Farbraum, sondern darauf, wie die Histogramme beeinflusst werden. 
+
+\subsubsection{Histogrammequalisierung}\label{sec:equalisierung}
+
+Bei dieser Methode, wird eine Gleichverteilung für alle Intensitäten angestrebt. Der Effekt wird sichtbar, wenn man das kumulative Histogramm betrachtet. Der Kurvenverlauf nähert sich nach der Anpassung einer Ursprungsgerade an. Ein Beispiel wie sich die Anpassung auswirkt ist in Abbildung \ref{fig:EQGraubild} gezeigt.
+
+\begin{figure}[h]\centering
+\subfloat[Originales Grauwertbild BLALBLA]{
+\includegraphics[width=0.45\textwidth]
+{pics/StandTechnik/800px-Unequalized_Hawkes_Bay_NZ}\label{fig:unequalized}}
+\quad
+\subfloat[Originales Histogramm in roter Farbe und kumulatives Histogramm mit schwarzer Linie BLALBA]{
+\includegraphics[width=0.45\textwidth]
+{pics/StandTechnik/712px-Unequalized_Histogram}\label{fig:histoUn}}
+\quad
+\subfloat[Ausgeglichenes Grauwertbild BLABLA]{
+\includegraphics[width=0.45\textwidth]
+{pics/StandTechnik/800px-Equalized_Hawkes_Bay_NZ}\label{fig:equalized}}
+\quad
+\subfloat[Ausgeglichenes Histogramm in Rot mit dem annähernd linearen kumulativen Histogramm in Schwarz BLABLA]{
+\includegraphics[width=0.45\textwidth]
+{pics/StandTechnik/712px-Equalized_Histogram}\label{fig:histoEq}}
+\quad
+\caption[Beispiel einer Histogrammequalisierung]{ \label{fig:EQGraubild}}
+\end{figure}
+
+
+Im Gegensatz zu einem klassischem Histogramm, bei welchem die Anzahl bzw. der Anteil der Pixel mit einen bestimmten Wert betrachtet wird, werden hier die Pixel berücksichtigt, welche kleiner oder gleich diesem Wert sind. Der Verlauf eines kumulativen Histogramms ist aus diesem Grund immer monoton steigend.
+
+\subsubsection{Histogrammspezifikation}\label{sec:spezifikation}
+
+Auch bei der Histogrammspezifikation spielt das kumulative Histogramm eine wichtige Rolle. Im Gegensatz zur in Abschnitt \ref{sec:equalisierung} beschriebenen Equalisierung, ist der Zielverlauf der Kurve bei der Spezifikation keine Gerade, sondern das kumulative Histogramm eines Referenzbildes. Das Vorgehen soll durch die Abbildung \ref{fig:equalisierung} verdeutlicht werden. Zunächst wird für einen Bin der Quelle der Dichtewert auf der y-Achse des Histogramms gesucht. Derjenige Intensitätswert der Referenz, bei dem die Zielfunktion die gleiche Dichte aufweist, ist der gesuchte Transferwert.  
+\begin{figure}[h]
+\includegraphics[width = 0.7\textwidth]
+{pics/StandTechnik/250px-Histogram_matching}
+\caption[Beispiel Histogramspezifikation]{Vorgang bei der Histogrammspezifikation. Die CDF(Cumulated Density Function) eines Bildes $\mathbf{x1}$ soll auf die CDF von Bild $\mathbf{x2}$ abgebildet werden. Die Pfeile verbildlichen dabei das genaue Vorgehen. }
+\end{figure}
+
+\subsubsection{Histogrammskalierung}\label{sec:skalierung}
+Mit Hilfe von Skalierung kann ein beliebiges Maximum, welches ein Histogramm aufweisen soll, erzwungen werden. Als Zielmaximum kann der maximal mögliche Wert angenommen werden (z.b. bei 8 Bit Farbtiefe 255), das Maximum eines Referenzhistogramms, der Durchschnitt der Maxima eines größeren Datensatzes oder ein willkürlich festgelegter Wert. Formel BLABLA beschreibt den Zusammenhang zwischen einem angepassten Wert $\hat x_i$ und $x_i$. Der Skalierungsfaktor $k$ ergibt sich dabei aus dem Verhältnis zwischen $m_{ref}$, dem Zielmaximum, und $m$, das dem ursprünglichem Maximum des zu verändernden Histogramms entspricht. Gilt $k > 1$ wird das Histogramm gestreckt, bei $k < 1$ wird das Bild dagegen gestaucht.
+\begin{equation}\label{equ:scale}
+\hat x_i = \frac{m_{ref}}{m}x_i = kx_i
+\end{equation}
 
 \section[Farbnormalisierung in der Mikroskopie]{Farbnormalisierung in der Mikroskopie}\label{sec:mikroskopie_normalisierung}
 Für Farbnormalisierung im vorliegenden Anwendungsgebiet wird in der Regel der Ansatz verfolgt, ein Bild an ein gegebenes Referenzbild anzugleichen. 
@@ -37,7 +83,7 @@ Farbranking ist ein Verfahren, das von \citeeig{kothari2011automatic} eingeführt
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.9\textwidth]{pics/StandTechnik/Farbranking_Ablauf}
-\caption[Farbranking]{Links sind die beiden Eingangs- und Referenzbild dargestellt, in der Mitte die sortierten Listen und rechts das Ausgabebild. Die farbigen Pfeile sollen den Ablauf nach dem Erstellen der sortierten Listen verdeutlichen zeigen. Dabei wird der Pixel links oben im Bild behandelt. Rot: Finden des Pixelwertes in der sortierten Liste. Blau: Wahl des positionsgleichen Wertes aus dem Referenzbild. Grün: Übertrag dieses Wertes an die gleiche Stelle in Bild B' \label{fig:farbranking}}
+\caption[Farbranking]{Links sind Eingangs- und Referenzbild dargestellt, in der Mitte die sortierten Listen und rechts das Ausgabebild. Die farbigen Pfeile sollen den Ablauf nach dem Erstellen der sortierten Listen verdeutlichen. Dabei wird der Pixel links oben im Bild behandelt. Rot: Finden des Pixelwertes in der sortierten Liste. Blau: Wahl des positionsgleichen Wertes aus dem Referenzbild. Grün: Übertrag dieses Wertes an die gleiche Stelle in Bild B' \label{fig:farbranking}}
 \end{figure}
 
 Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Referenzbild zu sehr unterscheiden. In diesem Fall kommt es zu Artefakten, bei denen monochrome Flächen nach der Anpassung starke Unterschiede aufweisen.
@@ -219,5 +265,8 @@ $\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k$, wobei jedes Histogramm $H_i$ 255 Ele
 \begin{equation}\label{equ:khan_dimreduc}
 \hat{H_i} = \mathbf{E}^r_h\left(H_i - \bar{H}\right)
 \end{equation}
+
+Der zur Zuordnung zu einer Klasse verwendete Merkmalsvektor ist folgendermaßen aufgebaut: $\mathcal{F} = \lbrack R,G,B, \hat{H} \rbrack$. Die Werte $R$,$G$ und $B$ entsprechen dabei den Werten aus den entsprechenden Kanälen eines RGB-Bildes. 
+
  
 
