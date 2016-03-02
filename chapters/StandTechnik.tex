@@ -48,10 +48,7 @@ evtl. Beispielbild
 \color{black}
 
 \subsection[Farbtransfer nach Reinhard]{Farbtransfer nach Reinhard}\label{sec:reinhard}
-\color{red}
-Reinhard allgemein + Anpassung an Mikroskopie(Mikroskopische Trainingsbilder)
-\color{black}
-Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \color{red} Reinhard \color{black}vorgeschlagen. Das Ziel ist es, die Anpassung mit möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder am besten erfüllt ist der von \color{red}Rudermann\color{black}vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
+Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Das Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
 \begin{itemize}
 \item{RGB $\rightarrow$ XYZ(Tristimulusraum): 
 \begin{equation}\label{equ:rgb_xyz}
@@ -69,7 +66,7 @@ R\\G\\B
 \end{bmatrix}
 \end{equation}
 }
-\item{XYZ $\rightarrow$ LMS\ref{sec:allgemeine_normalisierung}}
+\item{XYZ $\rightarrow$ LMS\ref{sec:farbkonstanz}}
 
 \begin{equation}\label{equ:xyz_lms}
 \begin{bmatrix}
@@ -109,7 +106,7 @@ log(L)\\log(M)\\log(S)
 \end{equation}
 \end{itemize}
 
-Die Umrechnung in \ref{equ:lms_lab} basiert auf einer Hauptachsentransformation, welche von \color{red} Rudermann(muss noch in die Bibliographie)\color{black} auf einem Datensatz natürlicher Fotos durchgeführt wurde. Die Eigenvektoren der gemittelten Kovarianzmatrix finden sich in der Rotationsmatrix dieser Transformation. Reinhard(\color{red} Bibliographie\color{black}) schlägt vor, die Histogramme der dekorrelierten Kanäle einzeln anzupassen. In seinem Verfahren werden Mittelwert und Standardabweichung angepasst. \color{red} evtl. kompletten Abschnitt zu Möglichkeiten Histogramme zu beeinflussen: -Equalisation, Spezifikation, Übertrag von Features (wie hier), Bspline(wie bei Khan) \color{black}
+Die Umrechnung in \ref{equ:lms_lab} basiert auf einer Hauptachsentransformation, welche von \citeauthor{rudermann1998statistics} auf einem Datensatz natürlicher Fotos durchgeführt wurde. Die Eigenvektoren der gemittelten Kovarianzmatrix finden sich in der Rotationsmatrix dieser Transformation. \citeeig{reinhard2001color} schlagen vor, die Histogramme der dekorrelierten Kanäle mittels Übertragung von Mittelwert und Standardabweichung einzeln anzupassen\ref{sec:mean_std}.
 
 \subsection{Color Deconvolution}\label{sec:color_deconvolution}
 Die sogenannte Color Deconvolution ist spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel quantitative Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
@@ -147,16 +144,16 @@ In Formel \ref{equ:beer_matrix} steht $\mathbf{S}$ für die sogenannte Stainmatri
 Formel \ref{equ:beer_matrix} lässt sich umstellen nach $\hat\Psi$ \ref{equ:color_deconvolution}
 
 \begin{align}\label{equ:color_deconvolution}
-\hat \Psi(c) & = \mathbf{D}\Phi(c) \\
-\textrm{Es gelten } \mathbf{D} & = \mathbf{S}^{-1} \\
-\textrm{und } \Phi(c) & = - log(\Psi(c))
+&\textrm{} &&\hat\Psi(c)= \mathbf{D}\Phi(c) \\
+&\textrm{Es gelten } &&\mathbf{D}= \mathbf{S}^{-1} \\
+&\textrm{und } &&\Phi(c) = - log(\Psi(c))
 \end{align}
 
 Der hier als $\Phi$ bezeichnete Farbraum beschreibt damit den OD-Wert(\ref{equ:od}). 
 Ein entscheidender Punkt bei CD liegt in der Bestimmung der Stainvektoren. In den folgenden Abschnitten \ref{sec:stains_färbung} und \ref{sec:stains_bild} werden unterschiedliche Möglichkeiten vorgestellt, diese zu bestimmen.
 
 \subsubsection{Stainvektoren für eine Färbung}\label{sec:stains_färbung}
-Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau zu kommen, wird von \citeauthor{ruifrok2001quantification} vorgeschlagen. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrix vor und nach dem Normierungsschritt sind in den Formeln \ref{equ:stain_hedab} und \ref{equ:stain_hedab_norm} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
+Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau zu kommen, wird von \citeauthor{ruifrok2001quantification} vorgeschlagen. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrix vor und nach dem Normierungsschritt sind in Formel \ref{equ:stain_hedab} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
 
 \begin{align}\label{equ:stain_hedab}
 \mathbf{S} & = 
@@ -171,7 +168,7 @@ Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau z
 0.65 & 0.70 & 0.29\\
 0.07 & 0.99 & 0.11\\
 0.27 & 0.57 & 0.78
-\end{bmatrix}
+\end{bmatrix}\nonumber
 \end{align}
 
 Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, wobei sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind also von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden.  
@@ -195,10 +192,10 @@ Zunächst einmal soll der Vorschlag von \citeeig{macenko2009method} vorgestellt w
 \item{Rücktransformation in den OD-Raum, Minimum und Maximum entsprechen den Stainvektoren}
 \end{itemize} 
 
-Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein Beispiel für ein Histogramm über die Winkel, Grafik \ref{fig:} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
+Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein Beispiel für ein Histogramm über die Winkel, Grafik \ref{fig:hist_angle} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
 \begin{figure}[h]
 \center
-\includegraphics[width = 0.7\textwidth]
+\includegraphics[width = 0.5\textwidth]
 {pics/StandTechnik/hist_angle_macenko}
 \caption[Winkelhistogramm Macenko]{Beispiel für ein Histogramm über die Winkel, welche die projizierten Punkte mit der ersten Hauptachse einschließen. Daraus zu bestimmen sind das robuste Minimum und Maximum.\label{fig:hist_angle} }
 \end{figure}
@@ -237,7 +234,14 @@ ein Set von $k$ Trainingsbildern, dann gibt es ein Set korrespondierender SCDs
 
 $\mathbf{\hat H} = \lbrace \hat{H_1},\hat{H_1},\ldots,\hat{H_k}\rbrace$.
 
-Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Oct-Tree quantisiert. Der Farbraum wird zunächst in acht Unterräume unterteilt, was durch eine gleichmäßige Unterteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. Das Ziel von \citeauthor{khan2014nonlinear} ist ein Oct-Tree mit 255 Blättern \color{red}(rechnerisch gar nicht möglich, $Sum != 1+x*7, x \in \mathbb{N}$)\color{black} weshalb sie nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügen, solange bis sie die gewünschte Zahl erreicht haben.
+Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert (Abbildung \ref{fig:octree}). Der Farbraum wird zunächst in acht Unterräume unterteilt, was durch eine gleichmäßige Unterteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. 
+\begin{figure}
+\center
+\includegraphics[width = 0.6\textwidth]
+{pics/StandTechnik/octree}
+\caption[Schema Octree]{Aufbau eines Octree: Baumstruktur, bei dem jeder Knoten, der kein Blatt ist, in acht Kindknoten zerlegt wird\cite{octree}. }\label{fig:octree}
+\end{figure}
+Das Ziel von \citeauthor{khan2014nonlinear} ist ein Baum mit 255 Blättern \color{red}(rechnerisch gar nicht möglich, $Sum != 1+x*7, x \in \mathbb{N}$)\color{black} weshalb nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügt werden, solange bis die gewünschte Zahl erreicht ist.
 
 Die Quantisierung jedes Bildes ergibt ein Set 
 $\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r \> 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
@@ -279,19 +283,19 @@ Histogramme sind eine Möglichkeit zur Beschreibung eines Bildes, weswegen viele 
 Bei dieser Methode, wird eine Gleichverteilung für alle Intensitäten angestrebt. Der Effekt wird sichtbar, wenn man das kumulative Histogramm betrachtet. Der Kurvenverlauf nähert sich nach der Anpassung einer Ursprungsgerade an. Ein Beispiel wie sich die Anpassung auswirkt ist in Abbildung \ref{fig:EQGraubild} gezeigt.
 
 \begin{figure}[h]\centering
-\subfloat[Originales Grauwertbild BLALBLA]{
+\subfloat[Originales Grauwertbild\cite{url_unequ_image}]{
 \includegraphics[width=0.45\textwidth]
 {pics/StandTechnik/800px-Unequalized_Hawkes_Bay_NZ}\label{fig:unequalized}}
 \quad
-\subfloat[Originales Histogramm in roter Farbe und kumulatives Histogramm mit schwarzer Linie BLALBA]{
+\subfloat[Originales Histogramm in roter Farbe und kumulatives Histogramm mit schwarzer Linie \cite{url_unequ_hist}.]{
 \includegraphics[width=0.45\textwidth]
 {pics/StandTechnik/712px-Unequalized_Histogram}\label{fig:histoUn}}
 \quad
-\subfloat[Ausgeglichenes Grauwertbild BLABLA]{
+\subfloat[Ausgeglichenes Grauwertbild \cite{url_equ_image}]{
 \includegraphics[width=0.45\textwidth]
 {pics/StandTechnik/800px-Equalized_Hawkes_Bay_NZ}\label{fig:equalized}}
 \quad
-\subfloat[Ausgeglichenes Histogramm in Rot mit dem annähernd linearen kumulativen Histogramm in Schwarz BLABLA]{
+\subfloat[Ausgeglichenes Histogramm in Rot mit dem annähernd linearen kumulativen Histogramm in Schwarz \cite{url_equ_hist}]{
 \includegraphics[width=0.45\textwidth]
 {pics/StandTechnik/712px-Equalized_Histogram}\label{fig:histoEq}}
 \quad
@@ -308,7 +312,7 @@ Auch bei der Histogrammspezifikation spielt das kumulative Histogramm eine wicht
 \center
 \includegraphics[width = 0.45\textwidth]
 {pics/StandTechnik/250px-Histogram_matching}
-\caption[Beispiel Histogramspezifikation]{Vorgang bei der Histogrammspezifikation. Die CDF(Cumulated Density Function) eines Bildes $\mathbf{x1}$ soll auf die CDF von Bild $\mathbf{x2}$ abgebildet werden. Die Pfeile verbildlichen dabei das genaue Vorgehen.\label{fig:equalisierung} }
+\caption[Beispiel Histogramspezifikation]{Vorgang bei der Histogrammspezifikation. Die CDF(Cumulated Density Function) eines Bildes $\mathbf{x1}$ soll auf die CDF von Bild $\mathbf{x2}$ abgebildet werden. Die Pfeile verbildlichen dabei das genaue Vorgehen\cite{url_hist_spe}.\label{fig:equalisierung}}
 \end{figure}
 
 \subsubsection{Histogrammskalierung}\label{sec:skalierung}
