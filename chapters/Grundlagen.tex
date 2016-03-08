@@ -56,10 +56,11 @@ Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Ze
 \item{SLIC Superpixel + Distanzmaß als Gewichtung}
 \end{itemize}
 
-Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wiederholung wird verhindert, dass Anfang und Endpunkt des Weges nicht übereinstimmen. Dies hätte zur Folge, dass die Segmentierung im späteren Bild nicht geschlossen ist und einen Sprung aufweist. Die inverse Polartransformation überführt die segmentierende Linie zurück in den ursprünglichen Bildraum. Abbildung \ref{fig:seg_outer_border} soll die einzelnen Schritte anhand eines Beispiels verdeutlichen.
+Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wiederholung wird verhindert, dass Anfang und Endpunkt des Weges nicht übereinstimmen. Dies hätte zur Folge, dass die Segmentierung im späteren Bild nicht geschlossen ist und einen Sprung aufweist. Die inverse Polartransformation überführt die segmentierende Linie zurück in den ursprünglichen Bildraum. Abbildung \ref{fig:seg_outer_borders} soll die einzelnen Schritte anhand eines Beispiels verdeutlichen.
 \begin{figure}
+\center
 \subfloat[Originalbild]{
-\includegraphics[width=0.3\textwidth]
+\includegraphics[width=0.35\textwidth]
 {pics/Grundlagen/seg_orig}\label{fig:seg_original}}
 \quad
 \subfloat[Polartransformiertes Original, dreifach aneinandergehängt]{
@@ -72,7 +73,7 @@ Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wi
 \includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_min}\label{fig:seg_min}}
 \quad
 \subfloat[Hervorgehobenes Ergebnis Segmentierung]{
-\includegraphics[width=0.45\textwidth]
+\includegraphics[width=0.35\textwidth]
 {pics/Grundlagen/seg_seg}\label{fig:seg_seg}}
 \quad
 \caption[Segmentierung mittels Polartransformation]{$\mathbf{(a)}$ Originalbild; $\mathbf{(b)}$ Polartransformation mit Zentrum der Zelle als Nullpunkt; $\mathbf{(c)}$ Kostenfunktion, wobei die Kosten in den dunklen Bereichen minimal sind; $\mathbf{(d)}$ Auswertung der Kostenfunktion: Grüne Linie entspricht Weg mit den geringsten Kosten; $\mathbf{(e)}$ Inverse Polartransformation, heller Bereich entspricht der segmentierten Zelle \label{fig:seg_outer_borders}}
