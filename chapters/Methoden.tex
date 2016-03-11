@@ -3,6 +3,18 @@
 \section{Implementierung Khan und Macenko}\label{sec:implementierung_khan_macenko}
 
 \section{Eigener Workflow}\label{sec:eigener_workflow}
+
+Im den folgenden Abschnitten soll aufgezeigt werden, inwiefern das Vorgehen von \citeauthor{khan2014nonlinear} und \citeauthor{macenko2009method} abgeändert wurde um die aufgetretenen Probleme zu umgehen.
+
+\subsection[Eigene Color Deconvolution]{Eigene Color Deconvolution}\label{sec:own_cd}
+In nächster Näherung wurden Stainvektoren für die Färbung nach Giemsa (Methylenblau und Eosin) verwendet, welche von \citeeig{landini2016} nach dem in Abschnitt \ref{sec:stains_färbung} vorgestellten experimentellen Verfahren ermittelt wurden. Für den fehlenden dritten Vektor, wird u.a. in der Arbeit von Khan angemerkt, dass dieser optimalerweise orthogonal zu den anderen beiden sein soll. Außer im Fall von Einheitsvektoren, würde dieser jedoch negative Komponenten enthalten, was im Modell die Folge hätte, dass die Absorption teilweise negativ wäre. Als Lösung wurden zwei verschiedene Ansätze getestet. Die ersten beiden Zeilen der Stainmatrix sind bekannt und \citeauthor{landini2016} berechnet die dritte Zeile der Stainmatrix, in dem er zunächst die Spalten normalisiert, für den Fall dass die ersten beiden Komponenten nicht schon über $1.0$ liegen. Tritt dies doch ein, so wird das Element der dritten Zeile auf $0.0$ gesetzt. Im nächsten Schritt wird die Zeile normalisiert und Elemente die gleich $0$ werden zur Fehlerreduktion auf einen Wert $\epsilon = 0.01$ gesetzt. Diese Methode wurde der eigenen Idee gegenübergestellt, bei der zunächst über das Kreuzprodukt ein echt orthogonaler Vektor bestimmt wird. Dabei werden beide  Szenarien abhängig vom Vorzeichen berücksichtigt. Negative Komponenten werden auf $0.0$ gesetzt. Derjenige Vektor der nach dieser Operation die größere Länge aufweist, wird gewählt und normalisiert und als dritter Stainvektor eingesetzt. Unabhängig von der Wahl des dritten Vektors ist die Approximation für die vorhandenen Daten legitim, da der dritte Kanal für beide Fälle in gefärbten Bereichen keine Information aufweist.
+Eine Idee, die Zerlegung bildspezifisch zu optimieren, ist die Definition einer Zielfunktion für ein Optimierungsproblem, wobei als Initialstelle die Giemsa-Farbstoffe dienen können. Die Funktion ist von vier Parametern abhängig, nämlich den jeweils ersten beiden Elementen der Farbe repräsentierenden Stainvektoren. Dies ist nur möglich, falls nur zwei Grundfarbstoffe verwendet werden, da ansonsten der dritte Vektor nicht in Abhängigkeit der ersten beiden berechnet werden kann. Folgende Eigenschaften der Zerlegung wurden als mögliche Komponenten der Zielfunktion identifiziert:
+\begin{itemize}
+\item{Entropie in Kanal 3: Der dritte Kanal soll vor allem den Hintergrund repräsentieren, welcher keine relevanten Informationen beinhaltet. Die Entropie dient als Maß für den Informationsgehalt einer Quelle}
+\item{Energie Kanal 3: Ähnlich wie im ersten Punkt geht es hierbei darum, der nicht farbrelevanten Komponente eine möglichst untergeordnete Rolle zuzuordnen}
+\item{Abstand zur Hauptebene: Angelehnt an Macenko, wurde ein Maß eingeführt, dass den Abstand für gefärbte Pixel zur Hauptebene, welche durch die ersten beiden Stainvektoren definiert wird verringert. Einfluss darauf, wie die beiden Vektoren innerhalb dieser Ebene liegen, hat dieses Maß keinen.}
+
+\end{itemize}
 \subsection{Bildclustering}\label{sec:clustering}
 
 \subsection{Bspline}\label{sec:bspline}
