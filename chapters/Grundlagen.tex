@@ -29,68 +29,100 @@ Die Gründe für eine zytologische Untersuchung des Knochenmarks sind vielfältig u
 
 Die Analyse der Probe findet unter einem Lichtmikroskop statt. Bei zehnfacher Vergrößerung kann dabei zunächst eine Aussage über Zelldichte und Fettgehalt getroffen werden. Teilweise gibt es auf dieser Stufe auch schon Informationen über qualitative Veränderungen, z.B. Häufung bestimmter Zelltypen. Geeignete Bereiche des Ausstrich werden anschließend bei stärkerer Vergrößerung (63x, seltener auch 100x) quantitativ ausgewertet. Dafür werden die verschiedenen Zelltypen gezählt, wobei mindestens 200 Zellen ausgewertet werden sollten, um Aussagen treffen zu können. Diese manuelle Auswertung dauert in der Regel zwischen 5 und 15 Minuten, in Einzelfällen sogar bis zu 30 Minuten. Das Ergebnis dieser Differentialzählung ist entscheidend für das weitere diagnostische und therapeutische Vorgehen. Hat ein Patient z.B. \leukaemie, so wird dieses Verfahren eine deutlich erhöhte Leukozytenzahl aufdecken, welche die restliche Blutbildung verdrängt.
 
-\section[Segmentierung]{Segmentierung}\label{sec:segmentierung}
-\color{red}
-Hier rein oder in Methoden? Hat ja nichts mit der Farbnormalisierung an sich zu tun
-\color{black}
-Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Segmentierung der einzelnen Zellen. \citeeig{krappe2015dynamic} stellen hierzu ein Verfahren vor, bei dem im ersten Schritt die Zellzentren detektiert werden sollen. Es wird ein Grauwertbild mit Hilfe eines gewichteten Quotienten von Grün- und Blaukanal generiert. Otsu-Thresholding führt im Anschluss zu einem Binärbild, in dem durch Zählen der schwarzen und weißen Pixel entschieden wird, ob das Bild viele oder wenige gefärbte Flächen enthält, wovon das weitere Vorgehen abhängt. Ist viel Vordergrund enthalten, so werden mit Hilfe morphologischer Operatoren Löcher im innerhalb weißer Flächen aufgefüllt. Für die Ermittlung potentieller Zellzentren, wird eine Wasserscheidentransformation auf dem gaußgefilterten oben beschriebenen Grauwertbild durchgeführt. Regionen welche eine Größe von 2500 Pixeln überschreiten, werden in eine Graphendarstellung umgewandelt. Falls gefundene Zentren eine euklidische Distanz von weniger als 70 Pixeln aufweisen, so wird davon ausgegangen, dass diese Knoten auf die gleiche Zelle verweisen, weshalb sie durch einen neuen Knoten ersetzt werden, der den Mittelwert repräsentiert. Dieser Schritt ist Abbildung \ref{fig:cell_centers} dargestellt.
-\begin{figure}
-\subfloat[Vor Korrektur: eine Zelle wird durch zwei Zentren beschrieben]{
-\includegraphics[width=0.45\textwidth]
-{pics/Grundlagen/centers_uncorrected}\label{fig:seg_uncorrected}}
-\quad
-\subfloat[Nach Korrektur: Jede Zelle mit nur einem Zentrum]{
-\includegraphics[width=0.45\textwidth]
-{pics/Grundlagen/centers_corrected}\label{fig:seg_corrected}}
-\quad
-\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in $\mathbf{(a)}$, zu einem Zentrum zusammengefügt $mathbf{(b)}$. \label{fig:cell_centers}}
-\end{figure} 
-Hat das Bild dagegen einen hohen Vordergrundanteil, so wird eine Hintergrundkorrektur durchgeführt, bei der dieser durch ein 2D-Polynom dritten Grades approximiert wird. Der Vordergrund wird zunächst mit Hilfe eines Mittelwertfilters geschätzt und dann unter Verwendung des "Fast Marching"-Algorithmus konkretisiert. In der Folge werden homogene Regionen mit dem "Color Structure Code" extrahiert und als geordneter Graph dargestellt. Die Blätter dieses Graphen sind die potentiellen Zellzentren, die anhand des gleichen Verfahrens wie im Fall mit viel Vordergrund korrigiert werden. 
-Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Zellkern und Zellplasma zu bestimmen, wird für jede Zelle eine Polartransformation mit dem im vorherigen Schritt gefundenen Zentrum durchgeführt. Es wird eine zu minimierende Kostenfunktion eingeführt, die aus sechs Komponenten besteht:
+\section{Bspline}\label{sec:basic_bspline}
+Dieses Konzept erlaubt es Kurven zu modellieren, die ein Set von Kontrollpunkten mittels Teilpolynomen so annähert, dass sie an den Grenzen stetig sind. Der Grad der Stetigkeit ist dabei über den Grad des Bsplines $n$ festgesetzt. Die Kurve ist neben den Kontrollpunkten auch noch vom Knotenvektor $\mathbf{T} =  (t_i)$ beeinflusst, welcher die Parameterintervalle festlegt. Ein Beispiel eines Knotenvektors ist in Abbildung \ref{fig:knotvector} dargestellt.
+\begin{figure}[h]
+\center
+\includegraphics[width = 0.7\textwidth]
+{pics/StandTechnik/knotvector}
+\caption[Bspline Knotenvektor]{Grundsätzlicher Aufbau eines Knotenvektors der Länge $m+n+1$. $n$ ist der Grad des Bsplines und $m$ die Anzahl der Kontrollpunkte.\label{fig:knotvector}}
+\end{figure}
+
+Grundlage für einen Bspline sind die Basisfunktionen $n_i^k(u)$, die nach Formel \ref{equ:bspline_basis} definiert sind. 
+\begin{align}\label{equ:bspline_basis}
+N^0_i(u) & := 
+\begin{cases}
+1 &t_i \leq u \le t_{i+1}\\
+0 &sonst
+\end{cases}\\
+N_i^k(u) & := \frac{u-t_i}{t_{i+k}}N^{k-1}_i(u)+\frac{t_{i+k+1}-u}{t_{i+k+1}-t_{i+1}}N^{k-1}_{i+1}(u), k =1,\ldots, n
+\end{align}
+
+Die Berechnung eines Bsplines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline}
+\begin{equation}\label{equ:bspline}
+F(u) := \sum^{m-1}_{i=0} N^n_i(u)\mathbf{d}_i 
+\end{equation}
+
+Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollständigen, Liste aufgeführt:
 \begin{itemize}
-\item{Gradient des gaussgefilterten Farbbild}
-\item{Radius mit spezifischem minimalen und maximalem Radius \color{red} Komisches Bild, Wiederholung, Sebastian fragen,  BLABLA \color{black}}
-\item{Gewichtung anhand Arcustangens von Blau- und Grünkanal}
-\item{Unterschied zum vorher bestimmten Durchschnitt der Hintergrundpixel  \color{red} "Distance transform" = geht in Richtung invers?, Sebastian fragen,  BLABLA \color{black}}
-\item{Unterschied zum vorher bestimmten Durchschnitt der Vordergrundpixel}
-\item{SLIC Superpixel + Distanzmaß als Gewichtung}
+\item{Keine Endpunktinterpolation}
+\item{Fallen $n$ Knoten $t_i$ auf den gleichen Wert, so wird der zugehörige Kontrollpunkt interpoliert}
+\item{Fallen $n$ Kontrollpunkte $\mathbf{d}_i$ auf den gleichen Punkt, so wird dieser interpoliert}
+\item{Lokale Kontrolle: Für $u \in \lbrack )$ ist die Kurve unabhängig von $\mathbf{d}_j$, wobei $j < i-n$ und $j > i$ gilt.}
 \end{itemize}
 
-Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wiederholung wird verhindert, dass Anfang und Endpunkt des Weges nicht übereinstimmen. Dies hätte zur Folge, dass die Segmentierung im späteren Bild nicht geschlossen ist und einen Sprung aufweist. Die inverse Polartransformation überführt die segmentierende Linie zurück in den ursprünglichen Bildraum. Abbildung \ref{fig:seg_outer_borders} soll die einzelnen Schritte anhand eines Beispiels verdeutlichen.
-\begin{figure}
-\center
-\subfloat[Originalbild]{
-\includegraphics[width=0.35\textwidth]
-{pics/Grundlagen/seg_orig}\label{fig:seg_original}}
-\quad
-\subfloat[Polartransformiertes Original, dreifach aneinandergehängt]{
-\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_polar}\label{fig:seg_polartransform}}
-\quad
-\subfloat[Kostenfunktion]{
-\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_function}\label{fig:seg_costfunction}}
-\quad
-\subfloat[Weg mit minimalen Kosten]{
-\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_min}\label{fig:seg_min}}
-\quad
-\subfloat[Hervorgehobenes Ergebnis Segmentierung]{
-\includegraphics[width=0.35\textwidth]
-{pics/Grundlagen/seg_seg}\label{fig:seg_seg}}
-\quad
-\caption[Segmentierung mittels Polartransformation]{$\mathbf{(a)}$ Originalbild; $\mathbf{(b)}$ Polartransformation mit Zentrum der Zelle als Nullpunkt; $\mathbf{(c)}$ Kostenfunktion, wobei die Kosten in den dunklen Bereichen minimal sind; $\mathbf{(d)}$ Auswertung der Kostenfunktion: Grüne Linie entspricht Weg mit den geringsten Kosten; $\mathbf{(e)}$ Inverse Polartransformation, heller Bereich entspricht der segmentierten Zelle \label{fig:seg_outer_borders}}
-\end{figure}
-Die Unterscheidung zwischen Plasma und Zellkern wird wieder auf dem Graubild realisiert, welches durch den Arcustangens von Blau und Grün gebildet wird. Dafür wird das Histogramm der Pixel, die innerhalb der zuvor segmentierten Zelle liegen, bestimmt. Mit Hilfe der Grenzwertbestimmung von Otsu wird das Histogramm und dadurch auch das Bild in zwei verschiedene Bereiche aufgeteilt.
-  
-\section[Klassifizierung]{Klassifizierung}\label{sec:klassifizierung}
-\color{red}
-Hier rein oder Methoden? Hat ja nichts mit der Farbnormalisierung an sich zu tun? Paper fehlt noch in Quellen!! Veröffentlichung abwarten?
-\color{black}
-Der zweite wichtige Baustein für eine automatisierte Differentialzählung ist die Zellklassifikation, welche der Segmentierung nachfolgt. In diesem Schritt soll die Zelle einer von 16 Klassen zugeordnet werden. Hierbei soll das Wissen über die Hematopoese genutzt werden und in Form eines hierarchischen Baummodell nachgebildet werden, wie in Abbildung \ref{fig:classification_tree} dargestellt.
-\begin{figure}
-\center
-\includegraphics[width = 0.95\textwidth]{pics/Grundlagen/classificationtree}
-\caption[Hierarchisches Baummodell für die Klassifikation]{Darstellung des hierarchischen Baummodell, das die Hematopoese annähert\label{fig:classification_tree}}
-\end{figure} 
-Die für die Klassifikation verwendeten Merkmale teilen sich in Form, Textur und Farbe auf. Bei der Form spielen die gesamte Fläche, das Verhältnis aus Kern und Plasma, Konturmerkmale, Zernike Momente, normalisierte zentrale Momente, normalisierte Merkmale des Radius, Formfaktoren und Anzahl der Kernsegmente. Die Textur wird durch "local binary patterns", Grauwertmatrizen, Merkmale basierend auf Summen- und Differenzhistogrammen, farbbasierte Texturmerkmale, Charakterisierung von Heterogenität und Granularität...\color{red} BLALBLA, Sebastian fragen wegen deutscher Begriffe für die einzelnen Features \color{black}. 
+\section{Color Deconvolution}
+
+Die sogenannte Color Deconvolution ist spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel quantitative Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
+
+Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz \ref{equ:lambert_beer}, wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also R,G oder B. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
+
+\begin{equation}\label{equ:lambert_beer}
+I_k = I_{0,k}e^{-Ac_k}
+\end{equation} 
+
+Der Zusammenhang zwischen der Menge an Farbstoff und der detektierten Intensität ist also nicht linear. Aus diesem Grund wird das Bild zunächst mit Hilfe des Logarithmus in den sogenannten OD-Raum (Optical Density) transferiert \ref{equ:od}.
+
+\begin{equation}\label{equ:od}
+OD_k = -log\left(\frac{I_k}{I_{0,k}}\right) = Ac_k
+\end{equation} 
 
 
+\citeeig{khan2014nonlinear} drücken die Zusammenhänge für die Color Deconvolution in Anlehnung an \citeauthor{ruifrok2001quantification} in Matrixschreibweise folgendermaßen aus:
+
+\begin{equation}\label{equ:beer_matrix}
+\Psi = e^{-\mathbf{S}\hat\Psi} 
+\end{equation}
+
+In Formel \ref{equ:beer_matrix} steht $\mathbf{S}$ für die sogenannte Stainmatrix, welche in Formel \ref{equ:stainmatrix} noch genauer beschrieben wird. Sie beinhaltet die Absorptionsfaktoren der vorkommenden Farbstoffe für die einzelnen Kanäle. $\Psi$ beschreibt den ursprünglichen Farbraum, also RGB und $\hat\Psi$ den neuen Farbraum. 
+
+\begin{equation}\label{equ:stainmatrix}
+\mathbf{S} =
+\begin{bmatrix}
+\bar s_{r,1} & \bar s_{g,1} & \bar s_{b,1}\\
+\bar s_{r,2} & \bar s_{g,2} & \bar s_{b,2}\\
+\bar s_{r,3} & \bar s_{g,3} & \bar s_{b,3}
+\end{bmatrix}
+\end{equation}
+
+Formel \ref{equ:beer_matrix} lässt sich umstellen nach $\hat\Psi$ \ref{equ:color_deconvolution}
+
+\begin{align}\label{equ:color_deconvolution}
+&\textrm{} &&\hat\Psi(c)= \mathbf{D}\Phi(c) \\
+&\textrm{Es gelten } &&\mathbf{D}= \mathbf{S}^{-1} \\
+&\textrm{und } &&\Phi(c) = - log(\Psi(c))
+\end{align}
+
+Der hier als $\Phi$ bezeichnete Farbraum beschreibt damit den OD-Wert(\ref{equ:od}). 
+Ein entscheidender Punkt bei CD liegt in der Bestimmung der Stainvektoren. Im  folgenden wird eine Möglichkeit beschrieben, wie diese manuell für eine spezifische Färbung gefunden werden.
+
+Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau zu kommen, wird von \citeauthor{ruifrok2001quantification} vorgeschlagen. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrix vor und nach dem Normierungsschritt sind in Formel \ref{equ:stain_hedab} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
+
+\begin{align}\label{equ:stain_hedab}
+\mathbf{S} & = 
+\begin{bmatrix}
+0.18 & 0.20 & 0.08\\
+0.01 & 0.13 & 0.01\\
+0.10 & 0.21 & 0.29
+\end{bmatrix}
+\\
+\mathbf{S_{norm}} & = 
+\begin{bmatrix}
+0.65 & 0.70 & 0.29\\
+0.07 & 0.99 & 0.11\\
+0.27 & 0.57 & 0.78
+\end{bmatrix}\nonumber
+\end{align}
+
+Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, weil sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden.  
 

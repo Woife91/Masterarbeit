@@ -27,14 +27,62 @@ Die Implementierung der Bspline-Berechnung weißt viele Parallelen, aber auch Abw
 \subsection{Auswahl Target}\label{sec:auswahl_target}
 
 Erste Versuche zeigten, dass ein einzelnes Referenzbild nicht ausreicht, die Vielfältigkeit der Daten abzubilden. Aus diesem Grund wurde manuell ein Set aus 15 Bildern zusammengestellt, welches zum einen möglichst viele verschiedene Ausprägungen, sowie für die Segmentierung geeignete Bilder enthält. Für die Wahl der Referenz wurden unterschiedliche Konzepte entwickelt. Eine Möglichkeit besteht darin, eine Art mittleres Referenzbild zu berechnen, indem für jedes Merkmal, der Mittelwert aller korrespondierenden Merkmale der Referenzbilder gewählt wird. Eine Abwandlung hierzu ist es, den Median anstelle des Mittelwerts zu verwenden, wodurch Ausreißer kein Gewicht bekommen. In beiden Fällen bleiben die Referenzmerkmale für alle zu normalisierenden Bilder gleich. Eine andere Möglichkeit ist es für jedes Bild eine hinsichtlich der Merkmale möglichst ähnliche Referenz auszuwählen. Dadurch ist die Gefahr einer Verfälschung der Bildinformationen am wenigsten gegeben, der Grad der Anpassung über ein ganzes Set hinweg ist jedoch auch geringer.
-  
-\subsection{Evaluierung}\label{sec:evaluierung}
 
-Die unterschiedlichen Ansätze zur Farbnormalisierung wurden in Hinblick auf die Qualität der Segmentierung und auf korrekte Klassifikation untersucht. Die dabei verwendeten Maße werden in den folgenden Abschnitten vorgestellt.
+\section[Segmentierung]{Segmentierung}\label{sec:segmentierung}
 
+\subsection{Algorithmus}\label{sec:seg_algo}
+Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Segmentierung der einzelnen Zellen. \citeeig{krappe2015dynamic} stellen hierzu ein Verfahren vor, bei dem im ersten Schritt die Zellzentren detektiert werden sollen. Es wird ein Grauwertbild mit Hilfe eines gewichteten Quotienten von Grün- und Blaukanal generiert. Otsu-Thresholding führt im Anschluss zu einem Binärbild, in dem durch Zählen der schwarzen und weißen Pixel entschieden wird, ob das Bild viele oder wenige gefärbte Flächen enthält, wovon das weitere Vorgehen abhängt. Ist viel Vordergrund enthalten, so werden mit Hilfe morphologischer Operatoren Löcher im innerhalb weißer Flächen aufgefüllt. Für die Ermittlung potentieller Zellzentren, wird eine Wasserscheidentransformation auf dem gaußgefilterten oben beschriebenen Grauwertbild durchgeführt. Regionen welche eine Größe von 2500 Pixeln überschreiten, werden in eine Graphendarstellung umgewandelt. Falls gefundene Zentren eine euklidische Distanz von weniger als 70 Pixeln aufweisen, so wird davon ausgegangen, dass diese Knoten auf die gleiche Zelle verweisen, weshalb sie durch einen neuen Knoten ersetzt werden, der den Mittelwert repräsentiert. Dieser Schritt ist Abbildung \ref{fig:cell_centers} dargestellt.
+\begin{figure}
+\subfloat[Vor Korrektur: eine Zelle wird durch zwei Zentren beschrieben]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/centers_uncorrected}\label{fig:seg_uncorrected}}
+\quad
+\subfloat[Nach Korrektur: Jede Zelle mit nur einem Zentrum]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/centers_corrected}\label{fig:seg_corrected}}
+\quad
+\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in $\mathbf{(a)}$, zu einem Zentrum zusammengefügt $mathbf{(b)}$. \label{fig:cell_centers}}
+\end{figure} 
+Hat das Bild dagegen einen hohen Vordergrundanteil, so wird eine Hintergrundkorrektur durchgeführt, bei der dieser durch ein 2D-Polynom dritten Grades approximiert wird. Der Vordergrund wird zunächst mit Hilfe eines Mittelwertfilters geschätzt und dann unter Verwendung des "Fast Marching"-Algorithmus konkretisiert. In der Folge werden homogene Regionen mit dem "Color Structure Code" extrahiert und als geordneter Graph dargestellt. Die Blätter dieses Graphen sind die potentiellen Zellzentren, die anhand des gleichen Verfahrens wie im Fall mit viel Vordergrund korrigiert werden. 
+Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Zellkern und Zellplasma zu bestimmen, wird für jede Zelle eine Polartransformation mit dem im vorherigen Schritt gefundenen Zentrum durchgeführt. Es wird eine zu minimierende Kostenfunktion eingeführt, die aus sechs Komponenten besteht:
+\begin{itemize}
+\item{Gradient des gaussgefilterten Farbbild}
+\item{Radius mit spezifischem minimalen und maximalem Radius \color{red} Komisches Bild, Wiederholung, Sebastian fragen,  BLABLA \color{black}}
+\item{Gewichtung anhand Arcustangens von Blau- und Grünkanal}
+\item{Unterschied zum vorher bestimmten Durchschnitt der Hintergrundpixel  \color{red} "Distance transform" = geht in Richtung invers?, Sebastian fragen,  BLABLA \color{black}}
+\item{Unterschied zum vorher bestimmten Durchschnitt der Vordergrundpixel}
+\item{SLIC Superpixel + Distanzmaß als Gewichtung}
+\end{itemize}
 
-\subsubsection{Segmentierung}\label{sec:eval_segmentierung}
+Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wiederholung wird verhindert, dass Anfang und Endpunkt des Weges nicht übereinstimmen. Dies hätte zur Folge, dass die Segmentierung im späteren Bild nicht geschlossen ist und einen Sprung aufweist. Die inverse Polartransformation überführt die segmentierende Linie zurück in den ursprünglichen Bildraum. Abbildung \ref{fig:seg_outer_borders} soll die einzelnen Schritte anhand eines Beispiels verdeutlichen.
+\begin{figure}
+\center
+\subfloat[Originalbild]{
+\includegraphics[width=0.35\textwidth]
+{pics/Grundlagen/seg_orig}\label{fig:seg_original}}
+\quad
+\subfloat[Polartransformiertes Original, dreifach aneinandergehängt]{
+\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_polar}\label{fig:seg_polartransform}}
+\quad
+\subfloat[Kostenfunktion]{
+\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_function}\label{fig:seg_costfunction}}
+\quad
+\subfloat[Weg mit minimalen Kosten]{
+\includegraphics[width = 0.9\textwidth]{pics/Grundlagen/seg_min}\label{fig:seg_min}}
+\quad
+\subfloat[Hervorgehobenes Ergebnis Segmentierung]{
+\includegraphics[width=0.35\textwidth]
+{pics/Grundlagen/seg_seg}\label{fig:seg_seg}}
+\quad
+\caption[Segmentierung mittels Polartransformation]{$\mathbf{(a)}$ Originalbild; $\mathbf{(b)}$ Polartransformation mit Zentrum der Zelle als Nullpunkt; $\mathbf{(c)}$ Kostenfunktion, wobei die Kosten in den dunklen Bereichen minimal sind; $\mathbf{(d)}$ Auswertung der Kostenfunktion: Grüne Linie entspricht Weg mit den geringsten Kosten; $\mathbf{(e)}$ Inverse Polartransformation, heller Bereich entspricht der segmentierten Zelle \label{fig:seg_outer_borders}}
+\end{figure}
+Die Unterscheidung zwischen Plasma und Zellkern wird wieder auf dem Graubild realisiert, welches durch den Arcustangens von Blau und Grün gebildet wird. Dafür wird das Histogramm der Pixel, die innerhalb der zuvor segmentierten Zelle liegen, bestimmt. Mit Hilfe der Grenzwertbestimmung von Otsu wird das Histogramm und dadurch auch das Bild in zwei verschiedene Bereiche aufgeteilt.
 
+\subsection{Evaluierung}\label{sec:seg_eval}
+%TODO
+\color{red}
+PAPER!
+\color{black}
 Für die Evaluation der Segmentierung, wurde der automatische Algorithmus mit den als Grundwahrheit dienenden manuell bestimmten Daten verglichen. Das verwendete Maß ist dabei eine Kombination aus Unter- bzw. Übersegmentierung und dem AOM-Kriterium, welches den Überlappungsbereich beschreibt. 
 
 \noindent AOM-Kriterium:
@@ -51,6 +99,19 @@ Q_3 = \frac{|A\setminus (A\cap T)|}{|A|}
 \end{equation}
 
 Soll Segmentierung der Zelle als ganzem betrachtet werden, so ist $A$ die Menge aller Punkte, welche laut automatischer Segmentierung zur Zelle gehören. $T$ steht für die äquivalente Menge entsprechend der Grundwahrheit.
-
-\subsubsection{Klassifizierung}\label{sec:eval_klassifizierung}
-
+  
+\section[Klassifizierung]{Klassifizierung}\label{sec:klassifizierung}
+\subsection{Algorithmus}\label{sec:klass_algo}
+%TODO
+\color{red}
+ Paper fehlt noch in Quellen!! Veröffentlichung abwarten?
+\color{black}
+Der zweite wichtige Baustein für eine automatisierte Differentialzählung ist die Zellklassifikation, welche der Segmentierung nachfolgt. In diesem Schritt soll die Zelle einer von 16 Klassen zugeordnet werden. Hierbei soll das Wissen über die Hematopoese genutzt werden und in Form eines hierarchischen Baummodell nachgebildet werden, wie in Abbildung \ref{fig:classification_tree} dargestellt.
+\begin{figure}
+\center
+\includegraphics[width = 0.95\textwidth]{pics/Grundlagen/classificationtree}
+\caption[Hierarchisches Baummodell für die Klassifikation]{Darstellung des hierarchischen Baummodell, das die Hematopoese annähert\label{fig:classification_tree}}
+\end{figure} 
+Die für die Klassifikation verwendeten Merkmale teilen sich in Form, Textur und Farbe auf. Bei der Form spielen die gesamte Fläche, das Verhältnis aus Kern und Plasma, Konturmerkmale, Zernike Momente, normalisierte zentrale Momente, normalisierte Merkmale des Radius, Formfaktoren und Anzahl der Kernsegmente. Die Textur wird durch "local binary patterns", Grauwertmatrizen, Merkmale basierend auf Summen- und Differenzhistogrammen, farbbasierte Texturmerkmale, Charakterisierung von Heterogenität und Granularität...\color{red} BLALBLA, Sebastian fragen wegen deutscher Begriffe für die einzelnen Features \color{black}. 
+\subsection{Evaluierung}\label{sec:klass_eval}
+%TODO
