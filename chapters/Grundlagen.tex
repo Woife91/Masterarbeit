@@ -61,9 +61,9 @@ Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollst
 \item{Lokale Kontrolle: Für $u \in \lbrack )$ ist die Kurve unabhängig von $\mathbf{d}_j$, wobei $j < i-n$ und $j > i$ gilt.}
 \end{itemize}
 
-\section{Color Deconvolution}
+\section{Color Deconvolution}\label{sec:color_deconvolution}
 
-Die sogenannte Color Deconvolution ist spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel quantitative Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
+Die sogenannte Color Deconvolution ist ein Farbraumtransformation spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel quantitative Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
 
 Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz \ref{equ:lambert_beer}, wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also R,G oder B. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
 
@@ -84,7 +84,7 @@ OD_k = -log\left(\frac{I_k}{I_{0,k}}\right) = Ac_k
 \Psi = e^{-\mathbf{S}\hat\Psi} 
 \end{equation}
 
-In Formel \ref{equ:beer_matrix} steht $\mathbf{S}$ für die sogenannte Stainmatrix, welche in Formel \ref{equ:stainmatrix} noch genauer beschrieben wird. Sie beinhaltet die Absorptionsfaktoren der vorkommenden Farbstoffe für die einzelnen Kanäle. $\Psi$ beschreibt den ursprünglichen Farbraum, also RGB und $\hat\Psi$ den neuen Farbraum. 
+In Formel \ref{equ:beer_matrix} steht $\mathbf{S}$ für die sogenannte Stainmatrix, welche in Formel \ref{equ:stainmatrix} genauer beschrieben wird. Sie beinhaltet die Absorptionsfaktoren der vorkommenden Farbstoffe für die einzelnen Kanäle. $\Psi$ beschreibt den ursprünglichen Farbraum, also RGB und $\hat\Psi$ den neuen Farbraum. 
 
 \begin{equation}\label{equ:stainmatrix}
 \mathbf{S} =
@@ -124,5 +124,5 @@ Ein Ansatz an die Stainvektoren für eine Färbemethode und einen Versuchsaufbau z
 \end{bmatrix}\nonumber
 \end{align}
 
-Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, weil sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden.  
+Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, weil sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden. Ansätze exakte und bildspezifische Werte zu finden werden in den Abschnitten \ref{sec:macenko} und \ref{sec:khan} beschrieben.  
 
