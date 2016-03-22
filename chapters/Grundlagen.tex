@@ -58,8 +58,29 @@ Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollst
 \item{Keine Endpunktinterpolation}
 \item{Fallen $n$ Knoten $t_i$ auf den gleichen Wert, so wird der zugehörige Kontrollpunkt interpoliert}
 \item{Fallen $n$ Kontrollpunkte $\mathbf{d}_i$ auf den gleichen Punkt, so wird dieser interpoliert}
-\item{Lokale Kontrolle: Für $u \in \lbrack )$ ist die Kurve unabhängig von $\mathbf{d}_j$, wobei $j < i-n$ und $j > i$ gilt.}
+\item{Lokale Kontrolle: Für $u \in \lbrack t_i,t_{i+1} )$ ist die Kurve unabhängig von $\mathbf{d}_j$, wobei $j < i-n$ und $j > i$ gilt.}
 \end{itemize}
+
+Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier Bsplines. Die Kontrollpunkte sind dabei identisch, allerdings sind Knotenvektor und Grad der Kurve unterschiedlich. Vergleicht man die gezeigten Verläufe in \ref{fig:bspline_inter_2} und \ref{fig:bspline_inter_4} ist festzustellen, dass der höhere Grad der Kurve eine geringere Annäherung an die Kontrollpunkte zur Folge hat, was den Verlauf robuster gegenüber Ausreißern bei den Kontrollpunkten macht. 
+\begin{figure}
+\subfloat[Uniformer Knotenvektor, Grad 2]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/bspline_uniform}\label{fig:bspline_uniform}}
+\quad
+\subfloat[Endpunktinterpolation, Grad 2]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/bspline_endpoint_interpolation}\label{fig:bspline_inter_2}}
+\quad
+\subfloat[Zufällig verteilter Knotenvektor]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/bspline_random}\label{fig:bspline_random}}
+\quad
+\subfloat[Endpunktinterpolation, Grad 4]{
+\includegraphics[width=0.45\textwidth]
+{pics/Grundlagen/bspline_endpoint_deg4}\label{fig:bspline_inter_4}}
+\quad
+\caption[Beispiele Bsplines]{Unterschiedliche Bsplines, abhängig von Grad und Verteilung auf Knotenvektor. Die Farbe des Bspline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor. \label{fig:bsplines_example}}
+\end{figure}
 
 \section{Color Deconvolution}\label{sec:color_deconvolution}
 

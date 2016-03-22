@@ -10,8 +10,50 @@
 
 Im den folgenden Abschnitten soll aufgezeigt werden, inwiefern das Vorgehen von \citeauthor{khan2014nonlinear} und \citeauthor{macenko2009method} abgeändert wurde um die aufgetretenen Probleme zu umgehen.
 
-\subsection[Eigene Color Deconvolution]{Eigene Color Deconvolution}\label{sec:own_cd}
-In nächster Näherung wurden Stainvektoren für die Färbung nach Giemsa (Methylenblau und Eosin) verwendet, welche von \citeeig{landini2016} nach dem in Abschnitt \ref{sec:color_deconvolution} vorgestellten experimentellen Verfahren ermittelt wurden. Für den fehlenden dritten Vektor, wird u.a. in der Arbeit von Khan angemerkt, dass dieser optimalerweise orthogonal zu den anderen beiden sein soll. Außer im Fall von Einheitsvektoren, würde dieser jedoch negative Komponenten enthalten, was im Modell die Folge hätte, dass die Absorption teilweise negativ wäre. Als Lösung wurden zwei verschiedene Ansätze getestet. Die ersten beiden Zeilen der Stainmatrix sind bekannt und \citeauthor{landini2016} berechnet die dritte Zeile der Stainmatrix, in dem er zunächst die Spalten normalisiert, für den Fall dass die ersten beiden Komponenten nicht schon über $1.0$ liegen. Tritt dies doch ein, so wird das Element der dritten Zeile auf $0.0$ gesetzt. Im nächsten Schritt wird die Zeile normalisiert und Elemente die gleich $0$ werden zur Fehlerreduktion auf einen Wert $\epsilon = 0.01$ gesetzt. Diese Methode wurde der eigenen Idee gegenübergestellt, bei der zunächst über das Kreuzprodukt ein echt orthogonaler Vektor bestimmt wird. Dabei werden beide  Szenarien abhängig vom Vorzeichen berücksichtigt. Negative Komponenten werden auf $0.0$ gesetzt. Derjenige Vektor der nach dieser Operation die größere Länge aufweist, wird gewählt und normalisiert und als dritter Stainvektor eingesetzt. Unabhängig von der Wahl des dritten Vektors ist die Approximation für die vorhandenen Daten legitim, da der dritte Kanal für beide Fälle in gefärbten Bereichen keine Information aufweist.
+\subsection[Color Deconvolution]{Color Deconvolution}\label{sec:own_cd}
+In nächster Näherung wurden zunächst Stainvektoren für die Färbung nach Giemsa (Methylenblau und Eosin) verwendet, welche von \citeeig{landini2016} nach dem in Abschnitt \ref{sec:color_deconvolution} vorgestellten experimentellen Verfahren ermittelt wurden. Außerdem wurden als Vergleich die Stainvektoren benutzt, die mit Hilfe des von \citeauthor{macenko2009method} eingeführten Verfahrens bestimmt worden sind(\ref{sec:implementierung_macenko}). Für den jeweils fehlenden dritten Vektor, wird u.a. in der Arbeit von Khan angemerkt, dass dieser optimalerweise orthogonal zu den anderen beiden sein soll. Außer im Fall von Einheitsvektoren, würde dieser jedoch negative Komponenten enthalten, was im Modell die Folge hätte, dass die Absorption teilweise negativ wäre. Da dies mit der Realität nicht vereinbar ist, wurden als Lösung wurden zwei verschiedene Ansätze getestet. Die ersten beiden Zeilen der Stainmatrix sind bekannt und \citeauthor{landini2016} berechnet die dritte Zeile der Stainmatrix, in dem er zunächst die Spalten normalisiert, für den Fall dass die ersten beiden Komponenten nicht schon über $1.0$ liegen. Tritt dies doch ein, so wird das Element der dritten Zeile auf $0.0$ gesetzt. Im nächsten Schritt wird die Zeile normalisiert und Elemente die gleich $0$ werden zur Fehlerreduktion auf einen Wert $\epsilon = 0.01$ gesetzt. Diese Methode wurde der eigenen Idee gegenübergestellt, bei der zunächst über das Kreuzprodukt ein echt orthogonaler Vektor bestimmt wird. Dabei werden beide  Szenarien abhängig vom Vorzeichen berücksichtigt. Negative Komponenten werden auf $0.0$ gesetzt. Derjenige Vektor der nach dieser Operation die größere Länge aufweist, wird gewählt und normalisiert und als dritter Stainvektor eingesetzt. Unabhängig von der Wahl des dritten Vektors ist die Approximation für die vorhandenen Daten legitim, da der dritte Kanal für beide Fälle in gefärbten Bereichen keine Information aufweist. In Abbildung BLA sind Beispiele für die jeweiligen Zerlegungen gezeigt. 
+\begin{figure}
+\subfloat[Originalbild]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/original}\label{fig:cd1_original}}
+\quad
+\subfloat[Kanal 1, Giemsa]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor1}\label{fig:cd1_ch1}}
+\quad
+\subfloat[Kanal 2, Giemsa]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor2}\label{fig:cd1_ch2}}
+\quad
+\subfloat[Kanal 3, Giemsa, normalisierte Spalten]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3}\label{fig:cd1_ch31}}
+\quad
+\subfloat[Kanal 3, Giemsa, ]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3_orthGiemsa}\label{fig:cd1_ch32}}
+\quad
+\centering\subfloat[Originalbild]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/original}\label{fig:cd2_original}}
+\quad
+\centering\subfloat[Kanal 1, Macenko]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor1_macenko}\label{fig:cd2_ch1}}
+\quad
+\centering\subfloat[Kanal 2, Macenko]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor2_macenko}\label{fig:cd2_ch2}}
+\quad
+\centering\subfloat[Kanal 3, Macenko, normalisierte Spalten]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3_macenko}\label{fig:cd2_ch31}}
+\quad
+\centering\subfloat[Kanal 3, Macenko, orthogonale Stains]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3_orthMacenko}\label{fig:cd2_ch32}}
+\caption[Color Deconvolution]{Verschiedene Ansätze für die Color Deconvolution. Die erste Reihe verwendet die experimentell gefundenen Stains, in der zweiten wurden sie nach Macenko (\ref{sec:implementierung_macenko}) bestimmt. Die erste Spalte zeigt das Originalbild, es folgen jeweils die Kanäle des ersten und zweiten Farbvektors. Spalte vier und fünf zeigen den dritten Vektor, der auf zwei verschiedene Arten bestimmt wurde. \label{fig:cd_examples}}
+\end{figure} 
 Eine Idee, die Zerlegung bildspezifisch zu optimieren, ist die Definition einer Zielfunktion für ein Optimierungsproblem, wobei als Initialstelle die Giemsa-Farbstoffe dienen können. Die Funktion ist von vier Parametern abhängig, nämlich den jeweils ersten beiden Elementen der Farbe repräsentierenden Stainvektoren. Dies ist nur möglich, falls nur zwei Grundfarbstoffe verwendet werden, da ansonsten der dritte Vektor nicht in Abhängigkeit der ersten beiden berechnet werden kann. Folgende Eigenschaften der Zerlegung wurden als mögliche Komponenten der Zielfunktion identifiziert:
 \begin{itemize}
 \item{Entropie in Kanal 3: Der dritte Kanal soll vor allem den Hintergrund repräsentieren, welcher keine relevanten Informationen beinhaltet. Die Entropie dient als Maß für den Informationsgehalt einer Quelle}
@@ -21,8 +63,34 @@ Eine Idee, die Zerlegung bildspezifisch zu optimieren, ist die Definition einer 
 \end{itemize}
 \subsection{Bildclustering}\label{sec:clustering}
 
-Um die Farbnormalisierung nach Khan durchzuführen, ist eine Zuordnung der Pixel in die Klassen "Gefärbt", "Hintergrund" und "Anderes" notwendig. Bei Khan wird diese durch einen Klassifikator realisiert, der für die vorliegenden Daten jedoch nicht geeignet war und schlechte Resultate lieferte. Aus diesem Grund wurde eine eigene Methode zur Identifikation der Cluster entwickelt. Zunächst werden mit Hilfe des Arcustangens aus Blau- und Grünkanal und einer Schwellwertbestimmung nach Otsu gefärbte Pixel identifiziert. Für den Hintergrund wird das Grauwertbild betrachtet. Die Histogramme weisen ein ausgeprägtes Maximum im Bereich hoher Intensitäten ($ > 200$)auf, wodurch der Hintergrund gut definiert ist. Der Schwellwert wird als erstes lokales Minimum unterhalb des Maximums festgelegt, wobei sowohl für die Bestimmung des Maximums als auch des Minimums ein gefiltertes Histogramm verwendet wird. Außerdem wird eine Minimaldistanz zwischen Maximum und Minimum eingeführt. Dadurch wird im Fall von zwei eng zusammenliegenden Maximumsspitzen vermieden, dass Teile des gesuchten Bereichs nicht erfasst werden. Der Bereich "Anderes", in den vor allem Erythrozyten fallen, grenzt sich deutlich vom Hintergrund ab, weswegen die Annahme, dass die Intensitätsdifferenz zwischen dem Maximum des Hintergrunds und Pixeln die in "Anderes" fallen mindestens fünf betragen sollte, valide ist. Der Fall eines sehr homogenen Hintergrund mit schmaler Spitze im Histogramm spielt eine untergeordnete Rolle, da die Intensitäten in "Anderes" stark streuen und ein Fehler des Schwellwerts $<5$ vernachlässigbar ist. Es gibt Fälle in denen kein Hintergrund zu sehen ist, bzw. dieser aufgrund leichter Färbung nicht mehr klar abgrenzbar ist. In diesen Fällen ist das Maximum dunkler als normal. Empirisch wurde der Bereich $ > 200$ festgelegt, für das ein gültiger Hintergrund gefunden werden kann. Für den Fall, dass das Maximum darunter liegt, wird für dieses Bild kein Hintergrund festgelegt. Dies hat Auswirkungen auf die Berechnung des Bsplines, da keine Merkmale für das Cluster vorhanden sind. Der Umgang mit diesem Fall wird in Abschnitt \ref{sec:bspline} beschrieben.  
-Nach der Bestimmung der Bereiche "Hintergrund" und "Gefärbt" ergibt sich "Anderes" aus den bisher nicht festgelegten Pixeln. Vorausgesetzt wird jedoch, dass diese Pixel nach der Color Deconvolution im dritten Kanal nicht weiß sind, da dies Eigenschaften des gefärbten Bereichs bzw. eines sehr hellen Hintergrunds wären. Die Farbeeigenschaft von hellerem Plasma wird durch den Arcustangens oft nicht komplett erfasst. Um zu vermeiden dass diese Bereiche anschließend "Anderes" zugeordnet werden, wird die oben genannte Bedingung gestellt. In Abbildung BLA sind einige Beispiele für die Segmentierung gezeigt. Es soll hierbei verdeutlicht werden, dass das Problem sehr vielschichtig ist.
+Um die Farbnormalisierung nach Khan durchzuführen, ist eine Zuordnung der Pixel in die Klassen "Gefärbt", "Hintergrund" und "Sonstiges" notwendig. Bei Khan wird diese durch einen Klassifikator realisiert, der für die vorliegenden Daten jedoch nicht geeignet war und schlechte Resultate lieferte. Aus diesem Grund wurde eine eigene Methode zur Identifikation der Cluster entwickelt. Zunächst werden mit Hilfe des Arcustangens aus Blau- und Grünkanal und einer Schwellwertbestimmung nach Otsu gefärbte Pixel identifiziert. Für den Hintergrund wird das Grauwertbild betrachtet. Die Histogramme weisen ein ausgeprägtes Maximum im Bereich hoher Intensitäten ($ > 200$)auf, wodurch der Hintergrund gut definiert ist. Der Schwellwert wird als erstes lokales Minimum unterhalb des Maximums festgelegt, wobei sowohl für die Bestimmung des Maximums als auch des Minimums ein gefiltertes Histogramm verwendet wird. Außerdem wird eine Minimaldistanz zwischen Maximum und Minimum eingeführt. Dadurch wird im Fall von zwei eng zusammenliegenden Maximumsspitzen vermieden, dass Teile des gesuchten Bereichs nicht erfasst werden. Der Bereich "Sonstiges", in den vor allem Erythrozyten fallen, grenzt sich deutlich vom Hintergrund ab, weswegen die Annahme, dass die Intensitätsdifferenz zwischen dem Maximum des Hintergrunds und Pixeln die in "Sonstiges" fallen mindestens fünf betragen sollte, valide ist. Der Fall eines sehr homogenen Hintergrund mit schmaler Spitze im Histogramm spielt eine untergeordnete Rolle, da die Intensitäten in "Sonstiges" stark streuen und ein Fehler des Schwellwerts $<5$ vernachlässigbar ist. Es gibt Fälle in denen kein Hintergrund zu sehen ist, bzw. dieser aufgrund leichter Färbung nicht mehr klar abgrenzbar ist. In diesen Fällen ist das Maximum dunkler als normal. Empirisch wurde der Bereich $ > 200$ festgelegt, für das ein gültiger Hintergrund gefunden werden kann. Für den Fall, dass das Maximum darunter liegt, wird für dieses Bild kein Hintergrund festgelegt. Dies hat Auswirkungen auf die Berechnung des Bsplines, da keine Merkmale für das Cluster vorhanden sind. Der Umgang mit diesem Fall wird in Abschnitt \ref{sec:bspline} beschrieben. 
+\begin{figure}
+\subfloat[Originalbild]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/original_target}\label{fig:seg_original}}
+\quad
+\subfloat[Arcustangens Blau und Grün]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/arctan}\label{fig:seg_arctan}}
+\quad
+\subfloat[Binärbild gefärbte Bereiche]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/bin_stained}\label{fig:seg_bin_stained}}
+\quad
+\subfloat[Grauwertbild]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/gray}\label{fig:seg_gray}}
+\quad
+\subfloat[Histogramm Grauwertbild]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/histogram}\label{fig:seg_histogram}}
+\quad
+\subfloat[Segmentierung]{
+\includegraphics[width=0.3\textwidth]
+{pics/Methoden/segmented}\label{fig:seg_seg}}
+\caption[Eigene Segmentierung]{Die Abbildung zeigt relevante Zwischenergebnisse für den Segmentierungsansatz. $(\mathbf{(c)}$ Weißer Bereich signalisiert gefärbten Bereich im Original. $\mathbf{(e)}$ Rote Linie markiert den gesuchten Schwellwert. Höhere Intensitäten werden dem Hintergrund zugeordnet. $\mathbf{(f)}$ Weiß: Gefärbt, helles Grau: Sonstiges, dunkles Grau: Hintergrund, Schwarz: Keine Zuordnung\label{fig:bsplines_example}}
+\end{figure} 
+Nach der Bestimmung der Bereiche "Hintergrund" und "Gefärbt" ergibt sich "Sonstiges" aus den bisher nicht festgelegten Pixeln. Vorausgesetzt wird jedoch, dass diese Pixel nach der Color Deconvolution im dritten Kanal nicht weiß sind, da dies Eigenschaften des gefärbten Bereichs bzw. eines sehr hellen Hintergrunds wären. Die Farbeeigenschaft von hellerem Plasma wird durch den Arcustangens oft nicht komplett erfasst. Um zu vermeiden dass diese Bereiche anschließend "Sonstiges" zugeordnet werden, wird die oben genannte Bedingung gestellt. In Abbildung BLA sind einige Beispiele für die Segmentierung gezeigt. Es soll hierbei verdeutlicht werden, dass das Problem sehr vielschichtig ist.
  
 \subsection{Bspline}\label{sec:bspline_own}
 
