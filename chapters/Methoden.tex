@@ -1,7 +1,7 @@
 \chapter[Methoden]{Methoden}\label{sec:methoden}
 
 \section{Implementierung Macenko}\label{sec:implementierung_macenko}
-Die Implementierung des Algorithmus von Macenko erfolgte in Matlab. Für eine Schätzung der beteiligten Farbstoffe ist eine möglichst große Auswahl aus verschiedenen Zellklassen notwendig. Eine Grundwahrheit die Segmentierung und die Klassifikation betreffend gibt es lediglich für kleinere Teilbilder, in denen häufig nur eine Zelle zu sehen ist. Um alle möglichen Farbtöne abzubilden, besteht entweder die Möglichkeit gefärbte Pixel aus einem größeren repräsentativen Datensatz zu verwenden, oder ein größeres Übersichtsbild mit vielen verschiedenen Zellarten zu wählen. Für gleiche Chemikalien sollten sich die Ergebnisse ähneln. Im folgenden ist der Verlauf anhand eines größeren Übersichtsbild der Größe 2452x2056 Pixel gezeigt. In Abbildung \ref{fig:mac_orig_bin} ist das Originalbild zu sehen, außerdem sind im Binärbild jene Pixel weiß dargestellt, welche für die anschließende Auswertung verwendet werden. Dabei wurden Grenzwerte $\beta_{min} = 0.15$ und $\beta_{max} = 0.95$ im normierten OD-Raum als untere und obere Schranke festgelegt um nicht gefärbte und chemisch gesättigte Pixel auszuschließen. 
+Die Implementierung des Algorithmus von Macenko erfolgte in Matlab. Für eine Schätzung der beteiligten Farbstoffe ist eine möglichst große Auswahl aus verschiedenen Zellklassen notwendig und Hintergrundtönen erforderlich. Hierfür wurde ein repräsentatives Set aus sieben Übersichtsbildern der Größe 2425x2056 ausgewählt, welches eine hohe Variabilität der genannten Eigenschaften aufweist. In Abbildung \ref{fig:mac_orig_bin} ist eines der Originalbilder zu sehen, außerdem sind im zugehörigen Binärbild jene Pixel weiß dargestellt, welche für die anschließende Auswertung verwendet werden. Dabei wurden Grenzwerte $\beta_{min} = 0.15$ und $\beta_{max} = 0.95$ im normierten OD-Raum als untere und obere Schranke festgelegt, um nicht gefärbte und chemisch gesättigte Pixel auszuschließen. 
 \begin{figure}
 \subfloat[Originalbild]{
 \includegraphics[width=0.45\textwidth]
@@ -18,11 +18,41 @@ Für die relevanten Pixel wurde im Anschluss die Kovarianzmatrix anhand von Forme
 \mathbf{C} = \frac{1}{N-1}\sum_{i = 1}^N (\vec{x} - \vec{\mu})\cdot(\vec{x} - \vec{mu})^T
 \end{equation}
 
-Die Bestimmung der ersten beiden Hauptachsen erfolge mittels Singärwertzerlegung (SVD) der Kovarianzmatrix. Dadurch wird diese in zwei orthogonale Matrizen $\mathbf{U}$ und $\mathbf{V}$ sowie die Matrix $\Sigma$, welche auf der Hauptachse die Singulärwerte der Matrix enthält und ansonsten Null ist, zerlegt. Die Singulärwerte sind außerdem entlang der Hauptachse der Größe nach geordnet, wobei der größte Wert an der Stelle $\mathbf{\Sigma_{0,0}}$ steht. Die beiden Hauptachsen, welche mit den beiden größten Eigenwerten korrespondieren sind aus diesem Grund die beiden ersten Spaltenvektoren in $\mathbf{U}$. 
+Die Bestimmung der ersten beiden Hauptachsen erfolgte mittels Singärwertzerlegung (SVD) der Kovarianzmatrix. Dadurch wird diese in zwei orthogonale Matrizen $\mathbf{U}$ und $\mathbf{V}$ sowie die Matrix $\Sigma$, welche auf der Hauptachse die Singulärwerte der Matrix enthält und ansonsten Null ist, zerlegt. Die Singulärwerte sind außerdem entlang der Hauptachse der Größe nach geordnet, wobei der größte Wert an der Stelle $\mathbf{\Sigma_{0,0}}$ steht. Die beiden Hauptachsen, welche mit den beiden größten Eigenwerten korrespondieren sind aus diesem Grund die beiden ersten Spaltenvektoren in $\mathbf{U}$. 
 \begin{equation}\label{equ:svd}
 \text{SVD: }\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T
 \end{equation}
-In der Folge werden die Pixelvektoren auf die Ebene projiziert, welche durch die beiden Hauptvektoren $\vec{u_1}$ und $\vec{u_2}$ aufgespannt wird. Die projizierten Vektoren werden normiert und der eingeschlossene Winkel mit der ersten Hauptachse wird in ein Histogramm eingetragen.
+In der Folge wurden die Pixelvektoren auf die Ebene projiziert, welche durch die beiden Hauptvektoren $\vec{u_1}$ und $\vec{u_2}$ aufgespannt wird. Als nächstem Schritt sollen die projizierten Vektoren normiert werden. Da die Ebene keine Ursprungsebene ist, liegt der normierte Vektor zunächst nicht wieder in der Ebene. Aus diesem Grund wird ein iteratives Verfahren angewendet, projizierte Vektor erst normiert wird, in dem durch seine Länge geteilt wird und dieser normierte Vektor dann wiederum auf die Ebene projiziert wird. Dieses Vorgehen wird solange fortgesetzt bis die Änderung kleiner einem $\epsilon$ ist. In Abbildung BLA ist das Verfahren anhand des 2D-Falls vereinfacht dargestellt. Dort wird im Gegensatz zum realen Anwendungsfall ein Punkt auf eine Gerade projiziert und normiert. 
+\begin{figure}
+\center
+\includegraphics[width = 0.95\textwidth]
+{pics/Methoden/normalisation_scheme}
+\caption[Iteratives Normalisierungsverfahren]{Iteratives Normalisierungsschema: Schwarz dargestellt ist die Gerade auf der Punkt zunächst liegt und am Ende auch wieder liegen soll. In blau dargestellt ist die Normierung in jedem Schritt, rot ist die orthogonale Projektion. Start- und Endpunkt des Verfahrens sind jeweils angegeben.}
+\end{figure}
+In der vorliegenden Arbeit waren maximal zwei Iterationen notwendig. Der eingeschlossene Winkel zwischen Pixelvektoren und zweiter Hauptachse wird danach in ein Histogramm eingetragen. Das kumulierte Histogramm erlaubt im nächsten Schritt eine schnelle Ermittlung des stabilen Minimums und Maximums. Als Grenzwert wird $\alpha = 0.01$ verwendet, das heißt es wird jeweils das erste Feld von unten mit $p \geq \alpha$ bzw. von oben mit $p \leq 1-\alpha$ gesucht. Nachdem die jeweiligen Felder identifiziert sind, wird der jeweilige Mittelwert über alle Repräsentanten berechnet. Im Original von Macenko wird der Winkel zur ersten Hauptachse verwendet, im vorliegenden Fall, führt dies jedoch bei Winkeln $\gamma \approx \pi$ zu numerischen Fehlern. Durch die Änderung werden diese Winkel vermieden und das Resultat entspricht einer Verschiebung des Histogramms um $\frac{\pi}{2}$. Auf das Ergebnis hat die Veränderung keinen Einfluss. Abbildung \ref{fig:mac_proj} zeigt die einzelnen Schritte, von der originalen Punktwolke, über die projizierte Version zur normierten Version für alle relevanten Pixel aus dem Trainingsset. Außerdem ist das zugehörige Histogramm über alle Winkel abgebildet. Die y-Achse gibt hierbei die Wahrscheinlichkeit für die einzelnen Felder an. 
+\begin{figure}
+\subfloat[Originale Punktwolke]{
+\includegraphics[width=0.45\textwidth]
+{pics/Methoden/mac_notprojected}\label{fig:mac_cloud_orig}}
+\quad
+\subfloat[Projizierte Punktwolke]{
+\includegraphics[width=0.45\textwidth]
+{pics/Methoden/mac_projected}\label{fig:mac_cloud_proj}}
+\quad
+\subfloat[Normalisierte Punktwolke]{
+\includegraphics[width= 0.45\textwidth]
+{pics/Methoden/mac_normalised}\label{fig:mac_cloud_norm}}
+\quad
+\subfloat[Histogramm über die Winkel]{
+\includegraphics[width = 0.45\textwidth]
+{pics/Methoden/mac_histo_angles}\label{fig:mac_histo}}
+\caption[Projektion und Winkelhistogramm]{Macenko: $\mathbf{(a)}$ Die originale Punktwolke, $\mathbf{(b)}$ Projizierte Punktwolke auf Ebene der Eigenvektoren. $\mathbf{c}$ Normalisierte Punktwolke. Rot ist jeweils der erste Hauptvektor dargestellt, blau der zweite. $\mathbf{(d)}$ Das Histogramm über die Winkel mit dem zweiten Hauptvektor. \label{fig:mac_proj}}
+\end{figure}  
+Für die relevanten Pixel wurde im Anschluss die Kovarianzmatrix anhand von Formel \ref{equ:covar} berechnet.
+\begin{equation}
+\label{equ:covar}
+\mathbf{C} = \frac{1}{N-1}\sum_{i = 1}^N (\vec{x} - \vec{\mu})\cdot(\vec{x} - \vec{mu})^T
+\end{equation}
 
 \section{Implementierung Khan}
 \label{sec:implementierung_khan}
@@ -55,26 +85,46 @@ In nächster Näherung wurden zunächst Stainvektoren für die Färbung nach Giemsa (
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/CHColor3_orthGiemsa}\label{fig:cd1_ch32}}
 \quad
-\centering\subfloat[Originalbild]{
+\subfloat[Originalbild]{
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/original}\label{fig:cd2_original}}
 \quad
-\centering\subfloat[Kanal 1, Macenko]{
+\subfloat[Kanal 1, Macenko]{
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/CHColor1_macenko}\label{fig:cd2_ch1}}
 \quad
-\centering\subfloat[Kanal 2, Macenko]{
+\subfloat[Kanal 2, Macenko]{
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/CHColor2_macenko}\label{fig:cd2_ch2}}
 \quad
-\centering\subfloat[Kanal 3, Macenko, normalisierte Spalten]{
+\subfloat[Kanal 3, Macenko, normalisierte Spalten]{
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/CHColor3_macenko}\label{fig:cd2_ch31}}
 \quad
-\centering\subfloat[Kanal 3, Macenko, orthogonale Stains]{
+\subfloat[Kanal 3, Macenko, orthogonale Stains]{
 \includegraphics[width=0.15\textwidth]
 {pics/Methoden/CHColor3_orthMacenko}\label{fig:cd2_ch32}}
-\caption[Color Deconvolution]{Verschiedene Ansätze für die Color Deconvolution. Die erste Reihe verwendet die experimentell gefundenen Stains, in der zweiten wurden sie nach Macenko (\ref{sec:implementierung_macenko}) bestimmt. Die erste Spalte zeigt das Originalbild, es folgen jeweils die Kanäle des ersten und zweiten Farbvektors. Spalte vier und fünf zeigen den dritten Vektor, der auf zwei verschiedene Arten bestimmt wurde. \label{fig:cd_examples}}
+\quad
+\subfloat[Originalbild]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/original2}\label{fig:cd3_original}}
+\quad
+\subfloat[Kanal 1, Macenko]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor1_macenko2}\label{fig:cd3_ch1}}
+\quad
+\subfloat[Kanal 2, Macenko]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor2_macenko2}\label{fig:cd3_ch2}}
+\quad
+\subfloat[Kanal 3, Macenko, normalisierte Spalten]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3_macenko2}\label{fig:cd3_ch31}}
+\quad
+\subfloat[Kanal 3, Macenko, orthogonale Stains]{
+\includegraphics[width=0.15\textwidth]
+{pics/Methoden/CHColor3_orthMacenko2}\label{fig:cd3_ch32}}
+\caption[Color Deconvolution]{Verschiedene Ansätze für die Color Deconvolution. Die erste Reihe verwendet die experimentell gefundenen Stains, in der zweiten und dritten wurden sie nach Macenko (\ref{sec:implementierung_macenko}) bestimmt. Die erste Spalte zeigt das Originalbild, es folgen jeweils die Kanäle des ersten und zweiten Farbvektors. Spalte vier und fünf zeigen den dritten Vektor, der auf zwei verschiedene Arten bestimmt wurde. \label{fig:cd_examples}}
 \end{figure} 
 Eine Idee, die Zerlegung bildspezifisch zu optimieren, ist die Definition einer Zielfunktion für ein Optimierungsproblem, wobei als Initialstelle die Giemsa-Farbstoffe dienen können. Die Funktion ist von vier Parametern abhängig, nämlich den jeweils ersten beiden Elementen der Farbe repräsentierenden Stainvektoren. Dies ist nur möglich, falls nur zwei Grundfarbstoffe verwendet werden, da ansonsten der dritte Vektor nicht in Abhängigkeit der ersten beiden berechnet werden kann. Folgende Eigenschaften der Zerlegung wurden als mögliche Komponenten der Zielfunktion identifiziert:
 \begin{itemize}
@@ -114,9 +164,14 @@ Um die Farbnormalisierung nach Khan durchzuführen, ist eine Zuordnung der Pixel 
 \end{figure} 
 Nach der Bestimmung der Bereiche "Hintergrund" und "Gefärbt" ergibt sich "Sonstiges" aus den bisher nicht festgelegten Pixeln. Vorausgesetzt wird jedoch, dass diese Pixel nach der Color Deconvolution im dritten Kanal nicht weiß sind, da dies Eigenschaften des gefärbten Bereichs bzw. eines sehr hellen Hintergrunds wären. Die Farbeeigenschaft von hellerem Plasma wird durch den Arcustangens oft nicht komplett erfasst. Um zu vermeiden dass diese Bereiche anschließend "Sonstiges" zugeordnet werden, wird die oben genannte Bedingung gestellt. In Abbildung BLA sind einige Beispiele für die Segmentierung gezeigt. Es soll hierbei verdeutlicht werden, dass das Problem sehr vielschichtig ist.
  
-\subsection{Bspline}\label{sec:bspline_own}
+\subsection{Anpassung}\label{sec:anpassung}
 
+\subsubsection{Bspline}\label{sec:bspline}
 Die Implementierung der Bspline-Berechnung weißt viele Parallelen, aber auch Abweichungen gegenüber der von Khan\ref{sec:bspline} auf. Als Kontrollpunkte dienen die gleichen Merkmale der Histogramme, aber die Interpolation an den Sättigungsstellen ist unterschiedlich gesichert. Bei Khan gibt es mehrere zusätzliche Kontrollpunkte, in der vorliegenden Arbeit gibt es genau zwei. Dabei liegt einer am unteren, der andere am oberen Ende. Dass diese Punkte trotzdem interpoliert werden, liegt an der Anpassung des Knotenvektors, indem den entsprechenden Knoten eine Vielfachheit $n$ zugewiesen wird. Gleichzeitig entspricht $n$ auch dem Grad des Bsplines. Die verbleibenden Knoten werden gleichmäßig über das Parameterintervall verteilt. Eine optimale Schätzung wie bei \citeauthor{khan2014nonlinear}\ref{sec:khan} wird dabei nicht durchgeführt, allerdings ist der Grad des Bsplines und damit auch die Länge des Knotenvektors variabel.  
+
+\subsubsection{Mittelwert und Standardabweichung}\label{sec:mean_std}
+Wie in Kapitel \ref{sec:reinhard} beschrieben, können Histogramme durch eine Übertragung der statistischen Eigenschaften Mittelwert und Standardabweichung angepasst werden. 
+\subsubsection{Skalierung}\label{sec:skalierung}
 
 \subsection{Auswahl Target}\label{sec:auswahl_target}
 
