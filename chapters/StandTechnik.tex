@@ -230,7 +230,7 @@ Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert 
 {pics/StandTechnik/octree}
 \caption[Schema Octree]{Aufbau eines Octree: Baumstruktur, bei dem jeder Knoten, der kein Blatt ist, in acht Kindknoten zerlegt wird\cite{octree}. }\label{fig:octree}
 \end{figure}
-Das Ziel von \citeauthor{khan2014nonlinear} ist ein Baum mit 255 Blättern \color{red}(rechnerisch gar nicht möglich, $Sum != 1+x*7, x \in \mathbb{N}$)\color{black} weshalb nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügt werden, solange bis die gewünschte Zahl erreicht ist.
+Das Ziel von \citeauthor{khan2014nonlinear} ist ein Baum mit 255 Blättern weshalb nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügt werden, solange bis die gewünschte Zahl erreicht ist.
 
 Die Quantisierung jedes Bildes ergibt ein Set 
 $\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r \> 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
