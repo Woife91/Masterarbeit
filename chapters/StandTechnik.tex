@@ -18,8 +18,8 @@ S_{a} & = k_{S}S
 \end{align}
 $L_{a}$, $M_{a}$ und $S_{a}$ sind hierbei die angepassten Signale. $k_{L}$, $K_{M}$ und $k_{S}$ sind hingegen die unabhängigen Skalierungsfaktoren.
 %Für die Bestimmung dieser Faktoren gibt es unterschiedliche Möglichkeiten. Zum einen können sie die Inversen des angenommenen Weißpunktes der Szene sein, zum anderen als Inverse des jeweils maximalen Werts des Kanals.
-Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Im Kern wird davon ausgegangen, dass die durchschnittliche Reflektanz in einer Szene Grau entspricht. \color{red} Achtung dies ist ein wörtliches Zitat aus MA Bindl, abklären inwieweit zitierfähig \color{black} Variationen gibt es u.a. bei der Wahl von Grau. 
-Im einfachsten Fall können die Skalierungsfaktoren entsprechend \label{equ:grey_world} berechnet werden. Hierbei entspricht $m_{L1}$ dem Mittelwert des L-Kanals einer Referenzaufnahme, $m_{L2}$ dem Mittelwert des L-Kanals aus einer Testaufnahme, usw.  
+Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Es wird dabei davon ausgegangen dass das reflektierte Licht in einem Bild sich zu grau addiert, wobei es Variationen gibt es u.a. bei der Wahl von Grau. 
+Im einfachsten Fall können die Skalierungsfaktoren entsprechend \ref{equ:grey_world} berechnet werden. Hierbei entspricht $m_{L1}$ dem Mittelwert des L-Kanals einer Referenzaufnahme, $m_{L2}$ dem Mittelwert des L-Kanals aus einer Testaufnahme, usw.  
 \begin{align}\label{equ:grey_world}
 k_{L}L & = \frac{m_{L2}}{m_{L1}}\\
 k_{M}M & = \frac{m_{M2}}{m_{M1}}\\
@@ -213,7 +213,7 @@ Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten
 %TODO
 \subsection{Anpassung nach Khan}\label{sec:khan}
 Es gibt Versuche, die Vektoren für jedes Bild neu zu bestimmen, welche implizit davon ausgehen, dass es Pixel im Bild gibt, welche eindeutig einem Farbstoff zuzuordnen sind. Es sollte also Stellen geben, an denen keine Überlappung stattfindet. 
-Auch \citeeig{khan2014nonlinear} verwenden in ihrer Methode Color Deconvolution \ref{sec:color_deconvolution}. Zudem spielt Machine Learning eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für die Bsplines benutzt werden.
+Neben dem bereits vorgestellten Ansatz von Macenko ist die Methode von \citeeig{khan2014nonlinear} ein weiteres Beispiel für ein solches Verfahren. Neben der Color Deconvolution \ref{sec:color_deconvolution} spielt hier zudem Machine Learning eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für die Bsplines benutzt werden.
 Für den Klassifikator führen \citeauthor{khan2014nonlinear} einen sogenannten "Stain Color Descriptor"(SCD) als bildspezifisches Merkmal ein.
 Sei
 
@@ -233,12 +233,12 @@ Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert 
 Das Ziel von \citeauthor{khan2014nonlinear} ist ein Baum mit 255 Blättern weshalb nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügt werden, solange bis die gewünschte Zahl erreicht ist.
 
 Die Quantisierung jedes Bildes ergibt ein Set 
-$\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r \> 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
+$\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k\rbrace$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r \> 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
 \begin{equation}\label{equ:khan_dimreduc}
 \hat{H_i} = \mathbf{E}^r_h\left(H_i - \bar{H}\right)
 \end{equation}
 
-Der, zur Zuordnung zu einer Klasse, verwendete Merkmalsvektor ist folgendermaßen aufgebaut: $\mathcal{F} = \lbrack R,G,B, \hat{H} \rbrack$. Die Werte $R$,$G$ und $B$ entsprechen dabei den Werten aus den entsprechenden Kanälen eines RGB-Bildes. 
+Der zur Zuordnung zu einer Klasse verwendete Merkmalsvektor ist folgendermaßen aufgebaut: $\mathcal{F} = \lbrack R,G,B, \hat{H} \rbrack$. Die Werte $R$,$G$ und $B$ entsprechen dabei den Werten aus den entsprechenden Kanälen eines RGB-Bildes. 
 Die Wahrscheinlichkeit, mit der ein Pixel einem Farbstoff $s_n$ zuzuordnen ist, wird mittels Formel \ref{equ:khan_prob_output}
 \begin{equation}\label{equ:khan_prob_output}
 P(s_n \mid \mathcal{F}) = \frac{P_{s_n}(s_n\mid \mathcal{F})}{P_{s_1}(s_1\mid \mathcal{F})+P_{s_2}(s_2\mid \mathcal{F})+P_{s_{bgd}}(bgd\mid \mathcal{F})}
@@ -246,7 +246,7 @@ P(s_n \mid \mathcal{F}) = \frac{P_{s_n}(s_n\mid \mathcal{F})}{P_{s_1}(s_1\mid \m
 Die berechnete Wahrscheinlichkeit wird für zwei verschiedene Zwecke genutzt:
 \begin{itemize}
 \item{Berechnung der normalisierten Stainvektoren für jede Klasse $s_n$.}
-\item{Zuordnung zu einer Klasse $\theta(c) in \lbrace \text{GEFÄRBT, HINTERGRUND, SONSTIGES}\rbrace$ mit Hilfe der folgenden Regel \ref{equ:thres_rule}:
+\item{Zuordnung zu einer Klasse $\theta(c) \text{ in } \lbrace \text{GEFÄRBT, HINTERGRUND, SONSTIGES}\rbrace$ mit Hilfe der folgenden Regel \ref{equ:thres_rule}:
 \begin{align}\label{equ:thres_rule}
 &if \quad P(bgd\mid\mathcal{F} > T_{bgd}:\quad &&\zeta(c)= \text{HINTERGRUND}\nonumber \\
 &elseif \quad P(s_n\mid\mathcal{F} > T_{fgd}:\quad &&\zeta(c)= \text{STAINED}\\

@@ -1,8 +1,7 @@
 \chapter[Ergebnisse]{Ergebnisse}\label{sec:ergebnis}
+Im folgenden Kapitel sollen die Ergebnisse der Arbeit vorgestellt werden, wobei auf unterschiedliche Aspekte eingegangen wird. Neben einer quantitativen Analyse des Einflusses der verschiedenen Ansätze auf Segmentierung und Klassifikation der Zellen, werden einige Resultate des Clustering gezeigt und verglichen. Zudem wird auf die Wirkung der Bestimmung der Stainvektoren durch die Lösung des Optimierungsproblems eingegangen. Zunächst soll jedoch das verwendete Material genauer beleuchtet werden.
+
 \section[Material]{Material}\label{sec:material}
+Die für diese Arbeit verwendeten Knochenmarkpräparate wurden nach Pappenheim gefärbt und unter einem Hellfeldmikroskop untersucht. Die Bilder wurden dabei mit einer CCD-Kamera aufgenommen, die an das Mikroskop der Marke Zeiss, Modell Axio Imager Z2, angebracht wurde. Die Originalbilder haben dabei eine Größe von 2452x2056 Pixel, wobei die Pixelgröße 3.45$\mu m$x 3.45$\mu m$ beträgt. 
+Als Eingang für die getesteten Normalisierungsalgorithmen die 400x400 Pixel große Ausschnitte der Originale, welche auf dem ersten Teil des in Kapitel \ref{sec:seg_algo} beschriebenen Segmentierungsverfahren basieren. Jedes Bild hat genau eine Zielzelle, deren Zentrum optimalerweise mit dem Mittelpunkt des Bildes zusammenfällt. Eine Handsegmentierung von ganzer Zelle und Zellkern steht zur Verfügung und dient als Grundwahrheit für die Auswertung der Segmentierungsqualität. Zudem wurden alle Zellen durch einen Pathologen klassifiziert, so dass auch hierfür eine Grundwahrheit vorhanden ist. Für den Test der Segmentierung wurde ein Datensatz verwendet, welcher 1000 dieser 400x400 Teilbilder umfasst. Die durch die Normalisierung veränderten Bilder wurden im Anschluss als Trainingsdatensatz für die Klassifikation verwendet. Getestet wurde die Klassifikation anhand eines davon unabhängigen Sets mit 100 Bildern. 
 
-\subsection[Mikroskopisches System]{Mikroskopisches System}\label{sec:mikroskopisches_system}
-
-\subsection[Färbung]{Färbung}\label{sec:färbung}
-
-\subsection[Vorverarbeitung]{Vorverarbeitung}\label{sec:vorverarbeitung}
