@@ -3,5 +3,81 @@ Im folgenden Kapitel sollen die Ergebnisse der Arbeit vorgestellt werden, wobei 
 
 \section[Material]{Material}\label{sec:material}
 Die für diese Arbeit verwendeten Knochenmarkpräparate wurden nach Pappenheim gefärbt und unter einem Hellfeldmikroskop untersucht. Die Bilder wurden dabei mit einer CCD-Kamera aufgenommen, die an das Mikroskop der Marke Zeiss, Modell Axio Imager Z2, angebracht wurde. Die Originalbilder haben dabei eine Größe von 2452x2056 Pixel, wobei die Pixelgröße 3.45$\mu m$x 3.45$\mu m$ beträgt. 
-Als Eingang für die getesteten Normalisierungsalgorithmen die 400x400 Pixel große Ausschnitte der Originale, welche auf dem ersten Teil des in Kapitel \ref{sec:seg_algo} beschriebenen Segmentierungsverfahren basieren. Jedes Bild hat genau eine Zielzelle, deren Zentrum optimalerweise mit dem Mittelpunkt des Bildes zusammenfällt. Eine Handsegmentierung von ganzer Zelle und Zellkern steht zur Verfügung und dient als Grundwahrheit für die Auswertung der Segmentierungsqualität. Zudem wurden alle Zellen durch einen Pathologen klassifiziert, so dass auch hierfür eine Grundwahrheit vorhanden ist. Für den Test der Segmentierung wurde ein Datensatz verwendet, welcher 1000 dieser 400x400 Teilbilder umfasst. Die durch die Normalisierung veränderten Bilder wurden im Anschluss als Trainingsdatensatz für die Klassifikation verwendet. Getestet wurde die Klassifikation anhand eines davon unabhängigen Sets mit 100 Bildern. 
+Als Eingang für die getesteten Normalisierungsalgorithmen dienen die 400x400 Pixel große Ausschnitte der Originale, welche auf dem ersten Teil des in Kapitel \ref{sec:seg_algo} beschriebenen Segmentierungsverfahren basieren. Jedes Bild hat genau eine Zielzelle, deren Zentrum optimalerweise mit dem Mittelpunkt des Bildes zusammenfällt. Eine Handsegmentierung von ganzer Zelle und Zellkern steht zur Verfügung und dient als Grundwahrheit für die Auswertung der Segmentierungsqualität. Zudem wurden alle Zellen durch einen Pathologen klassifiziert, so dass auch hierfür eine Grundwahrheit vorhanden ist. Für den Test der Segmentierung wurde ein Datensatz verwendet, welcher 1000 dieser 400x400 Teilbilder umfasst. Die durch die Normalisierung veränderten Bilder wurden im Anschluss als Trainingsdatensatz für die Klassifikation verwendet. Getestet wurde die Klassifikation anhand eines davon unabhängigen Sets mit 100 Bildern. Es wird nach den folgenden Zellklassen unterschieden: Segmentierte Neutrophile, Normablasten, Lymphozyten, Myelozyten, Eosinophile, Plasmazellen, Promyelozyten, Blasten, Proerythroblast, Erythroblast, Metamyelozyt, Band Neutrophil, Basophil, Monozyten, Haarzellen und unreife Lymphozyten.
 
+\section{Clustering}\label{sec:res_clustering}
+
+Aufgrund fehlender Grundwahrheiten, ist nur eine qualitative Bewertung des Clusteringansatzes möglich. In Abbildung \ref{fig:res_clustering} sind Resultate für verschiedene Beispiele dargestellt, welche die Stärken und Schwächen des Algorithmus aufzeigen. Eine optimale Zuordnung der Cluster konnte für die Originalbilder eins und zwei erzielt werden, während der Rest Fehler aufweist. Bei Spalte drei wurde das Plasma einer Zelle im rechten unteren Quadranten der Kategorie Sonstiges zugewiesen. In Cluster 4 konnte das Plasma dagegen keiner Gruppe zugeordnet werden, wobei ähnliches für die Zelle links unten in Beispiel 5 gilt. Für das Beispiel der letzten Spalte konnten größere Teile des Bilds nicht bestimmt werden. Die bläulich erscheinenden Erythrozyten können nicht in die Gruppe "Sonstiges" eingeordnet werden, da der dritte Kanal in dem Bereich weiß ist. Der sehr helle Hintergrund hat hier zur Folge, dass keine Unterscheidung mittels des dritten Kanals nach der Color Deconvolution möglich ist. Die gezeigten Ergebnisse sind nicht repräsentativ für die gesamte Datenmenge, da in den meisten Fällen keine, bzw. nur geringe Probleme auftreten. 
+  
+\begin{figure}[h]
+\subfloat[Original 1]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig1}}
+\quad
+\subfloat[Original 2]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig4}}
+\quad
+\subfloat[Original 3]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig2}}
+\quad
+\subfloat[Original 4]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig3}}
+\quad
+\subfloat[Original 5]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig5}}
+\quad
+\subfloat[Original 6]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/orig6}}
+\quad
+\subfloat[Cluster 1]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster1}}
+\quad
+\subfloat[Cluster 2]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster4}}
+\quad
+\subfloat[Cluster 3]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster2}}
+\quad
+\subfloat[Cluster 4]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster3}}
+\quad
+\subfloat[Cluster 5]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster5}}
+\quad
+\subfloat[Cluster 6]{
+\includegraphics[width = 0.13\textwidth]{pics/Ergebnisse/cluster6}}
+\caption[Beispiele Clusteralgorithmus]{Die Abbildung zeigt sechs Originalbilder in der ersten Zeile und die zugehörigen Ergebnisse des Clusteringverfahrens in der zweiten Zeile. In den ersten beiden Fällen zeigen sich sehr gute Ergebnisse, während die anderen vier kleinere und größere Probleme aufzeigen. Bei den Clustern gilt folgende Zuordnung: weiß = gefärbt, helles Grau = Sonstiges, dunkles Grau Hintergrund, schwarz = keine Information\label{fig:res_clustering}}
+\end{figure} 
+
+\section{Stainberechnung durch Optimierung}
+Eine Beurteilung der Qualität der Stainvektoren für Color Deconvolution ist schwierig, da es keine echten Kriterien gibt. Zwar sagt z.B. \citeeig{landini2016}, dass der dritte Kanal möglichst weiß sein soll, jedoch muss für diese Aussage unbedingt eine Hintergrundkorrektur durchgeführt werden. Vor allem bei sehr intensiv gefärbten Zellkernen ist es jedoch auch mit Korrektur nicht möglich, diese Färbung nur durch zwei Komponenten auszudrücken. Die zusätzliche Information muss dann durch den dritten Kanal abgedeckt werden. Im vorliegenden Workflow gilt jedoch die Voraussetzung, dass sich die berechneten Vektoren für die einzelnen Bilder nur in geringem Maß unterscheiden. Dies liegt an der Natur des Problems, da die verwendeten Farbstoffe für die verschiedenen Bilder gleich bleiben. Die getestete Idee die Vektoren mittels eines Optimierers zu berechnen konnte die Voraussetzung nicht erfüllen. Zwei verschiedene Beispiele wie die Zerlegung nach der Optimierung aussieht, sind in Abb. \ref{fig:stain_opt} zu sehen. 
+\begin{figure}
+\subfloat[Original 1]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_orig1}}
+\quad
+\subfloat[Kanal 1]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_1_ch1}}
+\quad
+\subfloat[Kanal 2]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_1_ch2}}
+\quad
+\subfloat[Kanal 3]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_1_ch3}}
+\quad
+\subfloat[Original 2]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_orig2}}
+\quad
+\subfloat[Kanal 1]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_2_ch1}}
+\quad
+\subfloat[Kanal 2]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_2_ch2}}
+\quad
+\subfloat[Kanal 3]{
+\includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_2_ch3}}
+\caption[Beispiele Color Deconvolution mit Optimierer]{Die obere Zeile zeig ein Beispiel, in welchem die Stainvektoren sich stark unterscheiden. In der unteren Zeile sind sich diese dagegen ähnlicher, was zu der deutlicheren Trennung zwischen Plasma und Kern führt.\label{fig:stain_opt}} 
+\end{figure}
+
+ 
+\section{Segmentierung}
+
+\section{Klassifikation}
