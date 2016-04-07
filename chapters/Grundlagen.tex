@@ -1,13 +1,14 @@
 \chapter[Allgemeine Grundlagen]{Allgemeine Grundlagen}\label{sec:grundlagen}
+Im folgenden Kapitel sollen einige Grundlagen erläutert werden, welche für das Verständnis der Arbeit relevant sind. Im Einzelnen soll zunächst auf die Funktionsweise eines Mikroskops und auf die Knochenmarkdiagnostik eingegangen werden. Zudem werden mit Color Deconvolution und B-Splines zwei Konzepte vorgestellt, welche in spezifischen Algorithmen zur Farbnormalisierung eingesetzt werden.
 
 \section[Mikroskopie]{Mikroskopie}\label{sec:mikroskopie}
 Für die Pathologie und Hämatologie spielt das Lichtmikroskop eine entscheidende Rolle. Mit Hilfe der optischen Vergrößerung können Strukturen auf zellulärer Ebene sichtbar gemacht werden, was diagnostische Aussagen ermöglicht. Grundsätzlich besteht ein Lichtmikroskop aus Objektiv und Okular, wobei letzteres einer Lupe entspricht. Zunächst wird durch das Objektiv ein virtuelles Zwischenbild erzeugt, welches dann durch das Okular wiederum gedreht und auf die Kameraebene projiziert wird \citep[6f]{haus2014optische}. Der schematische Aufbau eines solchen Geräts ist in Abb. \ref{fig:strahlengang} gezeigt.
 \begin{figure}
 \center
-\includesvg[width = 0.7\textwidth]{pics/Grundlagen/Mikroskop_Strahlengang_vector}
+\includegraphics[width = 0.7\textwidth]{pics/Grundlagen/Mikroskop_Strahlengang_eps}
 \caption[Schematischer Strahlengang Mikroskop]{Strahlengang im Mikroskop: Weg von Strahlen aus der Objektebene durch den Tubus und die Okularlinse in die Bildebene \cite{url_mikroskop_strahlengang}.\label{fig:strahlengang}}
 \end{figure}
-Die gesamte Vergrößerung $M_{ges}$ ergibt sich durch Multiplikation der Teilvergrößerungen der beiden Komponenten, wie in Formel \ref{equ:zoom} angegeben. $\beta_{Obj}$ entspricht dabei dem Abbildungsverhältnis des Objektiv, z.B. "40:1", und $M_{Ok}$.
+Die gesamte Vergrößerung $M_{ges}$ ergibt sich durch Multiplikation der Teilvergrößerungen der beiden Komponenten, wie in Formel \ref{equ:zoom} angegeben. $\beta_{Obj}$ entspricht dabei dem Abbildungsverhältnis des Objektivs und $M_{Ok}$ der Vergrößerung durch das Okular.
 \begin{equation}\label{equ:zoom}
 M_{ges} = \beta_{Obj}M_{Ok}
 \end{equation}
@@ -15,20 +16,20 @@ M_{ges} = \beta_{Obj}M_{Ok}
 Das Präparat ist in der Regel zunächst nicht homogen ausgeleuchtet, wodurch eine spätere Analyse erschwert wird. Deshalb ist ein wichtiger Schritt beim Mikroskopieren das sogenannte Köhlern, wodurch Streulicht unterdrückt wird und die Beleuchtungsintensität auf ein relevantes Maß reduziert wird. Hierdurch können auch licht- und wärmeempfindliche Proben geschont werden \citep[19f]{haus2014optische}.    
 
 \section[Knochenmarkdiagnostik]{Knochenmarkdiagnostik}\label{sec:diagnostik}
-Das Knochenmark ist im menschlichen Körper ab dem 4.-5. Schwangerschaftsmonat zuständig für  für die Hämatopoese, also die Blutbildung. Zuvor übernehmen diese Aufgabe der Dottersack (bis zur 6. Woche) und Leber und Milz(ab Woche zwölf bis drei Wochen nach der Geburt). Bis zur Pubertät sind fast alle Knochen beteiligt, ab dem 30 Lebensjahr dagegen nur noch kurze und platte Knochen. Hierzu zählen Beckenschaufel, Wirbelkörper, Sternum, Rippen und der Schädel. Ist der Bedarf erhöht oder liegen knochenmarksverdrängende Prozesse vor, so können Milz, Leber und auch andere Organe für die Hämatopoese reaktiviert werden. Aus einer multipotenten Stammzelle entstehen über mehrere Zwischenstadien die verschiedenen Zellarten \ref{fig:haematopoese}.
+Das Knochenmark ist im menschlichen Körper ab dem 4.-5. Schwangerschaftsmonat zuständig für die Hämatopoese, also die Blutbildung. Zuvor übernehmen diese Aufgabe der Dottersack (bis zur 6. Woche), Leber und Milz (ab Woche zwölf bis drei Wochen nach der Geburt). Bis zur Pubertät sind fast alle Knochen beteiligt, ab dem 30 Lebensjahr dagegen nur noch kurze und platte Knochen. Hierzu zählen Beckenschaufel, Wirbelkörper, Sternum, Rippen und der Schädel. Ist der Bedarf erhöht oder liegen knochenmarksverdrängende Prozesse vor, so können Milz, Leber und auch andere Organe für die Hämatopoese reaktiviert werden. Aus einer multipotenten Stammzelle entstehen über mehrere Zwischenstadien die verschiedenen Zellarten (siehe Abbildung \ref{fig:haematopoese}).
 \begin{figure}
 \center
 \includegraphics[width = 0.9\textwidth]{pics/Grundlagen/haematopoese}
-\caption[Schema Hämatopoese]{Die Abbildung zeigt die Entwicklung einer Stammzelle über Zwischenstadien zur fertigen Zelle\cite{url_haematopoese}\label{fig:haematopoese}}
+\caption[Schema Hämatopoese]{Die Abbildung zeigt die Entwicklung einer Stammzelle über Zwischenstadien zur reifen Zelle\cite{url_haematopoese}\label{fig:haematopoese}}
 \end{figure}  
 
-Die Gründe für eine zytologische Untersuchung des Knochenmarks sind vielfältig und reichen von außerhalb der Norm liegenden Differentialblutausstrichen bis zum Verdacht auf \leukaemie. Beim konventionellen Vorgehen wird zunächst mit einer Punktionsnadel eine geringe Menge an Knochenmark entnommen. Für die weitere Bearbeitung wird die Probe mit einer gerinnungshemmenden Lösung vermischt und auf einem Objektträger ausgestrichen. Im Anschluss muss die Schicht eine Stunde trocknen und wird dann mit dem Verfahren nach Pappenheim gefärbt, die eine Kombination aus zwei verschiedenen Methoden darstellt. Bei May-Grünwald kommt eine Eosin-Methylenblau-Lösung zum Einsatz, bei Giemsa dagegen Azur-Eosin-Methylenblau-Lösung, wobei Azur-Eosin eine Abwandlung zu Eosin darstellt. Diese Aufgabe übernimmt ein Automat, der dafür ca. 45 Minuten benötigt. Das Methylenblau ist positiv geladen und färbt somit negativ geladene Zellbestandteile. Die Ladung von gelöstem Eosin ist negativ, wodurch vor allem positive Proteinstrukturen der Zelle gefärbt werden. Als Stabilisator dient indes Glycerin und als Fixiermittel wird Methanol verwendet\cite{fuchs2011manual}. 
+Die Gründe für eine zytologische Untersuchung des Knochenmarks sind vielfältig und reichen von außerhalb der Norm liegenden Differentialblutausstrichen bis zum Verdacht auf \leukaemie. Beim konventionellen Vorgehen wird zunächst mit einer Punktionsnadel eine geringe Menge an Knochenmark entnommen. Für die weitere Bearbeitung wird die Probe mit einer gerinnungshemmenden Lösung vermischt und auf einem Objektträger ausgestrichen. Im Anschluss muss die Schicht eine Stunde trocknen und wird dann mit dem Verfahren nach Pappenheim gefärbt, die eine Kombination aus zwei verschiedenen Methoden darstellt. Bei May-Grünwald kommt eine Eosin-Methylenblau-Lösung zum Einsatz, bei Giemsa dagegen Azur-Eosin-Methylenblau-Lösung, wobei Azur-Eosin eine Abwandlung zu Eosin darstellt. Diese Aufgabe übernimmt ein Automat, der dafür ca. 45 Minuten benötigt. Das Methylenblau ist positiv geladen und färbt somit negativ geladene Zellbestandteile. Die Ladung von gelöstem Eosin ist negativ, wodurch vor allem positive Proteinstrukturen der Zelle gefärbt werden. Als Stabilisator dient indes Glycerin und als Fixiermittel wird Methanol verwendet \cite{fuchs2011manual}. 
 
 Die Analyse der Probe findet unter einem Lichtmikroskop statt. Bei zehnfacher Vergrößerung kann dabei zunächst eine Aussage über Zelldichte und Fettgehalt getroffen werden. Teilweise gibt es auf dieser Stufe auch schon Informationen über qualitative Veränderungen, z.B. Häufung bestimmter Zelltypen. Geeignete Bereiche des Ausstrich werden anschließend bei stärkerer Vergrößerung (63x, seltener auch 100x) quantitativ ausgewertet. Dafür werden die verschiedenen Zelltypen gezählt, wobei mindestens 200 Zellen ausgewertet werden sollten, um Aussagen treffen zu können. Diese manuelle Auswertung dauert in der Regel zwischen 5 und 15 Minuten, in Einzelfällen sogar bis zu 30 Minuten. Das Ergebnis dieser Differentialzählung ist entscheidend für das weitere diagnostische und therapeutische Vorgehen. Hat ein Patient z.B. \leukaemie, so wird dieses Verfahren eine deutlich erhöhte Leukozytenzahl aufdecken, welche die restliche Blutbildung verdrängt. \color{red}Quelle fehlt noch!\color{black}.
 %TODO Quelle, Sebastian fragen!
 
-\section{Bspline}\label{sec:basic_bspline}
-Das Konzept der Bsplines erlaubt es Kurven zu modellieren, die ein Set von Kontrollpunkten mittels Teilpolynomen so annähert, dass sie an den Grenzen stetig sind. Der Grad der Stetigkeit ist dabei über den Grad des Bsplines $n$ festgesetzt. Die Kurve ist neben den Kontrollpunkten auch noch vom Knotenvektor $\mathbf{T} =  (t_i)$ beeinflusst, welcher die Parameterintervalle festlegt. Ein Beispiel eines Knotenvektors ist in Abbildung \ref{fig:knotvector} dargestellt.
+\section{B-Spline}\label{sec:basic_bspline}
+Das Konzept der B-Splines erlaubt es Kurven zu modellieren, die ein Set von Kontrollpunkten mittels Teilpolynomen so annähert, dass sie an den Grenzen stetig sind. Der Grad der Stetigkeit ist dabei über den Grad des B-Splines $n$ festgesetzt. Die Kurve ist neben den Kontrollpunkten auch noch vom Knotenvektor $\mathbf{T} =  (t_i)$ beeinflusst, welcher die Parameterintervalle festlegt. Ein Beispiel eines Knotenvektors ist in Abbildung \ref{fig:knotvector} dargestellt.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.7\textwidth]
@@ -43,7 +44,7 @@ N^0_i(u) & :=
 1 &t_i \leq u \le t_{i+1}\\
 0 &sonst
 \end{cases}\\
-N_i^k(u) & := \frac{u-t_i}{t_{i+k}}N^{k-1}_i(u)+\frac{t_{i+k+1}-u}{t_{i+k+1}-t_{i+1}}N^{k-1}_{i+1}(u), k =1,\ldots, n
+N_i^k(u) & := \frac{u-t_i}{t_{i+k}}N^{k-1}_i(u)+\frac{t_{i+k+1}-u}{t_{i+k+1}-t_{i+1}}N^{k-1}_{i+1}(u), k =1,\ldots, n \nonumber
 \end{align}
 
 Die Berechnung eines Bsplines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline}
@@ -62,19 +63,19 @@ Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollst
 Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier Bsplines. Die Kontrollpunkte sind dabei identisch, allerdings sind Knotenvektor und Grad der Kurve unterschiedlich. Vergleicht man die gezeigten Verläufe in \ref{fig:bspline_inter_2} und \ref{fig:bspline_inter_4} ist festzustellen, dass der höhere Grad der Kurve eine geringere Annäherung an die Kontrollpunkte zur Folge hat, was den Verlauf robuster gegenüber Ausreißern bei den Kontrollpunkten macht. 
 \begin{figure}
 \subfloat[Uniformer Knotenvektor, Grad 2]{
-\includegraphics[width=0.45\textwidth]
+\includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_uniform}\label{fig:bspline_uniform}}
 \quad
 \subfloat[Endpunktinterpolation, Grad 2]{
-\includegraphics[width=0.45\textwidth]
+\includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_endpoint_interpolation}\label{fig:bspline_inter_2}}
 \quad
 \subfloat[Zufällig verteilter Knotenvektor]{
-\includegraphics[width=0.45\textwidth]
+\includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_random}\label{fig:bspline_random}}
 \quad
 \subfloat[Endpunktinterpolation, Grad 4]{
-\includegraphics[width=0.45\textwidth]
+\includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_endpoint_deg4}\label{fig:bspline_inter_4}}
 \quad
 \caption[Beispiele Bsplines]{Unterschiedliche Bsplines, abhängig von Grad und Verteilung auf Knotenvektor. Die Farbe des Bspline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor. \label{fig:bsplines_example}}
@@ -82,15 +83,15 @@ Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier Bsplines. Die Ko
 
 \section{Color Deconvolution}\label{sec:color_deconvolution}
 
-Die sogenannte Color Deconvolution ist eine Farbraumtransformation spezifisch für die Pathologie bzw. Hämotologie, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel genauere Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl, den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
+Die sogenannte Color Deconvolution ist eine für die Pathologie bzw. Hämotologie spezifische Farbraumtransformation, da hier Farbstoffe zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel genauere Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da eine höhere Anzahl den Transfer aus einem  trichromatischem Farbraum in einen höherdimensionalen Raum bedeuten würde. 
 
-Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz (\ref{equ:lambert_beer}), wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also R,G oder B. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
+Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz (siehe Formel \ref{equ:lambert_beer}), wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also rot, grün oder blau. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
 
 \begin{equation}\label{equ:lambert_beer}
 I_k = I_{0,k}e^{-Ac_k}
 \end{equation} 
 
-Der Zusammenhang zwischen der Menge an Farbstoff und der detektierten Intensität ist also nicht linear. Aus diesem Grund wird das Bild zunächst mit Hilfe des Logarithmus in den sogenannten OD-Raum (Optical Density) transferiert \ref{equ:od}.
+Der Zusammenhang zwischen der Menge an Farbstoff und der detektierten Intensität ist also nicht linear. Aus diesem Grund wird das Bild zunächst mit Hilfe des Logarithmus in den sogenannten OD-Raum (Optical Density) transferiert (Formel \ref{equ:od}).
 
 \begin{equation}\label{equ:od}
 OD_k = -log\left(\frac{I_k}{I_{0,k}}\right) = Ac_k
@@ -122,8 +123,8 @@ Formel \ref{equ:beer_matrix} lässt sich umstellen nach $\hat\Psi$ \ref{equ:color
 &\textrm{und } &&\Phi(c) = - log(\Psi(c))
 \end{align}
 
-Der hier als $\Phi$ bezeichnete Farbraum beschreibt damit den OD-Wert (\ref{equ:od}). 
-Ein entscheidender Punkt bei CD liegt in der Bestimmung der Stainvektoren. Im  Folgenden wird eine durch \citeauthor{ruifrok2001quantification} beschriebene Möglichkeit vorgestellt, wie diese manuell für eine spezifische Färbung gefunden werden. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrix vor und nach dem Normierungsschritt sind in Formel \ref{equ:stain_hedab} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
+Der hier als $\Phi$ bezeichnete Farbraum beschreibt damit den OD-Wert (Formel \ref{equ:od}). 
+Ein entscheidender Punkt bei Color Deconvolution liegt in der Bestimmung der Stainvektoren. Im  Folgenden wird eine durch \citeauthor{ruifrok2001quantification} beschriebene Möglichkeit vorgestellt, wie diese manuell für eine spezifische Färbung gefunden werden. Dabei sollen Proben mit nur einem der später verwendeten Farbstoffe untersucht werden. Im OD-Raum ergibt sich an den gefärbten Stellen ein Farbvektor, bei dem die Länge linear zur Menge an Farbstoff ist. Ein eindeutiger Farbvektor ergibt sich aus diesem Grund durch Normieren des Farbvektors im OD-Raum. \citeauthor{ruifrok2001quantification} führten das Verfahren für eine Färbung mit Hämatoxylin, Eosin und DAB durch. Die Matrizen $\mathbf{S}$ und $\mathbf{S_{norm}}$ vor und nach dem Normierungsschritt sind in Formel \ref{equ:stain_hedab} gezeigt. Die Stainvektoren der einzelnen Farbstoffe entsprechen dabei den Zeilen der Matrix.
 
 \begin{align}\label{equ:stain_hedab}
 \mathbf{S} & = 
@@ -141,5 +142,5 @@ Ein entscheidender Punkt bei CD liegt in der Bestimmung der Stainvektoren. Im  F
 \end{bmatrix}\nonumber
 \end{align}
 
-Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, weil sich die Stainvekoren leicht ändern können, je nach verwendeter Kamera, Lichtquelle und dem Alter der Proben. Die optimalen Stainvektoren sind von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden. Ansätze um exakte und bildspezifische Werte zu finden werden in den Abschnitten \ref{sec:macenko} und \ref{sec:khan} beschrieben.  
+Für eine bestimmte Färbemethode sind die so ermittelten Werte eine Näherung, weil sich die Stainvekoren je nach verwendeter Kamera, Lichtquelle und dem Alter der Probenleicht ändern können. Die optimalen Stainvektoren sind von Bild zu Bild leicht unterschiedlich, auch wenn die gleichen Farbstoffe verwendet wurden. Ansätze um exakte und bildspezifische Werte zu finden werden in den Abschnitten \ref{sec:macenko} und \ref{sec:khan} beschrieben.  
 
