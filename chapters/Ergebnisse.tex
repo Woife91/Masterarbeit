@@ -77,7 +77,28 @@ Eine Beurteilung der Qualität der Stainvektoren für Color Deconvolution ist schw
 \caption[Beispiele Color Deconvolution mit Optimierer]{Die obere Zeile zeig ein Beispiel, in welchem die Stainvektoren sich stark unterscheiden. In der unteren Zeile sind sich diese dagegen ähnlicher, was zu der deutlicheren Trennung zwischen Plasma und Kern führt.\label{fig:stain_opt}} 
 \end{figure}
 
- 
-\section{Segmentierung}
+\section{Vergleich der Korrelation in den einzelnen Farbräumen}\label{sec:correlation}
+\citeeig{reinhard2001color} führen eine Farbraumtransformation in den $l\alpha\beta$-Raum durch in welchem die eigentliche Anpassung stattfindet. Als Argumentation hierfür dient die hohe Unabhängigkeit der einzelnen Kanäle, welche durch den Korrelationskoeffizienten messbar ist. Aus Tabelle \ref{tab:correlation} ist erkennbar, dass für die vorliegenden Daten die Kanäle $l$ und $\alpha$ eine starke Abhängigkeit aufweisen während $\beta$ sich von beiden stark unterscheidet. Führt man die Color Deconvolution mit den Stains von \citeeig{landini2016} durch, so existieren keine zwei Kanäle mit einer ähnlich hohen Abhängigkeit wie im $l\alpha\beta$-Raum, allerdings gibt es keinen Kanal, der stark von den anderen abweicht. Die Color Deconvolution nach Macenko liefert dagegen die beste Entkopplung der einzelnen Kanäle, was sich in den verhältnismäßig geringen Werten der Korrelationskoeffizienten zwischen allen Kanälen niederschlägt. Im RGB-Farbraum weicht vor allem der Blaukanal von den anderen beiden ab, während R und G relativ stark korrelieren. 
+\begin{table}[h]
+\center
+\caption[Korrelation in verschiedenen Farbräumen]{Die Tabelle vergleicht die Korrelationskoeffizienten in verschiedenen Farbräumen nach Transformation von Knochenmarkbildern. CD steht dabei für Color Deconvolution, Giemsa bzw. Macenko sind die jeweils verwendeten Stains.\label{tab:correlation}} 
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+ & $\mathbf{l\alpha\beta}$ & \textbf{CD: Giemsa} & \textbf{CD: Macenko} & \textbf{RGB} \\ 
+\hline 
+\textbf{Kanal 1 und 2} & 0.9683 & 0.8555 & 0.3485 &  0.9078\\ 
+\hline 
+\textbf{Kanal 1 und 3} & 0.4453 & 0.7497 & 0.4321 & 0.7949 \\ 
+\hline 
+\textbf{Kanal 2 und 3} & 0.4750 & 0.8101 & 0.4174 & 0.6990 \\ 
+\hline
+\end{tabular}  
+\end{table}
 
+\section{Segmentierung}
+\begin{figure}
+\center
+\includegraphics[width = 1.0\textwidth]{pics/Ergebnisse/NachDegreeImg}
+\caption{Unterscheidung Segmentierung nach Grad des B-Spline}
+\end{figure}
 \section{Klassifikation}

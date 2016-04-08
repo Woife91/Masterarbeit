@@ -184,11 +184,11 @@ Ein Verfahren zur Farbnormalisierung in Mikroskopiebildern, welches auf Color De
 \item{Rücktransformation in den OD-Raum, Minimum und Maximum entsprechen den Stainvektoren}
 \end{itemize} 
 
-Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein Beispiel für ein Histogramm über die Winkel, Abbildung \ref{fig:hist_angle} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
+Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein nachgebildetes Beispiel für ein Histogramm über die Winkel, Abbildung \ref{fig:cd_macenko} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.5\textwidth]
-{pics/StandTechnik/hist_angle_macenko}
+{pics/StandTechnik/hist_angle_macenko_own_eps}
 \caption[Winkelhistogramm Macenko]{Beispiel für ein Histogramm über die Winkel, welche die projizierten Punkte mit der ersten Hauptachse einschließen. Daraus zu bestimmen sind das robuste Minimum und Maximum.\label{fig:hist_angle} }
 \end{figure}
 \begin{figure}[h]

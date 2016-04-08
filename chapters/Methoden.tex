@@ -228,7 +228,7 @@ Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Seg
 \includegraphics[width=0.45\textwidth]
 {pics/Grundlagen/centers_corrected}\label{fig:seg_corrected}}
 \quad
-\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in $\mathbf{(a)}$, zu einem Zentrum zusammengefügt $mathbf{(b)}$. \label{fig:cell_centers}}
+\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in \textbf{(a)}, zu einem Zentrum zusammengefügt \textbf{(b)}. \label{fig:cell_centers}}
 \end{figure} 
 Hat das Bild dagegen einen hohen Vordergrundanteil, so wird eine Hintergrundkorrektur durchgeführt, bei der dieser durch ein 2D-Polynom dritten Grades approximiert wird. Der Vordergrund wird zunächst mit Hilfe eines Mittelwertfilters geschätzt und dann unter Verwendung des "Fast Marching"-Algorithmus konkretisiert. In der Folge werden homogene Regionen mit dem "Color Structure Code" extrahiert und als geordneter Graph dargestellt. Die Blätter dieses Graphen sind die potentiellen Zellzentren, die anhand des gleichen Verfahrens wie im Fall mit viel Vordergrund korrigiert werden. 
 Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Zellkern und Zellplasma zu bestimmen, wird für jede Zelle eine Polartransformation mit dem im vorherigen Schritt gefundenen Zentrum durchgeführt. Es wird eine zu minimierende Kostenfunktion eingeführt, die aus sechs Komponenten besteht:
@@ -296,7 +296,7 @@ Soll die Segmentierung der Zelle als ganzem betrachtet werden, so ist $A$ die Me
 Der zweite wichtige Baustein für eine automatisierte Differentialzählung ist die Zellklassifikation, welche der Segmentierung nachfolgt. In diesem Schritt soll die Zelle einer von 16 Klassen zugeordnet werden. Hierbei soll das Wissen über die Hematopoese genutzt werden und in Form eines hierarchischen Baummodell nachgebildet werden, wie in Abbildung \ref{fig:classification_tree} dargestellt.
 \begin{figure}
 \center
-\includegraphics[width = \textwidth]{pics/Grundlagen/classificationtree}
+\includegraphics[width = \textwidth]{pics/Methoden/Hierarchy}
 \caption[Hierarchisches Baummodell für die Klassifikation]{Darstellung des hierarchischen Baummodell, das die Hematopoese annähert\label{fig:classification_tree}}
 \end{figure} 
 Die für die Klassifikation verwendeten Merkmale teilen sich in Form, Textur und Farbe auf. Bei der Form spielen die gesamte Fläche, das Verhältnis aus Kern und Plasma, Konturmerkmale, Zernike Momente, normalisierte zentrale Momente, normalisierte Merkmale des Radius, Formfaktoren und Anzahl der Kernsegmente eine Rolle. Die Textur wird durch Local Binary Patterns, Grauwertmatrizen, Merkmale basierend auf Summen- und Differenzhistogrammen, farbbasierte Texturmerkmale, Charakterisierung von Heterogenität und Granularität, statistische Merkmale basierend auf Geometrie und Lauflängen, Texturmerkmale, die visuelle Eigenschaften von Oberflächen charakterisieren, und die fraktale Dimension beschrieben. Zur Beschreibung der Farbinformationen kommen im RGB-Raum statistische Merkmale der Histogramme sowie zentrale Momente zum Einsatz. Im HSV-Farbraum werden neben den zentralen auch noch andere Momente verwendet. Die extrahierten Merkmale werden mittels z-Transformation normalisiert.
