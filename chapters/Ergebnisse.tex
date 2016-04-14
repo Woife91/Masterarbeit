@@ -50,7 +50,7 @@ Aufgrund fehlender Grundwahrheiten, ist nur eine qualitative Bewertung des Clust
 
 \section{Stainberechnung durch Optimierung}
 Eine Beurteilung der Qualität der Stainvektoren für Color Deconvolution ist schwierig, da es keine echten Kriterien gibt. Zwar sagt z.B. \citeeig{landini2016}, dass der dritte Kanal möglichst weiß sein soll, jedoch muss für diese Aussage unbedingt eine Hintergrundkorrektur durchgeführt werden. Vor allem bei sehr intensiv gefärbten Zellkernen ist es jedoch auch mit Korrektur nicht möglich, diese Färbung nur durch zwei Komponenten auszudrücken. Die zusätzliche Information muss dann durch den dritten Kanal abgedeckt werden. Im vorliegenden Workflow gilt jedoch die Voraussetzung, dass sich die berechneten Vektoren für die einzelnen Bilder nur in geringem Maß unterscheiden. Dies liegt an der Natur des Problems, da die verwendeten Farbstoffe für die verschiedenen Bilder gleich bleiben. Die getestete Idee die Vektoren mittels eines Optimierers zu berechnen konnte die Voraussetzung nicht erfüllen. Zwei verschiedene Beispiele wie die Zerlegung nach der Optimierung aussieht, sind in Abb. \ref{fig:stain_opt} zu sehen. 
-\begin{figure}
+\begin{figure}[h]
 \subfloat[Original 1]{
 \includegraphics[width = 0.22\textwidth]{pics/Ergebnisse/opt_orig1}}
 \quad
@@ -79,7 +79,7 @@ Eine Beurteilung der Qualität der Stainvektoren für Color Deconvolution ist schw
 
 \section{Vergleich der Korrelation in den einzelnen Farbräumen}\label{sec:correlation}
 \citeeig{reinhard2001color} führen eine Farbraumtransformation in den $l\alpha\beta$-Raum durch in welchem die eigentliche Anpassung stattfindet. Als Argumentation hierfür dient die hohe Unabhängigkeit der einzelnen Kanäle, welche durch den Korrelationskoeffizienten messbar ist. Aus Tabelle \ref{tab:correlation} ist erkennbar, dass für die vorliegenden Daten die Kanäle $l$ und $\alpha$ eine starke Abhängigkeit aufweisen während $\beta$ sich von beiden stark unterscheidet. Führt man die Color Deconvolution mit den Stains von \citeeig{landini2016} durch, so existieren keine zwei Kanäle mit einer ähnlich hohen Abhängigkeit wie im $l\alpha\beta$-Raum, allerdings gibt es keinen Kanal, der stark von den anderen abweicht. Die Color Deconvolution nach Macenko liefert dagegen die beste Entkopplung der einzelnen Kanäle, was sich in den verhältnismäßig geringen Werten der Korrelationskoeffizienten zwischen allen Kanälen niederschlägt. Im RGB-Farbraum weicht vor allem der Blaukanal von den anderen beiden ab, während R und G relativ stark korrelieren. 
-\begin{table}[h]
+\begin{table}[htb]
 \center
 \caption[Korrelation in verschiedenen Farbräumen]{Die Tabelle vergleicht die Korrelationskoeffizienten in verschiedenen Farbräumen nach Transformation von Knochenmarkbildern. CD steht dabei für Color Deconvolution, Giemsa bzw. Macenko sind die jeweils verwendeten Stains.\label{tab:correlation}} 
 \begin{tabular}{|c|c|c|c|c|}
@@ -96,23 +96,150 @@ Eine Beurteilung der Qualität der Stainvektoren für Color Deconvolution ist schw
 \end{table}
 
 \section{Segmentierung}
-\begin{figure}
-\center
-\includegraphics[width = 1.0\textwidth]{pics/Ergebnisse/NachDegreeImg_zelle}
-\caption{Unterscheidung Segmentierung ganze Zelle nach Grad des B-Spline}
-\end{figure}
+In den folgenden Abschnitten wird zunächst die Normalisierung mittels B-Spline und der Color Deconvolution mit den von \citeauthor{landini2016} bestimmten Stainvektoren näher beleuchtet. Dabei sollen die Einflüsse verschiedener Parameter auf die Qualität der Segmentierung gezeigt werden. Außerdem soll der Einfluss der Zellklasse auf die Segmentierung und die mit der Normalisierung einhergehenden Veränderungen verdeutlicht werden. Im Anschluss werden die verschiedenen Ansätze miteinander verglichen, wobei die jeweils besten getesteten Parameterkombinationen ausgewählt gezeigt sind.
 
-\begin{figure}
-\center
-\includegraphics[width = 1.0\textwidth]{pics/Ergebnisse/NachDegreeImg_kern}
-\caption{Unterscheidung Segmentierung Zellkern nach Grad des B-Spline}
-\end{figure}
-
-\begin{figure}
+\subsection{Vergleich unterschiedlicher Parameter bei der Verwendung von B-Splines}
+Aufgrund der Tatsache, dass die Pappenheimfärbung auf nur zwei verschiedenen Farbstoffen basiert, wurden zwei verschiedene Methoden für die Berechnung des dritten Stainvektor getestet (siehe Abschnitt\ref{sec:own_cd}). Abbildung \ref{fig:third_vector} zeigt die Mittelwerte $\pm$ der Standardabweichung für beide Varianten gegenübergestellt. Die Mittelwert für die eigene Berechnung eines Orthogonalvektors ist dabei um $0.06\%$ kleiner, als die Variante, welche \citeauthor{landini2016} vorschlägt. Der Einfluss ist als gering einzuschätzen, in folgenden Betrachtungen wird dennoch nur noch die Methode von \citeauthor{landini2016} berücksichtigt um eine größtmögliche Konsistenz zu erreichen. 
+\begin{figure}[htb]
 \center
 \includegraphics[width = 0.6\textwidth]{pics/Ergebnisse/Vergleich_ansatz_3vektor}
-\caption[Vergleich Ansätze Berechnung 3. Stainvektor]{Das Diagramm vergleicht die beiden implementierten Methoden zur Berechnung des 3. Stainvektors. Gezeigt ist jeweils der Mittelwert aus zwölf unterschiedlichen Parameterkombinationen und die Standardabweichung.}
+\caption[Vergleich Ansätze Berechnung 3. Stainvektor]{Das Diagramm vergleicht die beiden implementierten Methoden zur Berechnung des 3. Stainvektors. Gezeigt ist jeweils der Mittelwert $\pm$ der Standardabweichung für die Segmentierung der ganzen Zelle aus zwölf unterschiedlichen Parameterkombinationen.\label{fig:third_vector}}
 \end{figure}
+
+Einen größeren Einfluss auf die Segmentierungsqualität hat dagegen der Grad des verwendeten B-Splines, was in Abbildung \ref{fig:grad_bspline} verdeutlicht wird. Sowohl für die Segmentierung der ganzen Zelle als auch für den Zellkern gilt, dass die Ergebnisse mit steigendem Grad besser werden und erst bei Grad 10 schlechter werden. Das Referenzset umfasste 15 Bilder und es wurden jeweils alle drei Methoden zur Ermittlung der Referenzmerkmale (siehe Abschnitt \ref{sec:auswahl_target}) berücksichtigt. Für die Unterschiede in der Standardabweichung für die kleineren und größeren Grade ist vor allem die Auswahlmethode ursächlich, bei der das Referenzbild mit dem geringsten euklidischen Abstand der Merkmale verwendet wird. Betrachtet man die Auswertung für die ganze Zelle in Abbildung \ref{fig:grad_bspline_zelle} so weißt die Methode konstant gute Werte auf, während Mittelwert und Median diese Werte erst bei höherem Grad erreichen. Im Gegensatz dazu sind die Ergebnisse bei der Betrachtung des Zellkerns konstant im niedrigeren Bereich, weshalb vor allem bei hohem Grad die Standardabweichung steigt, da Mittelwert und Median hier bessere Werte aufweisen. Die rote Linie in den Diagrammen bezeichnet jeweils den Mittelwert für die Verwendung der Originalbilder. Vor allem im Bereich höherer Grade ist sowohl bei Betrachtung der ganzen Zelle als auch des Zellkerns eine Verbesserung sichtbar. 
+\begin{figure}[h]
+\center
+\subfloat[Ganze Zelle]{
+\includegraphics[width = 0.7\textwidth]{pics/Ergebnisse/nachGrad_zelle}\label{fig:grad_bspline_zelle}}
+\quad
+\subfloat[Zellkern]{
+\includegraphics[width = 0.7\textwidth]{pics/Ergebnisse/nachGrad_kern}\label{fig:grad_bspline_kern}}
+\caption[Segmentierungsergebnisse in Abhängigkeit vom Grad des B-Splines]{Durchschnittliche Segmentierungsergebnisse nach Grad des B-Spline. Für jeden Grad wurden drei verschiedene Methoden zur Berechnung der optimalen Referenz getestet. Das Referenzset umfasste 15 Bilder. Das Fehlermaß in schwarz entspricht $\pm$ der jeweiligen Standardabweichung der drei Methoden. Die rote Linie markiert die durchschnittliche Segmentierungsqualität unter Verwendung der Originalbilder. \textbf{(a)} Ganze Zelle, \textbf{(b)} Zellkern \label{fig:grad_bspline}}
+\end{figure}
+
+Ein weiterer Einflussfaktor auf das Ergebnis ist die Wahl der Referenz, wobei sowohl einzelne Referenzbilder, als auch mehrere möglich sind. Für den zweiten Fall werden die drei verschiedenen Möglichkeiten zur Bestimmung der Merkmale für den B-Spline näher untersucht. In Abbildung \ref{fig:all_bspline} sind die durchschnittlichen prozentualen Veränderungen gegenüber der Auswertung auf dem Originalbild für  verschiedene Varianten gezeigt. Es gibt dabei 15 einzelne Referenzbilder, in denen die Zielzelle gut segmentiert werden konnte. Set 3 umfasst dabei alle 15 Einzelreferenzen, für die Sets 4 bis 6 wurden sukzessive diejenigen Bilder entfernt, die als einzelnes Referenzbild die schlechtesten Ergebnisse erzielten. Die Referenzbilder 10 und 14 weisen beispielsweise eine Verschlechterung auf, weshalb sie in den anderen Sets fehlen. 
+%TODO genaue Zusammenstellung der Sets aufzeigen. 
+Auffällig ist, dass es bei den Einzelbildern teilweise große Unterschiede zwischen der Segmentierung der ganzen Zelle und der des Zellkerns gibt. Bei der Verwendung von Bild 4 als Zielzelle, konnten z.B. die besten Ergebnisse in Bezug auf die ganze Zelle erzielt werden, während die Segmentierung des Zellkerns vergleichsweise schlecht funktionierte. Bei der Verwendung mehrerer Zielbilder stabilisieren sich die Ergebnisse und weisen konstante durchschnittliche Verbesserungen auf. Für eine konkrete Bewertung der Eignung der Zielbilder, werden die Resultate sowohl für die ganze Zelle als auch für den Zellkern sortiert. Beide Ränge werden addiert, wobei die beste Referenz die geringste Summe aufweist. Die Resultate sind in Tabelle \ref{tab:all_bspline} aufgeführt.
+
+\begin{figure}[h]
+\center
+\subfloat[Ganze Zelle]{
+\includegraphics[width = 1.0\textwidth]{pics/Ergebnisse/all_bspline_zelle}}
+\quad
+\subfloat[Zellkern]{
+\includegraphics[width = 1.0\textwidth]{pics/Ergebnisse/all_bspline_kern}}
+\caption[Vergleich Ansatz B-Spline für verschiedene Referenzen]{Vergleich der durchschnittlichen Veränderung der Segmentierungsqualität in \%: \textbf{(a)} Segmentierung der ganzen Zelle, \textbf{(b)} Segmentierung des Zellkerns. Target 1-15 entsprechen der Anpassung an ein einzelnes Bild. Set 3-6 bezeichnet jeweils eine Gruppe Bilder. BLA REFERENZ EINFÜGEN. "Mean" bezeichnet die Anpassung an die Mittelwerte der Merkmale, "Median" die Verwendung des Median der Merkmale und "MinFeat" die Wahl des Bilds aus dem Set, zu dem die Features den geringsten euklidischen Abstand aufweisen (siehe Abschnitt \ref{sec:auswahl_target}).\label{fig:all_bspline}}
+\end{figure}
+
+\begin{table}[h]
+\center
+\caption[Vergleich Referenzen für B-Spline]{Die Tabelle listet die Positionen der verschiedenen Referenzen im Vergleich untereinander auf. Unterschieden wird zwischen der Auswertung der ganzen Zelle und des Zellkerns jeweils mit Grad 8 und 9. Der Rang für die Kombination bezieht sich auf alle Referenzen und Grad 8 und 9 für den B-Spline. Die beste Kombination aus Referenz und Grad des B-Spline ist hervorgehoben.\label{tab:all_bspline}}
+\begin{tabular}{ | l | r | r | r | r | r | r | }
+\hline
+	Referenz(-set) & \multicolumn{2}{c|}{Gesamte Zelle}  &\multicolumn{2}{c|}{Zellkern} & \multicolumn
+	{2}{c|}{Kombination}\\ \hline
+	& \multicolumn{1}{c|}{Grad 8} & \multicolumn{1}{c|}{Grad 9} & \multicolumn{1}{c|}{Grad 8} & \multicolumn{1}{c|}{Grad 9} & \multicolumn{1}{c|}{\textbf{Grad 8}} & \multicolumn{1}{c|}{Grad 9} \\ \hline
+	Target 1 & 21 & 24 & 27 & 27 & 47 & 52 \\ \hline
+	Target 2 & 2 & 3 & 18 & 16 & 15 & 12 \\ \hline
+	Target 3 & 25 & 23 & 12 & 10 & 43 & 39 \\ \hline
+	Target 4 & 1 & 1 & 25 & 25 & 30 & 30 \\ \hline
+	Target 5 & 20 & 20 & 1 & 1 & 18 & 18 \\ \hline
+	Target 6 & 17 & 16 & 10 & 7 & 32 & 24 \\ \hline
+	Target 7 & 23 & 21 & 13 & 15 & 40 & 40 \\ \hline
+	Target 8 & 13 & 13 & 2 & 4 & 5 & 7 \\ \hline
+	Target 9 & 5 & 2 & 16 & 18 & 18 & 15 \\ \hline
+	Target 10 & 27 & 27 & 26 & 26 & 53 & 53 \\ \hline
+	Target 11 & 24 & 25 & 24 & 23 & 47 & 47 \\ \hline
+	Target 12 & 11 & 7 & 19 & 20 & 35 & 32 \\ \hline
+	Target 13 & 22 & 22 & 21 & 21 & 45 & 45 \\ \hline
+	Target 14 & 26 & 26 & 23 & 24 & 50 & 51 \\ \hline
+	Target 15 & 19 & 15 & 5 & 3 & 28 & 10 \\ \hline
+	Mean Set 3 & 12 & 18 & 11 & 12 & 24 & 35 \\ \hline
+	Median Set 3 & 16 & 18 & 7 & 12 & 24 & 35 \\ \hline
+	MinFeat Set 3 & 15 & 14 & 22 & 22 & 43 & 40 \\ \hline
+	Mean Set 4 & 4 & 10 & 8 & 9 & 2 & 12 \\ \hline
+	Median Set 4 & 18 & 17 & 3 & 5 & 18 & 23 \\ \hline
+	MinFeat Set 4 & 10 & 6 & 20 & 19 & 35 & 29 \\ \hline
+	\textbf{Mean Set 5} & 6 & 11 & 4 & 6 & \cellcolor{green}\textbf{1} & 7 \\ \hline
+	Median Set 5 & 9 & 12 & 6 & 2 & 5 & 4 \\ \hline
+	MinFeat Set 5 & 7 & 8 & 14 & 11 & 18 & 12 \\ \hline
+	Mean Set 6 & 8 & 5 & 9 & 8 & 7 & 3 \\ \hline
+	Median Set 6 & 14 & 9 & 15 & 14 & 34 & 24 \\ \hline
+	MinFeat Set 6 & 3 & 1 & 17 & 17 & 15 & 10 \\ \hline
+\end{tabular}
+\end{table}
+
+Laut Tabelle \ref{tab:all_bspline} ist die Verwendung des Mittelwerts aus Set 5 und einem Grad 8 für die beiden Auswertungsszenarien am stabilsten. Abbildung \ref{fig:orig_vs_mean8} vergleicht für das 1000 Bilder umfassende Testset die Qualität der Segmentierung auf dem Originalbild mit der des normalisierten Bild. Bei Punkten auf der blauen Linie hat sich die Qualität nicht verändert, darüber konnte diese durch die Normalisierung verbessert werden, darunter wurder sie schlechter. Für den Großteil der Testzellen verändert sich die Segmentierung nur minimal. Dies gilt vor allem bei Betrachtung der kompletten Zelle. Eine deutlich positive Entwicklung gibt es jedoch häufiger als eine negative, was sich in der Abbildung dadurch bemerkbar macht, dass mehr Datenpunkte über der blauen Linie liegen als darunter. In Abbildung \ref{fig:orig_vs_mean8_kern} ist die Streuung größer, der Trend aus Abbildung \ref{fig:orig_vs_mean8_zelle} bestätigt sich jedoch.
+ 
+\begin{figure}[h]
+\center
+\subfloat[Ganze Zelle]{
+\includegraphics[width = 0.7\textwidth]{pics/Ergebnisse/Mean8_set5_zelle}\label{fig:orig_vs_mean8_zelle}}
+\quad
+\subfloat[Zellkern]{
+\includegraphics[width = 0.7\textwidth]{pics/Ergebnisse/Mean8_set5_kern}\label{fig:orig_vs_mean8_kern}}
+\caption[Vergleich Segmentierung normalisiertes und Originalbild]{Vergleich Veränderung der Segmentierungsqualität aller 1000 Einzelbilder. Die rote Linie bezeichnet die Werte, bei denen keine Veränderung der Qualität stattgefunden hat. Werte über der Linie weisen nach der Normalisierung eine bessere Qualität auf, darunter eine schlechtere. \textbf{(a)} Segmentierung der ganzen Zelle, \textbf{(b)} Segmentierung des Zellkerns. Die Normalisierung wurde mit dem Mittelwert aus Set 5 als Referenz und einem B-Spline mit Grad 8 durchgeführt.\label{fig:orig_vs_mean8}}
+\end{figure}
+
+Die bisherigen Betrachtungen waren jeweils unabhängig von der Zellklasse. Die Qualität der automatischen Segmentierung sowie die Veränderung durch die Normalisierung sind jedoch stark von der Art der Zelle abhängig. Die Zusammenhänge sollen mit Hilfe sogenannter Boxplots verdeutlicht werden. Diese Darstellungsweise beinhaltet das Minimum und Maximum einer Datenreihe. Die Untergrenze der namensgebenden Box markiert den Übergang zum zweiten Quartil, d.h. 25\% der Werte sind kleiner, der Strich in der Box den Median (50\%) und die Obergrenze liegt an der Grenze zwischen dem dritten und vierten Quartil (75\%). In den Abbildungen \ref{fig:klassen_zelle_ganz}-\ref{fig:klassen_kern_zoom} sind nach Klassen getrennt die Segmentierungsergebnisse bei Verwendung normalisierter und originaler Bilder gegenübergestellt. Auf der y-Achse ist dabei jeweils die Segmentierungsqualität angegeben. Bei Betrachtung der Resultate für die ganze Zelle wird deutlich, dass einzelne Klassen wie z.B. Proerythroblasten oder Lymphozyten unabhängig von einer Normalisierung konstant gut segmentiert werden. Eine signifikante Verschlechterung ergibt sich einzig für Normoblasten, jedoch gibt es deutliche Verbesserungen für segmentkernige- und stabkernige Zellen. Betrachtet man dagegen die Segmentierung des Zellkerns, so ergibt sich keine signifikante Verschlechterung. Dagegen sind wiederum Verbesserungen für segmentkernige und stabkernige Zellen erkennbar. Hinzu kommt auch eine signifikant positive Entwicklung für Myelozyten, Eosinophile, Metamyelozyten  und Monozyten. 
+%TODO Beispiele für alle Zellklassen  
+\begin{figure}[h]
+\center
+\includegraphics[scale = 0.48, angle = -90]{pics/Ergebnisse/klassen_zelle_ganz}
+\caption[Segmentierungsqualität Zelle nach Klassen]{Veränderung der Segmentierungsqualität ganze Zelle\label{fig:klassen_zelle_ganz}}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\includegraphics[scale = 0.48, angle = -90]{pics/Ergebnisse/klassen_zelle_zoom}
+\caption[Segmentierungsqualität Zelle nach Klassen, Ausschnitt]{Ausschnitt aus Abbildung \ref{fig:klassen_zelle_ganz}\label{fig:klassen_zelle_zoom}}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\includegraphics[scale = 0.48, angle = -90]{pics/Ergebnisse/klassen_kern_ganz}
+\caption[Segmentierungsqualität Zellkern nach Klassen]{Veränderung der Segmentierungsqualität Zellkern\label{fig:klassen_kern_ganz}}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\includegraphics[scale = 0.48, angle = -90]{pics/Ergebnisse/klassen_kern_zoom}
+\caption[Segmentierungsqualität Zellkern nach Klassen, Ausschnitt]{Ausschnitt aus Abbildung \ref{fig:klassen_kern_ganz}\label{fig:klassen_kern_zoom}}
+\end{figure}
+
+\subsection{Vergleich der unterschiedlichen Normalisierungsansätze}
+\begin{figure}[h]
+\center
+\subfloat[Komplette Übersicht, ganze Zelle]{
+\includegraphics[width = 1\textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_ganz}}
+\quad
+\subfloat[Fokus Boxen, ganze Zelle]{
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_zoom}}
+\quad
+\subfloat[Komplette Übersicht, Zellkern]{
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_ganz}}
+\quad
+\subfloat[Fokus Boxen, Zellkern]{
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_zoom}}
+\caption[Vergleich Segmentierung unterschiedlicher Normalisierungsmethoden]{Die Abbildung zeigt Boxplots der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\subfloat[Komplette Übersicht, ganze Zelle]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_ganz}}
+\quad
+\subfloat[Fokus Boxen, ganze Zelle]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_zoom}}
+\quad
+\subfloat[Komplette Übersicht, Zellkern]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_ganz}}
+\quad
+\subfloat[Fokus Boxen, Zellkern]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_zoom}}
+\caption[Vergleich der Veränderung der Segmentierung unterschiedlicher Methoden zum Original]{Die Abbildung zeigt Boxplots der Veränderungen der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen}
+\end{figure}
+
 
 
 \section{Klassifikation}
