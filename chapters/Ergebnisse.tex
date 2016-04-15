@@ -3,7 +3,61 @@ Im folgenden Kapitel sollen die Ergebnisse der Arbeit vorgestellt werden, wobei 
 
 \section[Material]{Material}\label{sec:material}
 Die für diese Arbeit verwendeten Knochenmarkpräparate wurden nach Pappenheim gefärbt und unter einem Hellfeldmikroskop untersucht. Die Bilder wurden dabei mit einer CCD-Kamera aufgenommen, die an das Mikroskop der Marke Zeiss, Modell Axio Imager Z2, angebracht wurde. Die Originalbilder haben dabei eine Größe von 2452x2056 Pixel, wobei die Pixelgröße 3.45$\mu m$x 3.45$\mu m$ beträgt. 
-Als Eingang für die getesteten Normalisierungsalgorithmen dienen die 400x400 Pixel große Ausschnitte der Originale, welche auf dem ersten Teil des in Kapitel \ref{sec:seg_algo} beschriebenen Segmentierungsverfahren basieren. Jedes Bild hat genau eine Zielzelle, deren Zentrum optimalerweise mit dem Mittelpunkt des Bildes zusammenfällt. Eine Handsegmentierung von ganzer Zelle und Zellkern steht zur Verfügung und dient als Grundwahrheit für die Auswertung der Segmentierungsqualität. Zudem wurden alle Zellen durch einen Pathologen klassifiziert, so dass auch hierfür eine Grundwahrheit vorhanden ist. Für den Test der Segmentierung wurde ein Datensatz verwendet, welcher 1000 dieser 400x400 Teilbilder umfasst. Die durch die Normalisierung veränderten Bilder wurden im Anschluss als Trainingsdatensatz für die Klassifikation verwendet. Getestet wurde die Klassifikation anhand eines davon unabhängigen Sets mit 100 Bildern. Es wird nach den folgenden Zellklassen unterschieden: Segmentierte Neutrophile, Normablasten, Lymphozyten, Myelozyten, Eosinophile, Plasmazellen, Promyelozyten, Blasten, Proerythroblast, Erythroblast, Metamyelozyt, Band Neutrophil, Basophil, Monozyten, Haarzellen und unreife Lymphozyten.
+Als Eingang für die getesteten Normalisierungsalgorithmen dienen die 400x400 Pixel große Ausschnitte der Originale, welche auf dem ersten Teil des in Kapitel \ref{sec:seg_algo} beschriebenen Segmentierungsverfahren basieren. Jedes Bild hat genau eine Zielzelle, deren Zentrum optimalerweise mit dem Mittelpunkt des Bildes zusammenfällt. Eine Handsegmentierung von ganzer Zelle und Zellkern steht zur Verfügung und dient als Grundwahrheit für die Auswertung der Segmentierungsqualität. Zudem wurden alle Zellen durch einen Pathologen klassifiziert, so dass auch hierfür eine Grundwahrheit vorhanden ist. Für den Test der Segmentierung wurde ein Datensatz verwendet, welcher 1000 dieser 400x400 Teilbilder umfasst. Die durch die Normalisierung veränderten Bilder wurden im Anschluss als Trainingsdatensatz für die Klassifikation verwendet. Getestet wurde die Klassifikation anhand eines davon unabhängigen Sets mit 100 Bildern. Es wird nach den folgenden Zellklassen unterschieden: Segmentkernige, Normablasten, Lymphozyten, Myelozyten, Eosinophile, Plasmazellen, Promyelozyten, Blasten, Proerythroblasten, Erythroblasten, Metamyelozyten, Stabkernige, Basophile, Monozyten, Haarzellen und unreife Lymphozyten.
+Abbildung \ref{fig:zellklassen} zeigt Beispiele für alle 16 zu unterscheidenden Arten.
+
+\begin{figure}[h]
+\center
+\subfloat[Segmentkernig]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_segmentkernig}}
+\quad
+\subfloat[Normoblast]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_normoblast}}
+\quad
+\subfloat[Lymphozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_lymphozyt}}
+\quad
+\subfloat[Myelozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_myelozyt}}
+\quad
+\subfloat[Eosinophil]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_eosinophil}}
+\quad
+\subfloat[Plasmazelle]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_plasmazelle}}
+\quad
+\subfloat[Promyelozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_promyelozyt}}
+\quad
+\subfloat[Blast]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_blast}}
+\quad
+\subfloat[Proerythroblast]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_proerythroblast}}
+\quad
+\subfloat[Erythroblast]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_erythroblast}}
+\quad
+\subfloat[Metamyelozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_metamyelozyt}}
+\quad
+\subfloat[Stabkernig]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_stabkernig}}
+\quad
+\subfloat[Basophil]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_basophil}}
+\quad
+\subfloat[Monozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_monozyt}}
+\quad
+\subfloat[Haarzelle]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_haarzelle}}
+\quad
+\subfloat[Unreifer Lymphozyt]{
+\includegraphics[width = 0.19\textwidth]{pics/Ergebnisse/class_unreifer_lymphozyt}}
+\caption[Beispiele für die verschiedenen Zellklassen]{Beispiele für die verschiedenen Zellklassen. Die angegebene Klasse bezieht sich bei mehreren Zellen im Bild auf die im Zentrum liegende Zelle.\label{fig:zellklassen}} 
+\end{figure}
+
 
 \section{Clustering}\label{sec:res_clustering}
 
@@ -134,11 +188,11 @@ Auffällig ist, dass es bei den Einzelbildern teilweise große Unterschiede zwisch
 \begin{table}[h]
 \center
 \caption[Vergleich Referenzen für B-Spline]{Die Tabelle listet die Positionen der verschiedenen Referenzen im Vergleich untereinander auf. Unterschieden wird zwischen der Auswertung der ganzen Zelle und des Zellkerns jeweils mit Grad 8 und 9. Der Rang für die Kombination bezieht sich auf alle Referenzen und Grad 8 und 9 für den B-Spline. Die beste Kombination aus Referenz und Grad des B-Spline ist hervorgehoben.\label{tab:all_bspline}}
-\begin{tabular}{ | l | r | r | r | r | r | r | }
+\begin{tabular}{ | >{\bfseries} l |r | r | r | r | r | r | }
 \hline
-	Referenz(-set) & \multicolumn{2}{c|}{Gesamte Zelle}  &\multicolumn{2}{c|}{Zellkern} & \multicolumn
-	{2}{c|}{Kombination}\\ \hline
-	& \multicolumn{1}{c|}{Grad 8} & \multicolumn{1}{c|}{Grad 9} & \multicolumn{1}{c|}{Grad 8} & \multicolumn{1}{c|}{Grad 9} & \multicolumn{1}{c|}{\textbf{Grad 8}} & \multicolumn{1}{c|}{Grad 9} \\ \hline
+	Referenz(-set) & \multicolumn{2}{c|}{\textbf{Gesamte Zelle}}  &\multicolumn{2}{c|}{\textbf{Zellkern}} & \multicolumn
+	{2}{c|}{\textbf{Kombination}}\\ \hline
+	& \multicolumn{1}{c|}{\textbf{Grad 8}} & \multicolumn{1}{c|}{\textbf{Grad 9}} & \multicolumn{1}{c|}{\textbf{Grad 8}} & \multicolumn{1}{c|}{\textbf{Grad 9}} & \multicolumn{1}{c|}{\textbf{\textbf{\cellcolor{lightgreen}Grad 8}}} & \multicolumn{1}{c|}{\textbf{Grad 9}} \\ \hline
 	Target 1 & 21 & 24 & 27 & 27 & 47 & 52 \\ \hline
 	Target 2 & 2 & 3 & 18 & 16 & 15 & 12 \\ \hline
 	Target 3 & 25 & 23 & 12 & 10 & 43 & 39 \\ \hline
@@ -160,7 +214,7 @@ Auffällig ist, dass es bei den Einzelbildern teilweise große Unterschiede zwisch
 	Mean Set 4 & 4 & 10 & 8 & 9 & 2 & 12 \\ \hline
 	Median Set 4 & 18 & 17 & 3 & 5 & 18 & 23 \\ \hline
 	MinFeat Set 4 & 10 & 6 & 20 & 19 & 35 & 29 \\ \hline
-	\textbf{Mean Set 5} & 6 & 11 & 4 & 6 & \cellcolor{green}\textbf{1} & 7 \\ \hline
+	\cellcolor{lightgreen} Mean Set 5 & 6 & 11 & 4 & 6 & \cellcolor{lightgreen}\textbf{1} & 7 \\ \hline
 	Median Set 5 & 9 & 12 & 6 & 2 & 5 & 4 \\ \hline
 	MinFeat Set 5 & 7 & 8 & 14 & 11 & 18 & 12 \\ \hline
 	Mean Set 6 & 8 & 5 & 9 & 8 & 7 & 3 \\ \hline
@@ -182,7 +236,37 @@ Laut Tabelle \ref{tab:all_bspline} ist die Verwendung des Mittelwerts aus Set 5 
 \end{figure}
 
 Die bisherigen Betrachtungen waren jeweils unabhängig von der Zellklasse. Die Qualität der automatischen Segmentierung sowie die Veränderung durch die Normalisierung sind jedoch stark von der Art der Zelle abhängig. Die Zusammenhänge sollen mit Hilfe sogenannter Boxplots verdeutlicht werden. Diese Darstellungsweise beinhaltet das Minimum und Maximum einer Datenreihe. Die Untergrenze der namensgebenden Box markiert den Übergang zum zweiten Quartil, d.h. 25\% der Werte sind kleiner, der Strich in der Box den Median (50\%) und die Obergrenze liegt an der Grenze zwischen dem dritten und vierten Quartil (75\%). In den Abbildungen \ref{fig:klassen_zelle_ganz}-\ref{fig:klassen_kern_zoom} sind nach Klassen getrennt die Segmentierungsergebnisse bei Verwendung normalisierter und originaler Bilder gegenübergestellt. Auf der y-Achse ist dabei jeweils die Segmentierungsqualität angegeben. Bei Betrachtung der Resultate für die ganze Zelle wird deutlich, dass einzelne Klassen wie z.B. Proerythroblasten oder Lymphozyten unabhängig von einer Normalisierung konstant gut segmentiert werden. Eine signifikante Verschlechterung ergibt sich einzig für Normoblasten, jedoch gibt es deutliche Verbesserungen für segmentkernige- und stabkernige Zellen. Betrachtet man dagegen die Segmentierung des Zellkerns, so ergibt sich keine signifikante Verschlechterung. Dagegen sind wiederum Verbesserungen für segmentkernige und stabkernige Zellen erkennbar. Hinzu kommt auch eine signifikant positive Entwicklung für Myelozyten, Eosinophile, Metamyelozyten  und Monozyten. 
-%TODO Beispiele für alle Zellklassen  
+Abbildung \ref{fig:pos_neg_change} zeigt jeweils ein deutliches Positiv- und Negativbeispiel für die Veränderung der automatischen Segmentierung. Auffällig ist, dass für das Negativbeispiel eine nur geringe optische Veränderung feststellbar ist.   
+%TODO was ist signifikant: mittlere Verbesserung erwähnen
+\begin{figure}[htb]
+\center
+\subfloat[Originalbild 1]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/negative_orig_img}}
+\quad
+\subfloat[Originalbild 1 mit Segmentierung]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/negative_orig}}
+\quad
+\subfloat[Normalisiertes Bild 1]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/negative_norm_img}}
+\quad
+\subfloat[Normalisiertes Bild 1 mit Segmentierung]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/negative_norm}}
+\quad
+\subfloat[Originalbild 2]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/positive_orig_img}}
+\quad
+\subfloat[Originalbild 2 mit Segmentierung]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/positive_orig}}
+\quad
+\subfloat[Normalisiertes Bild 2]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/positive_norm_img}}
+\quad
+\subfloat[Normalisiertes Bild 2 mit Segmentierung]{
+\includegraphics[width = 0.2\textwidth]{pics/Ergebnisse/positive_norm}}
+\caption[Beispiele Auswirkung auf Segmentierung]{In der Abbildung sind zwei Beispiele für die Veränderung der Segmentierung dargestellt. \textbf{(a)}-\textbf{(d)} Verschlechterung, \textbf{(e)}-\textbf{(h)} Verbesserung\label{fig:pos_neg_change}}
+\end{figure}
+
+
 \begin{figure}[h]
 \center
 \includegraphics[scale = 0.48, angle = -90]{pics/Ergebnisse/klassen_zelle_ganz}
@@ -207,37 +291,44 @@ Die bisherigen Betrachtungen waren jeweils unabhängig von der Zellklasse. Die Qu
 \caption[Segmentierungsqualität Zellkern nach Klassen, Ausschnitt]{Ausschnitt aus Abbildung \ref{fig:klassen_kern_ganz}\label{fig:klassen_kern_zoom}}
 \end{figure}
 
-\subsection{Vergleich der unterschiedlichen Normalisierungsansätze}
-\begin{figure}[h]
-\center
-\subfloat[Komplette Übersicht, ganze Zelle]{
-\includegraphics[width = 1\textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_ganz}}
-\quad
-\subfloat[Fokus Boxen, ganze Zelle]{
-\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_zoom}}
-\quad
-\subfloat[Komplette Übersicht, Zellkern]{
-\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_ganz}}
-\quad
-\subfloat[Fokus Boxen, Zellkern]{
-\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_zoom}}
-\caption[Vergleich Segmentierung unterschiedlicher Normalisierungsmethoden]{Die Abbildung zeigt Boxplots der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen}
-\end{figure}
 
-\begin{figure}[h]
+\subsection{Vergleich der unterschiedlichen Normalisierungsansätze}
+
+Die Anpassungsvariante mittels B-Spline und den manuell von \citeauthor{landini2016}bestimmten Giemsa Stainvektoren soll nun den übrigen getesteten Methoden und den Originalbildern gegenübergestellt werden. Im Einzelnen wurden hierfür jeweils die besten getesteten Parameterkombination für B-Spline mit durch die Methode von Macenko bestimmten Vektoren, der Skalierung auf ein festes Maximum nach Color Deconvolution (CD), der Anpassung von Mittelwert und Standardabweichung nach CD und der Anpassung nach Reinhard. 
+In den Abbildungen \ref{fig:methoden_zelle_ganz} und \ref{fig:methoden_zelle_zoom} ist dabei die Verteilung der Segmentierungsqualität für die ganze Zelle dargestellt. Die größten Unterschiede weisen die einzelnen Methoden dabei bei der unteren Grenze der Box auf. Die mit Hilfe von Macenkos Methode bestimmten Stainvektoren liefern dabei das schlechteste Ergebnis ab, während die Skalierung auf ein festes Maximum und B-Splines mit Giemsa Stains die besten Resultate erreichen. Insgesamt sind die Unterschiede jedoch gering. Bei Betrachtung des Zellkerns ergeben sich deutlichere Abweichungen. Die automatische Segmentierung funktioniert durchschnittlich am schlechtesten auf den Originalbildern, gefolgt von den nach Reinhard normalisierten Bildern. Im Mittelfeld liegen die Ergebnisse nach Skalierung und Anpassung von Mittelwert und Standardabweichung im CD-Farbraum. Am effektivsten bei der Abgrenzung von Zellkern und Zellplasma ist die Anpassung mittels B-Spline, wobei der Unterschied zwischen beiden Methoden sehr klein ist. 
+\begin{figure}[htb]
 \center
 \subfloat[Komplette Übersicht, ganze Zelle]{
-\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_ganz}}
+\includegraphics[width = 1\textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_ganz}\label{fig:methoden_zelle_ganz}}
 \quad
 \subfloat[Fokus Boxen, ganze Zelle]{
-\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_zoom}}
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_zelle_zoom}\label{fig:methoden_zelle_zoom}}
 \quad
 \subfloat[Komplette Übersicht, Zellkern]{
-\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_ganz}}
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_ganz}\label{fig:methdoen_kern_ganz}}
 \quad
 \subfloat[Fokus Boxen, Zellkern]{
-\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_zoom}}
-\caption[Vergleich der Veränderung der Segmentierung unterschiedlicher Methoden zum Original]{Die Abbildung zeigt Boxplots der Veränderungen der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen}
+\includegraphics[width = \textwidth]{pics/Ergebnisse/normalisierungsmethoden_kern_zoom}
+\label{fig:methoden_kern_zoom}}
+\caption[Vergleich Segmentierung unterschiedlicher Normalisierungsmethoden]{Die Abbildung zeigt Boxplots der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen\label{fig:methoden}}
+\end{figure}
+In Abbildung \ref{fig:methoden_diff} sind die Unterschiede der Segmentierung zwischen den normalisierten Bildern und den Originalen dargestellt. Hierbei wird deutlich, dass für den größten Teil der Bilder, die Tatsache ob das Bild zuvor normalisiert wurde oder nicht keine große rolle spielt, und die Veränderungen klein sind. Deutliche Verschlechterungen für einzelne Zellen gibt es bei allen Ansätzen, am wenigsten gravierend jedoch für Giemsa, Macenko und fixes Pseudomaximum, wo das Minimum bei -0.32 für die ganze Zelle liegt (Abb. \ref{fig:methoden_diff_zelle}). Im Vergleich dazu liegen die Minima für Reinhard und Mean/Std bei -0.47. Das Maximum liegt dagegen bei fast allen Ansätzen relativ konstant bei knapp 0.4. Einzig Macenko fällt hierbei mit einer maximalen Verbesserung von 0.3 etwas ab. Bei näherer Betrachtung der Veränderung für den Großteil der Zellen (Abb. \ref{fig:methoden_diff_zelle_zoom}) können keine großen Unterschiede zwischen den verschiedenen Ansätzen festgestellt werden. In den Abbildungen \ref{fig:methoden_diff_kern} und \ref{fig:methoden_diff_kern_zoom} liegt der Fokus dagegen auf dem Zellkern. Die Tatsache dass die Differenz allgemein stärker streut äußert sich in den größeren Boxen. Sowohl Minimum als auch Maximum liegen bei der Variante mit Giemsa-Stains und B-Splines mit -0.23 bzw. 0.73  höher als bei den restlichen Methoden. Am nächsten kommt jeweils die Skalierung auf ein festes Maximum mit -0.34 und 0.47. Während Reinhard sowie Anpassung Mittelwert/Standardabweichung für den Großteil der Zellen in beide Richtungen die geringsten Abweichungen aufweisen, streuen die Ergebnisse bei Skalierung auf ein fixes Maximum deutlich stärker. Für beide B-Spline Varianten liegt häufiger eine Verbesserung als eine Verschlechterung vor, der Median sowie das 3. Quartil liegen hier am höchsten.    
+Vor allem aufgrund der geringsten Verschlechterungen bei beiden Evaluationsansätzen, legen die Resultate nahe, dass die Variante B-Spline und Giemsa Stains am bezüglich der Segmentierung am stabilsten ist. 
+
+\begin{figure}[htb]
+\center
+\subfloat[Komplette Übersicht, ganze Zelle]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_ganz}\label{fig:methoden_diff_zelle}}
+\quad
+\subfloat[Fokus Boxen, ganze Zelle]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_zelle_zoom}\label{fig:methoden_diff_zelle_zoom}}
+\quad
+\subfloat[Komplette Übersicht, Zellkern]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_ganz}\label{fig:methoden_diff_kern}}
+\quad
+\subfloat[Fokus Boxen, Zellkern]{
+\includegraphics[width = 0.47\textwidth]{pics/Ergebnisse/diff_methoden_kern_zoom}\label{fig:methoden_diff_kern_zoom}}
+\caption[Vergleich der Veränderung der Segmentierung unterschiedlicher Methoden zum Original]{Die Abbildung zeigt Boxplots der Veränderungen der Segmentierungsergebnisse für verschiedene Ansätze. Für jeden Ansatz sind die erfolgreichsten Parameterkombinationen gezeigt. Die blaue Linie in jeder Box entspricht dem Median. \textbf{(a)} Ganze Zelle, Gesamtübersicht \textbf{(b)} Ganze Zelle, Fokus auf Boxen, \textbf{(c)} Zellkern, Gesamtübersicht \textbf{(d)} Zellkern, Fokus auf Boxen\label{fig:methoden_diff}}
 \end{figure}
 
 
