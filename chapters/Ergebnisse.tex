@@ -334,4 +334,38 @@ Vor allem aufgrund der geringsten Verschlechterungen bei beiden Evaluationsansät
 
 
 \section{Klassifikation}
+\begin{table}[htb]
+\caption{Zuordnung Experimente}
+\center
+\begin{tabular}{|c|c|c|}
+\hline 
+Experiment & Normalisierungsmethode & Segmentierung \\ 
+\hline 
+1 & B-Spline: Bestes Kombination & automatisch \\ 
+\hline 
+2 & B-Spline: Bestes ganze Zelle & automatisch \\ 
+\hline 
+3 & B-Spline: Bestes Zellkern & automatisch \\ 
+\hline 
+4 & B-Spline: Bestes Einzelbild & automatisch \\ 
+\hline 
+5 & Originalbilder & automatisch \\ 
+\hline 
+6 & B-Spline: Bestes Macenko & automatisch \\ 
+\hline 
+7 & Mean/Std & automatisch \\ 
+\hline 
+8 & Fixes Maximum & automatisch \\ 
+\hline 
+9 & Originalbilder & Handsegmentierung \\ 
+\hline 
+10 & Originalbilder & aus Experiment 1 \\ 
+\hline 
+\end{tabular}
+\end{table} 
 
+\begin{table}[htb]
+\caption{Sample}
+\includegraphics[width = \textwidth]{pics/Ergebnisse/klass_matrix1}
+
+\end{table}

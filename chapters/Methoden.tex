@@ -50,7 +50,7 @@ In der vorliegenden Arbeit waren maximal zwei Iterationen notwendig. Der eingesc
 \end{figure}  
 
 \section{Verfahren nach Khan}\label{sec:implementierung_khan}
-Für die Umsetzung des von \citeeig{khan2014nonlinear} vorgeschlagenen Algorithmus zur Klassifikation der einzelnen Pixel wurde zunächst aus einem Set aus Trainingsbildern ein Octree gebildet, der die vorkommenden Farben möglichst gut abbildet. \citeauthor{khan2014nonlinear} fassen den Octree solange zusammen, bis dieser noch genau 255 Blattknoten hat. Rechnerisch ist dies jedoch nicht möglich. Da in jedem Unterteilungsschritt ein Blatt durch acht neue ersetzt wird, bzw. beim Zusammenfassen acht Blätter durch den jeweiligen Elternknoten ersetzt werden, folgt die Zahl der Blattknoten $x$ folgender Logik:  $x = 1+i*7, i \in \mathbb{N}$. Aus diesem Grund wurde statt 255 das nächst kleinere gültige Ziel 253 verwendet. Die auf diese Weise festgelegte Quantisierung wurde nun auf alle Trainingsbilder angewendet und die Merkmalsvektoren wie bei \citeauthor{khan2014nonlinear} berechnet. Problematisch für die vorliegenden Daten war die Definition einer Klassenzugehörigkeit. Als Grundwahrheit verfügbar war für jedes Bild die Region of Interest einer Zelle, welche zudem in Plasma und Kern unterteilt war, sodass ein 3-Klassenproblem $s_n \in \text{KERN, PLASMA, HINTERGRUND}$ festgelegt wurde. Für ein Pixel welches laut Grundwahrheit nicht zu Kern oder Plasma der jeweiligen Zielzelle im Bild gehört, ist nicht bekannt, ob dieses wirklich Hintergrund zeigt, oder ob es zu einer anderen Zelle gehört. Um eine Zuordnung eines gefärbten Pixels zur Klasse Hintergrund zu vermeiden, wurde ein Clusteringverfahren angewendet, welches das Bild in gefärbte und nicht gefärbte Pixel unterteilt. Dabei wird zunächst der Arcustangens zwischen Blau- und Grünkanal berechnet und im Anschluss ein Grenzwert nach dem Verfahren von Otsu berechnet \cite{otsu1975threshold}. Im daraus resultierenden Binärbild werden mittels morphologischen Operationen wie Closing noch Fehler reduziert \cite{krappe2015dynamic}. Pixel, die im Binärbild als gefärbt markiert sind, jedoch nicht zur Zielzelle gehören, wurden für das Trainieren des Klassifikators ausgeschlossen. Für die Klassifikation wurde eine Support Vector Regression (SVR) aus der Bibliothek OpenCV verwendet. Geeignete Parameter wurden mittels 10-facher Kreuzvalidierung bestimmt. 
+Für die Umsetzung des von \citeeig{khan2014nonlinear} vorgeschlagenen Algorithmus zur Klassifikation der einzelnen Pixel wurde zunächst aus einem Set aus Trainingsbildern ein Octree gebildet, der die vorkommenden Farben möglichst gut abbildet. \citeauthor{khan2014nonlinear} fassen den Octree solange zusammen, bis dieser noch genau 255 Blattknoten hat. Rechnerisch ist dies jedoch nicht möglich. Da in jedem Unterteilungsschritt ein Blatt durch acht neue ersetzt wird, bzw. beim Zusammenfassen acht Blätter durch den jeweiligen Elternknoten ersetzt werden, folgt die Zahl der Blattknoten $x$ folgender Logik:  $x = 1+i*7, i \in \mathbb{N}$. Aus diesem Grund wurde statt 255 das nächst kleinere gültige Ziel 253 verwendet. Die auf diese Weise festgelegte Quantisierung wurde nun auf alle Trainingsbilder angewendet und die Merkmalsvektoren wie bei \citeauthor{khan2014nonlinear} berechnet. Problematisch für die vorliegenden Daten war die Definition einer Klassenzugehörigkeit. Als Grundwahrheit verfügbar war für jedes Bild die Region of Interest einer Zelle, welche zudem in Plasma und Kern unterteilt war, sodass ein 3-Klassenproblem $s_n \in \lbrace\text{KERN, PLASMA, HINTERGRUND}\rbrace$ festgelegt wurde. Für ein Pixel welches laut Grundwahrheit nicht zu Kern oder Plasma der jeweiligen Zielzelle im Bild gehört, ist nicht bekannt, ob dieses wirklich Hintergrund zeigt, oder ob es zu einer anderen Zelle gehört. Um eine Zuordnung eines gefärbten Pixels zur Klasse Hintergrund zu vermeiden, wurde ein Clusteringverfahren angewendet, welches das Bild in gefärbte und nicht gefärbte Pixel unterteilt. Dabei wird zunächst der Arcustangens zwischen Blau- und Grünkanal berechnet und im Anschluss ein Grenzwert nach dem Verfahren von Otsu berechnet \cite{otsu1975threshold}. Im daraus resultierenden Binärbild werden mittels morphologischen Operationen wie Closing noch Fehler reduziert \cite{krappe2015dynamic}. Pixel, die im Binärbild als gefärbt markiert sind, jedoch nicht zur Zielzelle gehören, wurden für das Trainieren des Klassifikators ausgeschlossen. Für die Klassifikation wurde eine Support Vector Regression (SVR) aus der Bibliothek OpenCV verwendet. Geeignete Parameter wurden mittels 10-facher Kreuzvalidierung bestimmt. Für den Fall, dass das Problem auf eine Zellart beschränkt wird, können gute Ergebnisse erreicht werden. Für das reale Problem ist die Streuung der Daten innerhalb einer Klasse sehr groß, während der Abstand zwischen den Klassen nicht weiter steigt. Aus diesem Grund war die Zuordnung der Pixel zu einer Klasse in den Tests nicht befriedigend. Um für den folgenden Schritt der Anpassung mittels B-Spline trotzdem die notwendige Zuordnung zu finden, wurde ein alternativer Ansatz entwickelt (siehe Abschnitt \ref{sec:clustering}).
 
 
 \section{Eigener Workflow}\label{sec:eigener_workflow}
@@ -218,8 +218,8 @@ Erste Versuche zeigten, dass ein einzelnes Referenzbild nicht ausreicht, die Vie
 \section[Segmentierung]{Segmentierung}\label{sec:segmentierung}
 
 \subsection{Algorithmus}\label{sec:seg_algo}
-Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Segmentierung der einzelnen Zellen. \citeeig{krappe2015dynamic} stellen hierzu ein Verfahren vor, bei dem im ersten Schritt die Zellzentren detektiert werden sollen. Es wird ein Grauwertbild mit Hilfe eines gewichteten Quotienten von Grün- und Blaukanal generiert. Otsu-Thresholding führt im Anschluss zu einem Binärbild, in dem durch Zählen der schwarzen und weißen Pixel entschieden wird, ob das Bild viele oder wenige gefärbte Flächen enthält, wovon das weitere Vorgehen abhängt. Ist viel Vordergrund enthalten, so werden mit Hilfe morphologischer Operatoren Löcher im innerhalb weißer Flächen aufgefüllt. Für die Ermittlung potentieller Zellzentren, wird eine Wasserscheidentransformation auf dem gaußgefilterten oben beschriebenen Grauwertbild durchgeführt. Regionen welche eine Größe von 2500 Pixeln überschreiten, werden in eine Graphendarstellung umgewandelt. Falls gefundene Zentren eine euklidische Distanz von weniger als 70 Pixeln aufweisen, so wird davon ausgegangen, dass diese Knoten auf die gleiche Zelle verweisen, weshalb sie durch einen neuen Knoten ersetzt werden, der den Mittelwert repräsentiert. Dieser Schritt ist in Abbildung \ref{fig:cell_centers} dargestellt.
-\begin{figure}
+Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Segmentierung der einzelnen Zellen. \citeauthor{krappe2015dynamic} stellen ihren Arbeiten \cite{krappe2014lokalisierung} und \cite{krappe2015dynamic} hierzu ein zweistufiges Verfahren vor, bei dem im ersten Schritt die Zellzentren detektiert werden sollen. Es wird ein Grauwertbild mit Hilfe eines gewichteten Quotienten von Grün- und Blaukanal generiert. Otsu-Thresholding führt im Anschluss zu einem Binärbild, in dem durch Zählen der schwarzen und weißen Pixel entschieden wird, ob das Bild viele oder wenige gefärbte Flächen enthält, wovon das weitere Vorgehen abhängt. Ist viel Vordergrund enthalten, so werden mit Hilfe morphologischer Operatoren Löcher im innerhalb weißer Flächen aufgefüllt. Für die Ermittlung potentieller Zellzentren, wird eine Wasserscheidentransformation auf dem gaußgefilterten oben beschriebenen Grauwertbild durchgeführt. Regionen welche eine Größe von 2500 Pixeln überschreiten, werden in eine Graphendarstellung umgewandelt. Falls gefundene Zentren eine euklidische Distanz von weniger als 70 Pixeln aufweisen, so wird davon ausgegangen, dass diese Knoten auf die gleiche Zelle verweisen, weshalb sie durch einen neuen Knoten ersetzt werden, der den Mittelwert repräsentiert. Dieser Schritt ist in Abbildung \ref{fig:cell_centers} dargestellt.
+\begin{figure}[htb]
 \subfloat[Vor Korrektur: eine Zelle wird durch zwei Zentren beschrieben]{
 \includegraphics[width=0.45\textwidth]
 {pics/Grundlagen/centers_uncorrected}\label{fig:seg_uncorrected}}
@@ -228,7 +228,7 @@ Eine Automatisierung der Differenzialzählung erfordert zunächst eine stabile Seg
 \includegraphics[width=0.45\textwidth]
 {pics/Grundlagen/centers_corrected}\label{fig:seg_corrected}}
 \quad
-\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in \textbf{(a)}, zu einem Zentrum zusammengefügt \textbf{(b)}. \label{fig:cell_centers}}
+\caption[Identifizierung Zellzentren]{Im Korrekturschritt werden Zentren mit geringer Distanz, grün markiert in \textbf{(a)}, zu einem Zentrum zusammengefügt \textbf{(b)} \cite{krappe2014lokalisierung}. \label{fig:cell_centers}}
 \end{figure} 
 Hat das Bild dagegen einen hohen Vordergrundanteil, so wird eine Hintergrundkorrektur durchgeführt, bei der dieser durch ein 2D-Polynom dritten Grades approximiert wird. Der Vordergrund wird zunächst mit Hilfe eines Mittelwertfilters geschätzt und dann unter Verwendung des "Fast Marching"-Algorithmus konkretisiert. In der Folge werden homogene Regionen mit dem "Color Structure Code" extrahiert und als geordneter Graph dargestellt. Die Blätter dieses Graphen sind die potentiellen Zellzentren, die anhand des gleichen Verfahrens wie im Fall mit viel Vordergrund korrigiert werden. 
 Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Zellkern und Zellplasma zu bestimmen, wird für jede Zelle eine Polartransformation mit dem im vorherigen Schritt gefundenen Zentrum durchgeführt. Es wird eine zu minimierende Kostenfunktion eingeführt, die aus sechs Komponenten besteht:
@@ -242,7 +242,7 @@ Um in der eigentlichen Segmentierung den äußeren Rand und die Grenze zwischen Ze
 \end{itemize}
 
 Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wiederholung wird verhindert, dass Anfang und Endpunkt des Weges nicht übereinstimmen. Dies hätte zur Folge, dass die Segmentierung im späteren Bild nicht geschlossen ist und einen Sprung aufweist. Die inverse Polartransformation überführt die segmentierende Linie zurück in den ursprünglichen Bildraum. Abbildung \ref{fig:seg_outer_borders} soll die einzelnen Schritte anhand eines Beispiels verdeutlichen.
-\begin{figure}
+\begin{figure}[htb]
 \center
 \subfloat[Originalbild]{
 \includegraphics[width=0.35\textwidth]
@@ -261,16 +261,13 @@ Der Weg im Kostenbild von 0-6$\pi$ soll minimiert werden. Durch die dreifache Wi
 \includegraphics[width=0.35\textwidth]
 {pics/Grundlagen/seg_seg}\label{fig:seg_seg}}
 \quad
-\caption[Segmentierung mittels Polartransformation]{$\mathbf{(a)}$ Originalbild; $\mathbf{(b)}$ Polartransformation mit Zentrum der Zelle als Nullpunkt; $\mathbf{(c)}$ Kostenfunktion, wobei die Kosten in den dunklen Bereichen minimal sind; $\mathbf{(d)}$ Auswertung der Kostenfunktion: Grüne Linie entspricht Weg mit den geringsten Kosten; $\mathbf{(e)}$ Inverse Polartransformation, heller Bereich entspricht der segmentierten Zelle \label{fig:seg_outer_borders}}
+\caption[Segmentierung mittels Polartransformation]{$\mathbf{(a)}$ Originalbild; $\mathbf{(b)}$ Polartransformation mit Zentrum der Zelle als Nullpunkt; $\mathbf{(c)}$ Kostenfunktion, wobei die Kosten in den dunklen Bereichen minimal sind; $\mathbf{(d)}$ Auswertung der Kostenfunktion: Grüne Linie entspricht Weg mit den geringsten Kosten; $\mathbf{(e)}$ Inverse Polartransformation, heller Bereich entspricht der segmentierten Zelle \cite{krappe2015dynamic} \label{fig:seg_outer_borders}}
 \end{figure}
 Die Unterscheidung zwischen Plasma und Zellkern wird wieder auf dem Graubild realisiert, welches durch den Arcustangens von Blau und Grün gebildet wird. Dafür wird das Histogramm der Pixel, die innerhalb der zuvor segmentierten Zelle liegen, bestimmt. Mit Hilfe der Grenzwertbestimmung von Otsu wird das Histogramm und dadurch auch das Bild in zwei verschiedene Bereiche aufgeteilt.
 
 \subsection{Verfahren zur Evaluierung}\label{sec:seg_eval}
-%TODO
-\color{red}
-PAPER!
-\color{black}
-Für die Evaluation der Segmentierung, wurde der automatische Algorithmus mit den als Grundwahrheit dienenden manuell bestimmten Daten verglichen. Das verwendete Maß ist dabei eine Kombination aus Unter- bzw. Übersegmentierung und dem AOM-Kriterium, welches den Überlappungsbereich beschreibt. 
+
+Für die Evaluation der Segmentierung, wurde der automatische Algorithmus mit den als Grundwahrheit dienenden manuell bestimmten Daten verglichen. Das verwendete Maß ist dabei eine Kombination aus Unter- bzw. Übersegmentierung und dem AOM-Kriterium, welches den Überlappungsbereich beschreibt \cite{dominguez2007improved}. 
 
 \noindent AOM-Kriterium:
 \begin{equation}
@@ -289,11 +286,8 @@ Soll die Segmentierung der Zelle als ganzem betrachtet werden, so ist $A$ die Me
   
 \section[Klassifizierung]{Klassifizierung}\label{sec:klassifizierung}
 \subsection{Algorithmus}\label{sec:klass_algo}
-%TODO
-\color{red}
- Paper fehlt noch in Quellen!! Veröffentlichung abwarten?
-\color{black}
-Der zweite wichtige Baustein für eine automatisierte Differentialzählung ist die Zellklassifikation, welche der Segmentierung nachfolgt. In diesem Schritt soll die Zelle einer von 16 Klassen zugeordnet werden. Hierbei soll das Wissen über die Hematopoese genutzt werden und in Form eines hierarchischen Baummodell nachgebildet werden, wie in Abbildung \ref{fig:classification_tree} dargestellt.
+
+Der zweite wichtige Baustein für eine automatisierte Differentialzählung ist die Zellklassifikation, welche der Segmentierung nachfolgt \cite{krappe2016automated}. In diesem Schritt soll die Zelle einer von 16 Klassen zugeordnet werden. Hierbei soll das Wissen über die Hematopoese genutzt werden und in Form eines hierarchischen Baummodell nachgebildet werden, wie in Abbildung \ref{fig:classification_tree} dargestellt.
 \begin{figure}
 \center
 \includegraphics[width = \textwidth]{pics/Methoden/Hierarchy}
@@ -304,5 +298,4 @@ Die für die Klassifikation verwendeten Merkmale teilen sich in Form, Textur und 
 In jedem Knoten des Baummodells wird ein "Einer-gegen-Alle"-Ansatz verwendet. Außerdem werden während des Lernprozess für jeden Knoten 100 Merkmale so ausgewählt, dass der Informationsgehalt möglichst groß wird, bei gleichzeitig geringer Redundanz. Von diesen 100 Merkmalen, werden im Anschluss mittels Merkmalsselektion die besten ausgewählt um eine Support Vector Machine (SVM) zu trainieren. 
 
 \subsection{Verfahren zur Evaluierung}\label{sec:klass_eval}
-%TODO
-Für die Evaluierung der Klassifikation spielt die Natur des Problems eine wichtige Rolle. Es ist aus medizinischer Sicht normal und tolerabel, dass die Unterscheidung zwischen Zellen unterschiedlichen Reifegrads oft nicht klar und deutlich erkennbar ist.
+Für die Evaluierung der Klassifikation spielt die Natur des Problems eine wichtige Rolle. Es ist aus medizinischer Sicht normal und tolerabel, dass die Unterscheidung zwischen ähnlichen Zellklassen bzw. Zellen unterschiedlichen Reifegrads oft nicht klar und deutlich erkennbar ist. Für die Auswertung werden Vertauschungsmatrizen und Korrektklassifizierungsrate ("accuracy") verglichen.
