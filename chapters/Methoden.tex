@@ -298,4 +298,19 @@ Die für die Klassifikation verwendeten Merkmale teilen sich in Form, Textur und 
 In jedem Knoten des Baummodells wird ein "Einer-gegen-Alle"-Ansatz verwendet. Außerdem werden während des Lernprozess für jeden Knoten 100 Merkmale so ausgewählt, dass der Informationsgehalt möglichst groß wird, bei gleichzeitig geringer Redundanz. Von diesen 100 Merkmalen, werden im Anschluss mittels Merkmalsselektion die besten ausgewählt um eine Support Vector Machine (SVM) zu trainieren. 
 
 \subsection{Verfahren zur Evaluierung}\label{sec:klass_eval}
-Für die Evaluierung der Klassifikation spielt die Natur des Problems eine wichtige Rolle. Es ist aus medizinischer Sicht normal und tolerabel, dass die Unterscheidung zwischen ähnlichen Zellklassen bzw. Zellen unterschiedlichen Reifegrads oft nicht klar und deutlich erkennbar ist. Für die Auswertung werden Vertauschungsmatrizen und Korrektklassifizierungsrate ("accuracy") verglichen.
+Für die Evaluierung der Klassifikation spielt die Natur des Problems eine wichtige Rolle. Es ist aus medizinischer Sicht normal und tolerabel, dass die Unterscheidung zwischen ähnlichen Zellklassen bzw. Zellen unterschiedlichen Reifegrads oft nicht klar und deutlich erkennbar ist. Aus diesem Grund werden alle Maße in der Evaluation sowohl für die exakte Klasse, als auch unter Einbeziehung der Toleranz angegeben. Für die Auswertung werden Vertauschungsmatrizen, Trefferquote ("accuracy", Gleichung \ref{equ:acc} und Genauigkeit ("precision", Gleichung \ref{equ:prec}) verglichen.
+
+Für jede Klasse gibt es Kandidaten, die der Klasse angehören und richtig klassifiziert werden ($TP$), bzw. falsch zugeordnet werden ($FN$). Außerdem gibt es die Möglichkeit, dass der Kandidat der Klasse nicht angehört und ihr auch nicht zugeordnet wird ($TN$). Für den Fall dass die Klasse doch vorausgesagt wird, ist er $FP$.
+ 
+\begin{equation}\label{equ:acc}
+Accuracy = \frac{TP}{TP + FN}
+\end{equation}
+\begin{equation}\label{equ:prec}
+Precision = \frac{TP}{TP + FP}
+\end{equation}
+
+Für Gleichung \ref{equ:prec} kann der Fall eintreten, dass durch 0 geteilt wird, falls einer Klasse im Klassifikationsschritt kein Kandidat zugeordnet wird. In diesem Fall wird die Genauigkeit auf 0 gesetzt. 
+  
+In einer Vertauschungsmatrix sind all diese Informationen enthalten. Die Spalten bezeichnen jeweils die wahre Klasse, während die Zeilen die vorhergesagte Klasse erkennen lassen. 
+Die allgemeine Trefferquote gibt das Verhältnis aus korrekt klassifizierten Zellen und der Gesamtzahl wieder. Für die allgemeine Genauigkeit eines Klassifikators wurde der Mittelwert über die Genauigkeiten der einzelnen Klassen gebildet. 
+ 
