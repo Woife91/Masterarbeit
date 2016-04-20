@@ -48,7 +48,7 @@
             urlcolor=black,       % color of page of \url{...}
             breaklinks=true    % break links if exceeding a single line
 ]{hyperref}
-\usepackage[numbers]{natbib}
+\usepackage[sort&compress,numbers]{natbib}
 %\usepackage{natbib}
 \usepackage{engord} %english ordered numbers
 \usepackage{soul}
@@ -68,6 +68,7 @@
 \newcommand{\citeeig}[1]{\citeauthor{#1} \cite{#1}}
 \newcommand{\trade}{\textsuperscript{\textregistered}}
 \newcommand{\leukaemie}{Leu\-{kä}\-{mie}}
+\newcommand{\Farbraumtransformation}{Farb\-{raum}\-{trans}\-{for}\-{ma}\-{ti}\-{on}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % --- CV Config: ---
@@ -226,9 +227,9 @@
 % ---------- Anhang ----------
 % Die Datei Appendix.tex wird automatisch erzeugt!
 
-%\begin{appendix}
-%\input{anhang/Anhang}
-%\end{appendix}
+\begin{appendix}
+\input{anhang/Anhang}
+\end{appendix}
 
 % ----------------------------
 
@@ -238,7 +239,7 @@
 \newpage
 \phantomsection \label{bibliography}
 \addcontentsline{toc}{chapter}{Literaturverzeichnis} 
-\bibliographystyle{plainnat} %numbers, order: alphabetical
+\bibliographystyle{unsrtnat} %numbers, order: alphabetical
 %\bibliographystyle{natdin} %numbers, order: alphabetical
 \inputencoding{latin1}
 \bibliography{bib/quellen}

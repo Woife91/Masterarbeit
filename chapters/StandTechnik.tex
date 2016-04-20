@@ -8,9 +8,9 @@ Das grundsätzliche Ziel beim Einsatz von Algorithmen zur Farbnormalisierung ist,
 %\color{black}
 
 \section{Farbkonstanzalgorithmen}\label{sec:farbkonstanz}
-Das menschliche Gehirn ist innerhalb gewisser Grenzen in der Lage die Farbe eines Objektes unabhängig von dessen Beleuchtung zu bestimmen. Diese Fähigkeit ist die Grundlage für eine Gruppe von Ansätzen, die als Farbkonstanzalgorithmen bezeichnet werden.
+Das menschliche Gehirn ist innerhalb gewisser Grenzen in der Lage die Farbe eines Objektes unabhängig von dessen Beleuchtung zu bestimmen. Diese Fähigkeit ist die Grundlage für eine Gruppe von Ansätzen, die als Farbkonstanzalgorithmen bezeichnet werden \citep[S. 18]{rangayyan2011color}.
 
-Das menschliche Auge ist das Vorbild für den sogenannten LMS-Farbraum. Die drei Kanäle entsprechen dabei den unterschiedlichen Zapfen, die auf lang-, mittel- und kurzwelliges Licht reagieren. Nach den Erkenntnissen von Johannes von Kries werden die unterschiedlichen Signale unabhängig voneinander vom Gehirn angepasst. Dieser Zusammenhang wird in der folgenden Formel \ref{equ:kries} dargestellt.
+Das menschliche Auge ist das Vorbild für den sogenannten LMS-Farbraum. Die drei Kanäle entsprechen dabei den unterschiedlichen Zapfen, die auf lang-, mittel- und kurzwelliges Licht reagieren. Nach den Erkenntnissen von \citeeig{von1902chromatic} werden die unterschiedlichen Signale unabhängig voneinander vom Gehirn angepasst. Dieser Zusammenhang wird in der folgenden Formel \ref{equ:kries} dargestellt.
 \begin{align}\label{equ:kries}
 L_{a} & = k_{L}L\\
 M_{a} & = k_{M}M\\
@@ -65,7 +65,7 @@ Auch bei der Histogrammspezifikation spielt das kumulative Histogramm eine wicht
 \center
 \includegraphics[width = 0.45\textwidth]
 {pics/StandTechnik/460px-Histogram_matching}
-\caption[Beispiel Histogramspezifikation]{Vorgang bei der Histogrammspezifikation. Die CDF(Cumulated Density Function) eines Bildes $\mathbf{x1}$ soll auf die CDF von Bild $\mathbf{x2}$ abgebildet werden. Die Pfeile verbildlichen dabei das genaue Vorgehen \cite{url_hist_spec}.\label{fig:equalisierung}}
+\caption[Beispiel Histogramspezifikation]{Vorgang bei der Histogrammspezifikation. Die CDF (Cumulated Density Function) eines Bildes $\mathbf{x1}$ soll auf die CDF von Bild $\mathbf{x2}$ abgebildet werden. Die Pfeile verbildlichen dabei das genaue Vorgehen \cite{url_hist_spec}.\label{fig:equalisierung}}
 \end{figure}
 
 \section[Farbnormalisierung in der Mikroskopie]{Farbnormalisierung in der Mikroskopie}\label{sec:mikroskopie_normalisierung}
@@ -73,7 +73,7 @@ Für Farbnormalisierung im vorliegenden Anwendungsgebiet wird in der Regel der An
 Während die Methoden in den Abschnitten \ref{sec:reinhard}, \ref{sec:macenko} und \ref{sec:khan} eine Farbraumtransformation erfordern, benötigt das Farbranking (\ref{sec:farbranking}) keine Vorverarbeitungsschritte.
 
 \subsection{Farbranking}\label{sec:farbranking}
-Farbranking ist ein Verfahren, das von \citeeig{kothari2011automatic} eingeführt wurde. Hierbei werden zunächst die Intensitäten in allen Kanälen jeweils für das Eingangs- und Ausgangsbild sortiert. Anschließend werden zunächst die Positionen für jedes Pixel in den sortierten Listen ermittelt. Die Farbintensitäten bekommen am Ende die Werte zugewiesen, welche sich in den Listen des Referenzbildes an den gleichen Stellen befinden. Dieser Zusammenhang ist in Abbildung \ref{fig:farbranking} für den Fall von Grauwertbildern mit Größe 3x3 dargestellt. Dabei entspricht Bild A dem Referenzbild und Bild B dem Eingangsbild. B' beschreibt das angepasste Ausgabebild. 
+Farbranking ist ein Verfahren, das von \citeeig{kothari2011automatic} eingeführt wurde. Hierbei werden zunächst die Intensitäten in allen Kanälen jeweils für das Eingangs- und Ausgangsbild sortiert. Anschließend werden die Positionen für jedes Pixel in den sortierten Listen ermittelt. Die Farbintensitäten bekommen am Ende die Werte zugewiesen, welche sich in den Listen des Referenzbildes an den gleichen Stellen befinden. Dieser Zusammenhang ist in Abbildung \ref{fig:farbranking} für den Fall von Grauwertbildern mit Größe 3x3 dargestellt. Dabei entspricht Bild A dem Referenzbild und Bild B dem Eingangsbild. B' beschreibt das angepasste Ausgabebild. 
 
 \begin{figure}[h]
 \center
@@ -171,7 +171,7 @@ Die Formel \ref{equ:mean_std} wird auf alle Kanäle $l\alpha\beta$ angewendet. Ei
 
 \subsection{Anpassung nach Macenko}\label{sec:macenko}
 
-Ein Verfahren zur Farbnormalisierung in Mikroskopiebildern, welches auf Color Deconvolution (siehe Kaptitel (\ref{sec:color_deconvolution}) basiert, wird von \citeeig{macenko2009method} vorgeschlagen. Da die Stainvektoren optimalerweise für jedes Bild neu berechnet sollten, ist der erste Teil auf dieses Problem fokussiert. Die Lösung der Autoren ist in folgende Schritte unterteilt:
+Ein Verfahren zur Farbnormalisierung in Mikroskopiebildern, welches auf Color Deconvolution (siehe Kapitel \ref{sec:color_deconvolution}) basiert, wird von \citeeig{macenko2009method} vorgeschlagen. Da die Stainvektoren optimalerweise für jedes Bild neu berechnet werden sollten, ist der erste Teil auf dieses Problem fokussiert. Die Lösung der Autoren ist in folgende Schritte unterteilt:
 \begin{itemize}
 \item{Start: RGB-Bild}
 \item{RGB $\rightarrow$ Optical Density (OD)}
@@ -184,7 +184,7 @@ Ein Verfahren zur Farbnormalisierung in Mikroskopiebildern, welches auf Color De
 \item{Rücktransformation in den OD-Raum, Minimum und Maximum entsprechen den Stainvektoren}
 \end{itemize} 
 
-Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein nachgebildetes Beispiel für ein Histogramm über die Winkel, Abbildung \ref{fig:cd_macenko} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
+Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein nachgebildetes Beispiel für ein Histogramm über die Winkel \cite{macenko2009method}, Abbildung \ref{fig:cd_macenko} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.5\textwidth]
@@ -228,15 +228,14 @@ Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten
 \caption[Beispiel Farbnormalisierung Macenko]{\textbf{(a)} zwei verschiedene, originale hämatologische Bilder, welche beide mit Hämatoxylin und Eosin gefärbt wurden, aber trotzdem deutliche Unterschiede in der Erscheinung aufweisen. \textbf{(b)} Ergebnis der Normalisierung. \cite{macenko2009method} \label{fig:macenko_result}}
 \end{figure}
 
-%TODO
 \subsection{Anpassung nach Khan}\label{sec:khan}
 Ansätze, die das Ziel haben, die Vektoren für jedes Bild neu zu bestimmen, gehen implizit davon aus, dass es Pixel im Bild gibt, welche eindeutig einem Farbstoff zuzuordnen sind. Es sollte also Stellen geben, an denen keine Überlappung stattfindet. 
-Neben dem bereits vorgestellten Ansatz von Macenko ist die Methode von \citeeig{khan2014nonlinear} ein weiteres Beispiel für ein solches Verfahren. Neben der Color Deconvolution (siehe Abschnitt\ref{sec:color_deconvolution}) spielt hier Mustererkennung eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für die B-Splines benutzt werden.
-Für den Klassifikator führen \citeauthor{khan2014nonlinear} einen sogenannten "Stain Color Descriptor"(SCD) als bildspezifisches Merkmal ein.
+Neben dem bereits vorgestellten Ansatz von Macenko ist die Methode von \citeeig{khan2014nonlinear} ein weiteres Beispiel für ein solches Verfahren. Neben der Color Deconvolution (siehe Abschnitt \ref{sec:color_deconvolution}) spielt hier Mustererkennung eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für die B-Splines benutzt werden.
+Für den Klassifikator führen \citeauthor{khan2014nonlinear} einen sogenannten "Stain Color Descriptor" (SCD) als bildspezifisches Merkmal ein.
 
 Sei $\mathbf{I} = \lbrace I_1,I_2,\ldots,I_k \rbrace$, ein Set von $k$ Trainingsbildern, dann gibt es ein Set korrespondierender SCDs $\mathbf{\hat H} = \lbrace \hat{H_1},\hat{H_1},\ldots,\hat{H_k}\rbrace$.
 
-Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert \cite{gervautz1988simple}. Der Farbraum wird zunächst in acht Unterräume unterteilt, was durch eine gleichmäßige Aufteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. In Abbildung \ref{fig:octree} ist der  Aufbau eines Octree dargestellt.
+Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert \cite{gervautz1988simple}. Der Farbraum wird dafür in acht Unterräume unterteilt, was durch eine gleichmäßige Aufteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. In Abbildung \ref{fig:octree} ist der  Aufbau eines Octree dargestellt.
 \begin{figure}
 \center
 \includegraphics[width = 0.6\textwidth]
@@ -251,7 +250,7 @@ $\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k\rbrace$, wobei jedes Histogramm $H_i$ 
 \hat{H_i} = \mathbf{E}^r_h\left(H_i - \bar{H}\right)
 \end{equation}
 
-Der zur Zuordnung zu einer Klasse verwendete Merkmalsvektor ist folgendermaßen aufgebaut: $\mathcal{F} = \lbrack R,G,B, \hat{H} \rbrack$. Die Werte $R$,$G$ und $B$ entsprechen dabei den Werten aus den entsprechenden Kanälen eines RGB-Bildes. 
+Der zur Zuordnung zu einer Klasse verwendete Merkmalsvektor ist folgendermaßen aufgebaut: $\mathcal{F} = \lbrack R,G,B, \hat{H} \rbrack$. Die Werte $R$, $G$ und $B$ entsprechen dabei den Werten aus den entsprechenden Kanälen eines RGB-Bildes. 
 Die Wahrscheinlichkeit, mit der ein Pixel einem Farbstoff $s_n$ zuzuordnen ist, wird mittels Formel \ref{equ:khan_prob_output} bestimmt:
 \begin{equation}\label{equ:khan_prob_output}
 P(s_n \mid \mathcal{F}) = \frac{P_{s_n}(s_n\mid \mathcal{F})}{P_{s_1}(s_1\mid \mathcal{F})+P_{s_2}(s_2\mid \mathcal{F})+P_{s_{bgd}}(bgd\mid \mathcal{F})}

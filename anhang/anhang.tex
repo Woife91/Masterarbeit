@@ -1,15 +1,81 @@
 \appendix
 \refstepcounter{chapter}
-\chaptermark{Testbild}
+\chaptermark{Referenzbilder}
 %\clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{\numberline{A}Testbild}
+\addcontentsline{toc}{chapter}{\numberline{A}Referenzbilder}
+\label{app:reference}
+\newcommand{\mywidth}{0.17}
+\begin{figure}
+\subfloat[Referenz 1]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single01}}
+\quad
+\subfloat[Referenz 2]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single02}}
+\quad
+\subfloat[Referenz 3]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single03}}
+\quad
+\subfloat[Referenz 4]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single04}}
+\quad
+\subfloat[Referenz 5]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single05}}
+\quad
+\subfloat[Referenz 6]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single06}}
+\quad
+\subfloat[Referenz 7]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single07}}
+\quad
+\subfloat[Referenz 8]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single08}}
+\quad
+\subfloat[Referenz 9]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single09}}
+\quad
+\subfloat[Referenz 10]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single10}}
+\quad
+\subfloat[Referenz 11]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single11}}
+\quad
+\subfloat[Referenz 12]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single12}}
+\quad
+\subfloat[Referenz 13]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single13}}
+\quad
+\subfloat[Referenz 14]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single14}}
+\quad
+\subfloat[Referenz 15]{
+\includegraphics[width = \mywidth\textwidth]{pics/Anhang/single15}}
+\caption{Alle Referenzbilder\label{fig:all_references}}
+\end{figure}
 
-Hier ein Inhalt
+\begin{table}
+\center
+\caption{Zusammensetzung Referenzsets}
+\begin{tabular}{|c|r|}
+\hline
+\textbf{Set} & \textbf{Zusammensetzung} \\ 
+\hline
+3 & 1-15 \\ 
+\hline 
+4 & ohne 1,10,11,14\\ 
+\hline 
+5 & 2,5,6,8,9,15 \\ 
+\hline 
+6 & 2,8,9 \\ 
+\hline
+7 & 1,2,4,10,12,14,15\\
+\hline
+\end{tabular} 
+\end{table}
+%\newpage
+%\refstepcounter{chapter}
+%\chaptermark{Testbild Other}
+%\addcontentsline{toc}{chapter}{\numberline{B}Anderer Anhang}
 
-\newpage
-\refstepcounter{chapter}
-\chaptermark{Testbild Other}
-\addcontentsline{toc}{chapter}{\numberline{B}Anderer Anhang}
-
-Hier ein anderer Inhalt 
+%Hier ein anderer Inhalt 
