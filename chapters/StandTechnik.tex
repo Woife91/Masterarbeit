@@ -81,11 +81,16 @@ Farbranking ist ein Verfahren, das von \citeeig{kothari2011automatic} eingeführt
 \caption[Farbranking]{Links sind Eingangs- und Referenzbild dargestellt, in der Mitte die sortierten Listen und rechts das Ausgabebild. Die farbigen Pfeile sollen den Ablauf nach dem Erstellen der sortierten Listen verdeutlichen. Dabei wird der Pixel links oben im Bild behandelt. Rot: Finden des Pixelwertes in der sortierten Liste. Blau: Wahl des positionsgleichen Wertes aus dem Referenzbild. Grün: Übertrag dieses Wertes an die gleiche Stelle in Bild B' \label{fig:farbranking}}
 \end{figure}
 
-Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Referenzbild zu sehr unterscheiden. In diesem Fall kommt es zu Artefakten, bei denen monochrome Flächen nach der Anpassung starke Unterschiede aufweisen.
+Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Referenzbild zu sehr unterscheiden. In diesem Fall kommt es zu Artefakten, bei denen monochrome Flächen nach der Anpassung starke Unterschiede aufweisen. Ein Beispiel hierfür ist in Abbildung \ref{fig:bsp_ranking} gezeigt.
 
-\color{red}
-evtl. Beispielbild
-\color{black}
+\begin{figure}
+\centering
+\subfloat[Original]{\includegraphics[width = 0.25\textwidth]{pics/StandTechnik/rank_orig}}
+\quad
+\subfloat[Referenz]{\includegraphics[width = 0.25\textwidth]{pics/StandTechnik/rank_ref}}
+\subfloat[Ergebnis Rankingverfahren]{\includegraphics[width = 0.25\textwidth]{pics/StandTechnik/rank_norm}}
+\caption[Beispiel Auswirkung Farbranking]{Die Abbildung verdeutlicht die Schwächen des Farbrankingverfahrens. \textbf{(a)} zeigt das Originalbild, \textbf{(b)} die Referenz. Im Ergebnisbild \textbf{c} zeigen sich deutliche Artefakte im Hintergrund. Außerdem ist der Erythrozyt oben im Bild nach der Anpassung stark gefärbt.\label{fig:bsp_ranking}}
+\end{figure}
 
 \subsection[Anpassung nach Reinhard]{Anpassung nach Reinhard}\label{sec:reinhard}
 Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Das Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
@@ -218,11 +223,11 @@ Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten
 
 \begin{figure}[h]\centering
 \subfloat[Originale Bilder]{
-\includegraphics[width=0.9\textwidth]
+\includegraphics[width=0.7\textwidth]
 {pics/StandTechnik/macenko_src}\label{fig:macenko_src}}
 \quad
 \subfloat[Farbnormalisierte Bilder]{
-\includegraphics[width=0.9\textwidth]
+\includegraphics[width=0.7\textwidth]
 {pics/StandTechnik/macenko_norm}\label{fig:macenko_norm}}
 \quad
 \caption[Beispiel Farbnormalisierung Macenko]{\textbf{(a)} zwei verschiedene, originale hämatologische Bilder, welche beide mit Hämatoxylin und Eosin gefärbt wurden, aber trotzdem deutliche Unterschiede in der Erscheinung aufweisen. \textbf{(b)} Ergebnis der Normalisierung. \cite{macenko2009method} \label{fig:macenko_result}}
@@ -238,7 +243,7 @@ Sei $\mathbf{I} = \lbrace I_1,I_2,\ldots,I_k \rbrace$, ein Set von $k$ Trainings
 Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert \cite{gervautz1988simple}. Der Farbraum wird dafür in acht Unterräume unterteilt, was durch eine gleichmäßige Aufteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. In Abbildung \ref{fig:octree} ist der  Aufbau eines Octree dargestellt.
 \begin{figure}
 \center
-\includegraphics[width = 0.6\textwidth]
+\includegraphics[width = 0.4\textwidth]
 {pics/StandTechnik/octree}
 \caption[Schema Octree]{Aufbau eines Octree: Baumstruktur, bei dem jeder Knoten, der kein Blatt ist, in acht Kindknoten zerlegt wird \cite{octree}. }\label{fig:octree}
 \end{figure}
@@ -258,7 +263,7 @@ P(s_n \mid \mathcal{F}) = \frac{P_{s_n}(s_n\mid \mathcal{F})}{P_{s_1}(s_1\mid \m
 Die berechnete Wahrscheinlichkeit wird für zwei verschiedene Zwecke genutzt:
 \begin{itemize}
 \item{Berechnung der normalisierten Stainvektoren für jede Klasse $s_n$.}
-\item{Zuordnung zu einer Klasse $\theta(c) \text{ in } \lbrace \text{GEFÄRBT, HINTERGRUND, SONSTIGES}\rbrace$ mit Hilfe der folgenden Regel \ref{equ:thres_rule}:
+\item{Zuordnung zu einer Klasse $\theta(c) \in \lbrace \text{GEFÄRBT, HINTERGRUND, SONSTIGES}\rbrace$ mit Hilfe der folgenden Regel \ref{equ:thres_rule}:
 \begin{align}\label{equ:thres_rule}
 &if \quad P(bgd\mid\mathcal{F} > T_{bgd}:\quad &&\zeta(c)= \text{HINTERGRUND}\nonumber \\
 &elseif \quad P(s_n\mid\mathcal{F} > T_{fgd}:\quad &&\zeta(c)= \text{GEFÄRBT}\\
@@ -266,7 +271,6 @@ Die berechnete Wahrscheinlichkeit wird für zwei verschiedene Zwecke genutzt:
 \end{align}}
 $T_{bgd}$ und $T_{fgd}$ sind dabei Grenzwerte für die jeweiligen Entscheidungen. \citeauthor{khan2014nonlinear} geben beide mit $0.75$ an und stellen fest, dass die Wahrscheinlichkeiten in den meisten Fällen entweder nahe $0$ bzw. $1$ liegen, weshalb die Grenzwerte sehr stabil sind.
 \end{itemize} 
-
 Eine Übersicht über den Klassifikationsvorgangs von \citeauthor{khan2014nonlinear} gibt Abbildung \ref{fig:khan_classifier}.
 \begin{figure}[h]
 \center
@@ -275,7 +279,7 @@ Eine Übersicht über den Klassifikationsvorgangs von \citeauthor{khan2014nonlinea
 \caption[Klassifikationsvorgang Khan]{Übersicht über den Klassifikationsansatz von \citeeig{khan2014nonlinear}.\label{fig:khan_classifier} }
 \end{figure}
 
-\citeeig{khan2014nonlinear} schlagen für die Anpassung der Histogramme B-Splines vor. Die Einsatzmöglichkeit dieses Konzeptes für eine Farbanpassung liegt in der Definition der Kontrollpunkte durch Merkmale des Histogramms. Dabei setzt sich eine solche Stützstelle aus einem Merkmal der Quelle, z.B. dem Mittelwert oder dem Maximum, und dem äquivalenten Merkmal der Referenz zusammen. \citeauthor{khan2014nonlinear} segmentieren das Bild zunächst in drei Bereiche: Gefärbt, Hintergrund und Sonstiges. Dabei nutzen sie die Ausgabe des Klassifikators, welcher in Abschnitt \ref{sec:khan} beschrieben wurde. Nachdem die Color Deconvolution durchgeführt wurde, wird für jeden Kanal separat die Anpassung mittels B-Spline festgelegt. Hierzu wird für jeden der drei segmentierten Bereiche ein Histogramm gebildet und das robuste Minimum und Maximum sowie der Mittelwert bestimmt (Abbildung \ref{fig:cd_histograms}). Für jeden Kanal gibt es demnach neun Merkmale, was wiederum zu neun Kontrollpunkten für den B-Spline führt. Optisch bzw. chemisch gesättigte Pixel sollen nicht verändert werden, weshalb zusätzliche Stützstellen entlang der Hauptachse eingeführt werden, damit die Sättigungsstellen interpoliert werden. Die Werte des Knotenvektors $\mathbf{T}$ werden mit Hilfe einer Thikonov regularization optimiert \cite{hansen1998rank}. Der beispielhafte Verlauf eines B-Splines für einen Kanal ist in Abbildung \ref{fig:cd_bspline} gezeigt.
+\citeeig{khan2014nonlinear} schlagen für die Anpassung der Histogramme B-Splines vor. Die Einsatzmöglichkeit dieses Konzeptes für eine Farbanpassung liegt in der Definition der Kontrollpunkte durch Merkmale des Histogramms. Dabei setzt sich eine solche Stützstelle aus einem Merkmal der Quelle, z.B. dem Mittelwert oder dem Maximum, und dem äquivalenten Merkmal der Referenz zusammen. \citeauthor{khan2014nonlinear} clustern das Bild zunächst in drei Bereiche: Gefärbt, Hintergrund und Sonstiges. Dabei nutzen sie die Ausgabe des Klassifikators, welcher in Abschnitt \ref{sec:khan} beschrieben wurde. Nachdem die Color Deconvolution durchgeführt wurde, wird für jeden Kanal separat die Anpassung mittels B-Spline festgelegt. Hierzu wird für jeden der drei segmentierten Bereiche ein Histogramm gebildet und das robuste Minimum und Maximum sowie der Mittelwert bestimmt (Abbildung \ref{fig:cd_histograms}). Für jeden Kanal gibt es demnach neun Merkmale, was wiederum zu neun Kontrollpunkten für den B-Spline führt. Optisch bzw. chemisch gesättigte Pixel sollen nicht verändert werden, weshalb zusätzliche Stützstellen entlang der Hauptachse eingeführt werden, damit die Sättigungsstellen interpoliert werden. Die Werte des Knotenvektors $\mathbf{T}$ werden mit Hilfe einer Thikonov regularization optimiert \cite{hansen1998rank}. Der beispielhafte Verlauf eines B-Splines für einen Kanal ist in Abbildung \ref{fig:cd_bspline} gezeigt. Eine Gesamtübersicht über den Farbnormalisierungsansatz von Khan gibt Abbildung \ref{fig:khan_normalisation}. Dabei ist auch ein Beispiel für die Wirkung der Methode zu sehen.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.4\textwidth]
@@ -289,10 +293,9 @@ Eine Übersicht über den Klassifikationsvorgangs von \citeauthor{khan2014nonlinea
 \caption[Khan B-Spline]{B-Spline (blaue Linie) zur Anpassung eines CD-Kanals nach Khan. Auf der x-Achse der ursprüngliche Wert des Quellbildes, auf der y-Achse der neue Wert. Die Kontrollpunkte aus den Histogrammmerkmalen, sowie die zusätzlichen Stützstellen, zur Sicherstellung der Interpolation der Sättigungsstellen sind eingezeichnet.\label{fig:cd_bspline}}
 \end{figure}
 
-Eine Gesamtübersicht über den Farbnormalisierungsansatz von Khan gibt Abbildung \ref{fig:khan_normalisation}. Dabei ist auch ein Beispiel für die Wirkung der Methode zu sehen.
 \begin{figure}[h]
 \center
-\includegraphics[width = 0.9\textwidth]
+\includegraphics[width = 1.0\textwidth]
 {pics/StandTechnik/khan_pipeline}
 \caption[Übersicht Normalisierungsansatz Khan]{Übersicht über den Normalisierungsansatz von \citeeig{khan2014nonlinear}.\label{fig:khan_normalisation} }
 \end{figure}
