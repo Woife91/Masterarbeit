@@ -38,10 +38,10 @@ Das Konzept der B-Splines erlaubt es Kurven zu modellieren, die ein Set von Kont
 \center
 \includegraphics[width = 0.7\textwidth]
 {pics/StandTechnik/knotvector}
-\caption[Bspline Knotenvektor]{Grundsätzlicher Aufbau eines Knotenvektors der Länge $m+n+1$. $n$ ist der Grad des Bsplines und $m$ die Anzahl der Kontrollpunkte.\label{fig:knotvector}}
+\caption[B-Spline Knotenvektor]{Grundsätzlicher Aufbau eines Knotenvektors der Länge $m+n+1$. $n$ ist der Grad des B-Splines und $m$ die Anzahl der Kontrollpunkte.\label{fig:knotvector}}
 \end{figure}
 
-Grundlage für einen Bspline sind die Basisfunktionen $N_i^k(u)$, die nach Formel \ref{equ:bspline_basis} definiert sind. 
+Grundlage für einen B-Spline sind die Basisfunktionen $N_i^k(u)$, die nach Formel \ref{equ:bspline_basis} definiert sind \cite{gm2014}. 
 \begin{align}\label{equ:bspline_basis}
 N^0_i(u) & := 
 \begin{cases}
@@ -51,12 +51,12 @@ N^0_i(u) & :=
 N_i^k(u) & := \frac{u-t_i}{t_{i+k}}N^{k-1}_i(u)+\frac{t_{i+k+1}-u}{t_{i+k+1}-t_{i+1}}N^{k-1}_{i+1}(u), k =1,\ldots, n \nonumber
 \end{align}
 
-Die Berechnung eines Bsplines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline}
+Die Berechnung eines B-Splines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline}\cite{gm2014}.
 \begin{equation}\label{equ:bspline}
 F(u) := \sum^{m-1}_{i=0} N^n_i(u)\mathbf{d}_i 
 \end{equation}
 
-Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollständigen, Liste aufgeführt:
+Einige wichtige Eigenschaften eines B-Splines sind in der folgenden, nicht vollständigen, Liste aufgeführt \citep{gm2014}:
 \begin{itemize}
 \item{Keine Endpunktinterpolation}
 \item{Fallen $n$ Knoten $t_i$ auf den gleichen Wert, so wird der zugehörige Kontrollpunkt interpoliert}
@@ -64,7 +64,7 @@ Einige wichtige Eigenschaften eines Bsplines sind in der folgenden, nicht vollst
 \item{Lokale Kontrolle: Für $u \in \lbrack t_i,t_{i+1} )$ ist die Kurve unabhängig von $\mathbf{d}_j$, wobei $j < i-n$ und $j > i$ gilt.}
 \end{itemize}
 
-Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier Bsplines. Die Kontrollpunkte sind dabei identisch, allerdings sind Knotenvektor und Grad der Kurve unterschiedlich. Vergleicht man die gezeigten Verläufe in \ref{fig:bspline_inter_2} und \ref{fig:bspline_inter_4} ist festzustellen, dass der höhere Grad der Kurve eine geringere Annäherung an die Kontrollpunkte zur Folge hat, was den Verlauf robuster gegenüber Ausreißern bei den Kontrollpunkten macht. 
+Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier B-Splines. Die Kontrollpunkte sind dabei identisch, allerdings sind Knotenvektor und Grad der Kurve unterschiedlich. Vergleicht man die gezeigten Verläufe in \ref{fig:bspline_inter_2} und \ref{fig:bspline_inter_4} ist festzustellen, dass der höhere Grad der Kurve eine geringere Annäherung an die Kontrollpunkte zur Folge hat, was den Verlauf robuster gegenüber Ausreißern bei den Kontrollpunkten macht. 
 \begin{figure}
 \subfloat[Uniformer Knotenvektor, Grad 2]{
 \includegraphics[width=0.49\textwidth]
@@ -82,7 +82,7 @@ Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier Bsplines. Die Ko
 \includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_endpoint_deg4}\label{fig:bspline_inter_4}}
 \quad
-\caption[Beispiele Bsplines]{Unterschiedliche Bsplines, abhängig von Grad und Verteilung auf Knotenvektor. Die Farbe des Bspline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor. \label{fig:bsplines_example}}
+\caption[Beispiele B-Splines]{Unterschiedliche B-Splines, abhängig von Grad und Verteilung auf Knotenvektor. Die Farbe des Bspline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor \cite{gm2014}. \label{fig:bsplines_example}}
 \end{figure}
 
 \section{Color Deconvolution}\label{sec:color_deconvolution}
