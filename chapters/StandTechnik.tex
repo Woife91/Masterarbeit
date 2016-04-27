@@ -1,5 +1,5 @@
 \chapter[Stand der Technik]{Stand der Technik}\label{sec:stand_der_technik}
-Das grundsätzliche Ziel beim Einsatz von Algorithmen zur Farbnormalisierung ist, dass Objekte gleicher Farbe auch ähnliche Pixelwerte haben. Dies sollte unabhängig von der Beleuchtung im Bild sein. Beim Anwendungsfeld der Mikroskopie kommen als Faktoren zusätzlich noch Probendicke und Farbstoffmenge hinzu. Im folgenden Kapitel soll ein Überblick über bestehende Verfahren gegeben werden, wobei der Schwerpunkt, die Normalisierung auf mikroskopischen Bildern, in Abschnitt \ref{sec:mikroskopie_normalisierung} behandelt wird. Zunächst soll jedoch auf Methoden eingegangen werden, welche zwar oft eingesetzt werden, im vorliegenden Fall aufgrund der speziellen Bildakquisition jedoch ungeeignet sind. 
+Das grundsätzliche Ziel beim Einsatz von Algorithmen zur Farbnormalisierung ist, das Erreichen ähnlicher Pixelwerte für Objekte gleicher Farbe, dies sollte unabhängig von der Beleuchtung im Bild sein. Beim Anwendungsfeld der Mikroskopie kommen als Faktoren zusätzlich noch Probendicke und Farbstoffmenge hinzu. Im folgenden Kapitel soll ein Überblick über bestehende Verfahren gegeben werden, wobei der Schwerpunkt, die Normalisierung auf mikroskopischen Bildern, in Abschnitt \ref{sec:mikroskopie_normalisierung} behandelt wird. Zunächst soll jedoch auf Methoden eingegangen werden, welche zwar oft eingesetzt werden, im vorliegenden Fall aufgrund der speziellen Bildakquisition jedoch ungeeignet sind. 
 %\section[Allgemeine Farbnormalisierung]{Allgemeine Farbnormalisierung}%\label{sec:allgemeine_normalisierung}
 %\color{red}
 %Gray World Assumption, Farbkonstanz
@@ -18,7 +18,7 @@ S_{a} & = k_{S}S
 \end{align}
 $L_{a}$, $M_{a}$ und $S_{a}$ sind hierbei die angepassten Signale. $k_{L}$, $k_{M}$ und $k_{S}$ sind hingegen die unabhängigen Skalierungsfaktoren.
 %Für die Bestimmung dieser Faktoren gibt es unterschiedliche Möglichkeiten. Zum einen können sie die Inversen des angenommenen Weißpunktes der Szene sein, zum anderen als Inverse des jeweils maximalen Werts des Kanals.
-Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Es wird dabei davon ausgegangen dass das reflektierte Licht in einem Bild sich zu grau addiert, wobei es Variationen gibt, u.a. bei der Definition von Grau. 
+Eine Annahme die gerne gemacht wird um diese Faktoren zu finden, ist die sogenannte "Grey World Assumption". Es wird dabei davon ausgegangen, dass sich das reflektierte Licht in einem Bild zu grau addiert, wobei es Variationen, u.a. bei der Definition von Grau, gibt.
 Im einfachsten Fall können die Skalierungsfaktoren entsprechend Formel \ref{equ:grey_world} berechnet werden. Hierbei entspricht $m_{L1}$ dem Mittelwert des L-Kanals einer Referenzaufnahme, $m_{L2}$ dem Mittelwert des L-Kanals aus einer Testaufnahme, usw.  
 \begin{align}\label{equ:grey_world}
 k_{L}L & = \frac{m_{L2}}{m_{L1}}\\
@@ -93,7 +93,7 @@ Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Ref
 \end{figure}
 
 \subsection[Anpassung nach Reinhard]{Anpassung nach Reinhard}\label{sec:reinhard}
-Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Das Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
+Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
 \begin{itemize}
 \item{RGB $\rightarrow$ XYZ (Tristimulusraum): 
 \begin{equation}\label{equ:rgb_xyz}
@@ -189,7 +189,7 @@ Ein Verfahren zur Farbnormalisierung in Mikroskopiebildern, welches auf Color De
 \item{Rücktransformation in den OD-Raum, Minimum und Maximum entsprechen den Stainvektoren}
 \end{itemize} 
 
-Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein nachgebildetes Beispiel für ein Histogramm über die Winkel \cite{macenko2009method}, Abbildung \ref{fig:cd_macenko} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
+Die Logik hinter diesem Vorgehen ist, dass durch die Wahl von Minimum und Maximum, jeder Wert dazwischen als lineare Summe dieser beiden Vektoren ausdrückbar ist. Abbildung \ref{fig:hist_angle} zeigt ein nachgebildetes Beispiel für ein Histogramm über die Winkel \cite{macenko2009method}, Abbildung \ref{fig:cd_macenko} zeigt das Ergebnis einer Color Deconvolution mit den gefundenen Stainvektoren.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.5\textwidth]
@@ -212,14 +212,14 @@ Die Logik hinter diesem Vorgehen ist, dass durch das Wählen von Minimum und Maxi
 \caption[Color Deconvolution nach Macenko]{\textbf{(a)} originales Bild, \textbf{(b)} dritter Kanal, nur geringe Information. \textbf{(c)} und \textbf{(d)} Bild aufgeteilt nach den beiden Grundfarbstoffen.\label{fig:cd_macenko} }
 \end{figure}
 
-\citeauthor{macenko2009method} liefern auch einen Ansatz für die Normalisierung. Hierbei wird für jeden vorkommenden Farbstoff ein Histogramm berechnet, welches jedoch nur jene Pixel berücksichtigt, die überwiegend diesen Farbstoff beinhalten.
-Die Histogramme werden anschließend so skaliert, dass alle das gleiche Pseudomaximum haben, um sie miteinander vergleichbar zu machen (siehe Formel \ref{equ:scale}). Diese Operation fällt in den Bereich der Histogrammanpassung und hat den Effekt, dass das Histogramm entweder gedehnt oder gestaucht wird. Welche der beiden Möglichkeiten eintritt hängt von der Größe des Skalierungsfaktors $k$ ab. Ist $k < 1$, entspricht dies einer Stauchung, ist $k > 1$ einer Dehnung. $k$ ist dabei abhängig vom realen Maximum $m$ und dem Zielmaximum $m_{ref}$. In Formel \ref{equ:scale} repräsentiert $x_i$ einen Wert aus dem ursprünglichen Histogramm, $\hat x_i$ ist der entsprechende angepasste Wert.
+\citeauthor{macenko2009method} liefern auch einen Ansatz für die Normalisierung. Hierbei wird für jeden vorkommenden Farbstoff ein Histogramm berechnet, welches jedoch nur jene Pixel berücksichtigt, die überwiegend den entsprechenden Farbstoff beinhalten.
+Die Histogramme werden anschließend so skaliert, dass alle über das gleiche Pseudomaximum verfügen, um sie miteinander vergleichbar zu machen (siehe Formel \ref{equ:scale}). Dieses Vorgehen fällt in den Bereich der Histogrammanpassung und hat den Effekt, dass das Histogramm entweder gedehnt oder gestaucht wird. Welche der beiden Möglichkeiten eintritt hängt von der Größe des Skalierungsfaktors $k$ ab. Ist $k < 1$, entspricht dies einer Stauchung, ist $k > 1$ einer Dehnung. $k$ ist dabei abhängig vom realen Maximum $m$ und dem Zielmaximum $m_{ref}$. In Formel \ref{equ:scale} repräsentiert $x_i$ einen Wert aus dem ursprünglichen Histogramm, $\hat x_i$ ist der entsprechende angepasste Wert.
 
 \begin{equation}\label{equ:scale}
 \hat x_i = \frac{m_{ref}}{m}x_i = kx_i
 \end{equation}
 
-Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten und dieser Effekt reduziert. Allerdings wird nicht berücksichtigt, dass sich die Proben auch inhaltlich stark unterscheiden könnten. Das Ergebnis der Anpassung zweier Bilder ist in Abbildung \ref{fig:macenko_result} gezeigt.
+Bei diesem Verfahren wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten, dieser Effekt wird hierdurch reduziert. Allerdings wird nicht bedacht, dass sich die Proben auch inhaltlich stark unterscheiden könnten. Das Ergebnis der Anpassung zweier Bilder ist in Abbildung \ref{fig:macenko_result} gezeigt.
 
 \begin{figure}[h]\centering
 \subfloat[Originale Bilder]{
@@ -235,12 +235,12 @@ Hierbei wird vor allem berücksichtigt, dass Proben gebleicht worden sein könnten
 
 \subsection{Anpassung nach Khan}\label{sec:khan}
 Ansätze, die das Ziel haben, die Vektoren für jedes Bild neu zu bestimmen, gehen implizit davon aus, dass es Pixel im Bild gibt, welche eindeutig einem Farbstoff zuzuordnen sind. Es sollte also Stellen geben, an denen keine Überlappung stattfindet. 
-Neben dem bereits vorgestellten Ansatz von Macenko ist die Methode von \citeeig{khan2014nonlinear} ein weiteres Beispiel für ein solches Verfahren. Neben der Color Deconvolution (siehe Abschnitt \ref{sec:color_deconvolution}) spielt hier Mustererkennung eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für die B-Splines benutzt werden.
+Neben dem bereits vorgestellten Ansatz von Macenko ist die Methode von \citeeig{khan2014nonlinear} ein weiteres Beispiel für ein solches Verfahren. Neben der Color Deconvolution (siehe Abschnitt \ref{sec:color_deconvolution}) spielt hier Mustererkennung eine wichtige Rolle, da ein Klassifikator trainiert werden soll, welcher für jedes Pixel angibt, von welchem Farbstoff es mehrheitlich geprägt ist, bzw. ob es zum Hintergrund gehört. Diese Information ist sowohl entscheidend für die Berechnung der Stainvektoren, als auch für die spätere Anpassung, für welche B-Splines benutzt werden.
 Für den Klassifikator führen \citeauthor{khan2014nonlinear} einen sogenannten "Stain Color Descriptor" (SCD) als bildspezifisches Merkmal ein.
 
 Sei $\mathbf{I} = \lbrace I_1,I_2,\ldots,I_k \rbrace$, ein Set von $k$ Trainingsbildern, dann gibt es ein Set korrespondierender SCDs $\mathbf{\hat H} = \lbrace \hat{H_1},\hat{H_1},\ldots,\hat{H_k}\rbrace$.
 
-Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert \cite{gervautz1988simple}. Der Farbraum wird dafür in acht Unterräume unterteilt, was durch eine gleichmäßige Aufteilung jedes Farbkanals in zwei Bereiche erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwert liegt. In Abbildung \ref{fig:octree} ist der  Aufbau eines Octree dargestellt.
+Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert \cite{gervautz1988simple}. Der Farbraum wird dafür in acht Unterräume unterteilt, was durch eine gleichmäßige Aufteilung der drei Farbkanäle in zwei Bereiche, es ergeben sich $2^3 = 8$ Kombinationen, erreicht wird. Diese Unterräume werden rekursiv wieder in acht Teile zerlegt, bis die Anzahl an Pixeln, die durch diesen Bereich repräsentiert werden unterhalb eines Grenzwertes liegt. In Abbildung \ref{fig:octree} ist der  Aufbau eines Octree dargestellt.
 \begin{figure}
 \center
 \includegraphics[width = 0.4\textwidth]
@@ -250,7 +250,7 @@ Hierfür werden zunächst alle Trainingsbilder mit Hilfe eines Octree quantisiert 
 Das Ziel von \citeauthor{khan2014nonlinear} ist ein Baum mit 255 Blättern, weshalb nach der Zerlegung diejenigen Knoten mit der geringsten Zahl an Pixeln wieder zusammenfügt werden, solange bis die gewünschte Zahl erreicht ist.
 
 Die Quantisierung jedes Bildes ergibt ein Set 
-$\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k\rbrace$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellten dabei für $r > 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
+$\mathbf{H} = \lbrace H_1, H_2,\ldots,H_k\rbrace$, wobei jedes Histogramm $H_i$ 255 Elemente hat. Zur Berechnung des korrespondierenden SCD $\hat{H_i}$ wird zunächst ein mittlerer Vektor $\bar H$ und die Kovarianzmatrix $\Sigma_h$ berechnet. Um eine lineare Dimensionsreduktion durchzuführen wird die Eigenvektormatrix $\mathbf {E}^r_h$ bestimmt, wobei $r$ die Zieldimension darstellt. Die Autoren stellen dabei für $r > 1$ keine signifikante Verbesserung der Klassifikationsergebnisse fest. Formel \ref{equ:khan_dimreduc} zeigt die Projektion eines Histograms $H_i$ in den $r$-dimensionalen Raum, welcher von den Eigenvektoren aufgespannt wird, die zu den $r$ größten Eigenwerten gehören.
 \begin{equation}\label{equ:khan_dimreduc}
 \hat{H_i} = \mathbf{E}^r_h\left(H_i - \bar{H}\right)
 \end{equation}
@@ -279,7 +279,7 @@ Eine Übersicht über den Klassifikationsvorgangs von \citeauthor{khan2014nonlinea
 \caption[Klassifikationsvorgang Khan]{Übersicht über den Klassifikationsansatz von \citeeig{khan2014nonlinear}.\label{fig:khan_classifier} }
 \end{figure}
 
-\citeeig{khan2014nonlinear} schlagen für die Anpassung der Histogramme B-Splines vor. Die Einsatzmöglichkeit dieses Konzeptes für eine Farbanpassung liegt in der Definition der Kontrollpunkte durch Merkmale des Histogramms. Dabei setzt sich eine solche Stützstelle aus einem Merkmal der Quelle, z.B. dem Mittelwert oder dem Maximum, und dem äquivalenten Merkmal der Referenz zusammen. \citeauthor{khan2014nonlinear} clustern das Bild zunächst in drei Bereiche: Gefärbt, Hintergrund und Sonstiges. Dabei nutzen sie die Ausgabe des Klassifikators, welcher in Abschnitt \ref{sec:khan} beschrieben wurde. Nachdem die Color Deconvolution durchgeführt wurde, wird für jeden Kanal separat die Anpassung mittels B-Spline festgelegt. Hierzu wird für jeden der drei segmentierten Bereiche ein Histogramm gebildet und das robuste Minimum und Maximum sowie der Mittelwert bestimmt (Abbildung \ref{fig:cd_histograms}). Für jeden Kanal gibt es demnach neun Merkmale, was wiederum zu neun Kontrollpunkten für den B-Spline führt. Optisch bzw. chemisch gesättigte Pixel sollen nicht verändert werden, weshalb zusätzliche Stützstellen entlang der Hauptachse eingeführt werden, damit die Sättigungsstellen interpoliert werden. Die Werte des Knotenvektors $\mathbf{T}$ werden mit Hilfe einer Thikonov regularization optimiert \cite{hansen1998rank}. Der beispielhafte Verlauf eines B-Splines für einen Kanal ist in Abbildung \ref{fig:cd_bspline} gezeigt. Eine Gesamtübersicht über den Farbnormalisierungsansatz von Khan gibt Abbildung \ref{fig:khan_normalisation}. Dabei ist auch ein Beispiel für die Wirkung der Methode zu sehen.
+\citeeig{khan2014nonlinear} schlagen für die Anpassung der Histogramme B-Splines vor. Die Einsatzmöglichkeit dieses Konzeptes für eine Farbanpassung liegt in der Definition der Kontrollpunkte durch Merkmale des Histogramms. Dabei setzt sich eine solche Stützstelle aus einem Merkmal der Quelle, z.B. dem Mittelwert oder dem Maximum, und dem äquivalenten Merkmal der Referenz zusammen. \citeauthor{khan2014nonlinear} clustern das Bild zunächst in drei Bereiche: Gefärbt, Hintergrund und Sonstiges. Dabei nutzen sie die Ausgabe des Klassifikators, welcher in Abschnitt \ref{sec:khan} beschrieben wurde. Nach Durchführung der Color Deconvolution, wird für jeden Kanal separat die Anpassung mittels B-Spline festgelegt. Hierzu wird für jeden der drei segmentierten Bereiche ein Histogramm gebildet und das robuste Minimum und Maximum sowie der Mittelwert bestimmt (Abbildung \ref{fig:cd_histograms}). Für jeden Kanal gibt es demnach neun Merkmale, was wiederum zu neun Kontrollpunkten für den B-Spline führt. Optisch bzw. chemisch gesättigte Pixel sollen nicht verändert werden, weshalb zusätzliche Stützstellen entlang der Hauptachse eingeführt werden, damit die Sättigungsstellen interpoliert werden. Die Werte des Knotenvektors $\mathbf{T}$ werden mit Hilfe einer Thikonov regularization optimiert \cite{hansen1998rank}. Der beispielhafte Verlauf eines B-Splines für einen Kanal ist in Abbildung \ref{fig:cd_bspline} gezeigt. Eine Gesamtübersicht über den Farbnormalisierungsansatz von Khan gibt Abbildung \ref{fig:khan_normalisation}. Dabei ist auch ein Beispiel für die Wirkung der Methode zu sehen.
 \begin{figure}[h]
 \center
 \includegraphics[width = 0.4\textwidth]
