@@ -202,16 +202,16 @@ Abgabe der Arbeit:\ \@edate
 \chapter*{Erkl\"arung}
 \bigskip
 
-Ich versichere, da\ss\ ich die Arbeit ohne fremde Hilfe und ohne Benutzung
-anderer als der angegebenen Quellen angefertigt habe und da\ss\ die Arbeit in
+Ich versichere, dass ich die Arbeit ohne fremde Hilfe und ohne Benutzung
+anderer als der angegebenen Quellen angefertigt habe und dass die Arbeit in
 gleicher oder \"ahnlicher Form noch keiner anderen Pr\"ufungsbeh\"orde
 vorgelegen hat und von dieser als Teil einer Pr\"ufungsleistung angenommen
 wurde. Alle Ausf\"uhrungen, die w\"ortlich oder sinngem\"a\ss\ \"ubernommen
 wurden, sind als solche gekennzeichnet.
 
 \bigskip
-Ich bin damit einverstanden, da\ss\ die Arbeit ver\"offentlicht wird und
-da\ss\ in wissenschaftlichen Ver\"offentlichungen auf sie Bezug genommen wird.
+Ich bin damit einverstanden, dass die Arbeit ver\"offentlicht wird und
+dass in wissenschaftlichen Ver\"offentlichungen auf sie Bezug genommen wird.
 
 \def\test{#1}
 \def\tmp{copyright}
