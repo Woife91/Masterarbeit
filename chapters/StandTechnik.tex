@@ -1,5 +1,5 @@
 \chapter[Stand der Technik]{Stand der Technik}\label{sec:stand_der_technik}
-Das grundsätzliche Ziel beim Einsatz von Algorithmen zur Farbnormalisierung ist, das Erreichen ähnlicher Pixelwerte für Objekte gleicher Farbe, dies sollte unabhängig von der Beleuchtung im Bild sein. Beim Anwendungsfeld der Mikroskopie kommen als Faktoren zusätzlich noch Probendicke und Farbstoffmenge hinzu. Im folgenden Kapitel soll ein Überblick über bestehende Verfahren gegeben werden, wobei der Schwerpunkt, die Normalisierung auf mikroskopischen Bildern, in Abschnitt \ref{sec:mikroskopie_normalisierung} behandelt wird. Zunächst soll jedoch auf Methoden eingegangen werden, welche zwar oft eingesetzt werden, im vorliegenden Fall aufgrund der speziellen Bildakquisition jedoch ungeeignet sind. 
+Das grundsätzliche Ziel beim Einsatz von Algorithmen zur Farbnormalisierung ist das Erreichen ähnlicher Pixelwerte für Objekte gleicher Farbe, dies sollte unabhängig von der Beleuchtung im Bild sein. Beim Anwendungsfeld der Mikroskopie kommen als Faktoren zusätzlich noch Probendicke und Farbstoffmenge hinzu. Im folgenden Kapitel soll ein Überblick über bestehende Verfahren gegeben werden, wobei der Schwerpunkt, die Normalisierung auf mikroskopischen Bildern, in Abschnitt \ref{sec:mikroskopie_normalisierung} behandelt wird. Zunächst soll jedoch auf Methoden eingegangen werden, welche zwar oft eingesetzt werden, im vorliegenden Fall aufgrund der speziellen Bildakquisition jedoch ungeeignet sind. 
 %\section[Allgemeine Farbnormalisierung]{Allgemeine Farbnormalisierung}%\label{sec:allgemeine_normalisierung}
 %\color{red}
 %Gray World Assumption, Farbkonstanz
@@ -89,11 +89,11 @@ Die Schwächen des Verfahrens, zeigen sich vor allem, wenn sich Eingangs- und Ref
 \quad
 \subfloat[Referenz]{\includegraphics[width = 0.25\textwidth]{pics/StandTechnik/rank_ref}}
 \subfloat[Ergebnis Rankingverfahren]{\includegraphics[width = 0.25\textwidth]{pics/StandTechnik/rank_norm}}
-\caption[Beispiel Auswirkung Farbranking]{Die Abbildung verdeutlicht die Schwächen des Farbrankingverfahrens. \textbf{(a)} zeigt das Originalbild, \textbf{(b)} die Referenz. Im Ergebnisbild \textbf{c} zeigen sich deutliche Artefakte im Hintergrund. Außerdem ist der Erythrozyt oben im Bild nach der Anpassung stark gefärbt.\label{fig:bsp_ranking}}
+\caption[Beispiel Auswirkung Farbranking]{Die Abbildung verdeutlicht die Schwächen des Farbrankingverfahrens. \textbf{(a)} zeigt das Originalbild, \textbf{(b)} die Referenz. Im Ergebnisbild \textbf{(c)} zeigen sich deutliche Artefakte im Hintergrund. Außerdem ist der Erythrozyt oben im Bild nach der Anpassung stark gefärbt.\label{fig:bsp_ranking}}
 \end{figure}
 
 \subsection[Anpassung nach Reinhard]{Anpassung nach Reinhard}\label{sec:reinhard}
-Ein andere Methode bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
+Ein andere Methode, bei der die Akquisition keine Rolle spielt, wird von \citeeig{reinhard2001color} vorgeschlagen. Ziel ist es, die Anpassung in möglichst schwach korrelierenden Kanälen durchzuführen. Ein Farbraum, der diese Eigenschaft für natürliche Bilder erfüllt ist der von \citeeig{ruderman1998statistics} vorgeschlagene $l\alpha\beta$-Raum. Die Umrechnung erfolgt dabei in mehreren Schritten. 
 \begin{itemize}
 \item{RGB $\rightarrow$ XYZ (Tristimulusraum): 
 \begin{equation}\label{equ:rgb_xyz}
@@ -151,7 +151,7 @@ log(L)\\log(M)\\log(S)
 \end{equation}
 \end{itemize}
 
-Die Umrechnung in Formel \ref{equ:lms_lab} basiert auf einer Hauptachsentransformation, welche von \citeauthor{ruderman1998statistics} auf einem Datensatz natürlicher Fotos durchgeführt wurde. Die Eigenvektoren der gemittelten Kovarianzmatrix finden sich in der Rotationsmatrix dieser Transformation. \citeeig{reinhard2001color} schlagen vor, die Histogramme der dekorrelierten Kanäle mittels Übertragung von Mittelwert und Standardabweichung einzeln anzupassen. Während dies beim Mittelwert über eine einfache Verschiebung des Histogramms möglich ist, wird für die Standardabweichung eine Stauchung bzw. Dehnung benötigt. Formel \ref{equ:mean_std} zeigt den allgemeinen Fall, wobei das Histogramm des Kanals $x$ einer Quelle $src$ dem äquivalenten Kanal der Referenz $ref$ nachempfunden werden soll. Das neue Histogramm wird als $neu$ bezeichnet. Außerdem gilt, dass $\sigma_x$ der Standardabweichung entspricht und $\bar{x}$ dem Mittelwert. 
+Die Umrechnung in Formel \ref{equ:lms_lab} basiert auf einer Hauptachsentransformation, welche von \citeauthor{ruderman1998statistics} auf einem Datensatz natürlicher Fotos durchgeführt wurde. Die Eigenvektoren der gemittelten Kovarianzmatrix finden sich in der Rotationsmatrix dieser Transformation. \citeauthor{reinhard2001color} schlagen vor, die Histogramme der dekorrelierten Kanäle mittels Übertragung von Mittelwert und Standardabweichung einzeln anzupassen. Während dies beim Mittelwert über eine einfache Verschiebung des Histogramms möglich ist, wird für die Standardabweichung eine Stauchung bzw. Dehnung benötigt. Formel \ref{equ:mean_std} zeigt den allgemeinen Fall, wobei das Histogramm des Kanals $x$ einer Quelle $src$ dem äquivalenten Kanal der Referenz $ref$ nachempfunden werden soll. Das neue Histogramm wird als $neu$ bezeichnet. Außerdem gilt, dass $\sigma_x$ der Standardabweichung entspricht und $\bar{x}$ dem Mittelwert. 
 \begin{align}\label{equ:mean_std}
 x^{\star} &= x_{src} - \bar{x}_{src}\nonumber\\
 \hat{x} &= \frac{\sigma_{x_{src}}}{\sigma_{x_{ref}}}x^{\star}\nonumber\\
@@ -209,7 +209,7 @@ Die Logik hinter diesem Vorgehen ist, dass durch die Wahl von Minimum und Maximu
 \quad
 \subfloat[Kanal 2]{
 \includegraphics[width = 0.35\textwidth]{pics/StandTechnik/macenko3}}
-\caption[Color Deconvolution nach Macenko]{\textbf{(a)} originales Bild, \textbf{(b)} dritter Kanal, nur geringe Information. \textbf{(c)} und \textbf{(d)} Bild aufgeteilt nach den beiden Grundfarbstoffen.\label{fig:cd_macenko} }
+\caption[Color Deconvolution nach Macenko]{\textbf{(a)} originales Bild, \textbf{(b)} dritter Kanal, der aufgrund der sehr guten Aufteilung der Informationen über die Grundfarbstoffe in \textbf{(c)} und \textbf{(d)} leer erscheint.\label{fig:cd_macenko} }
 \end{figure}
 
 \citeauthor{macenko2009method} liefern auch einen Ansatz für die Normalisierung. Hierbei wird für jeden vorkommenden Farbstoff ein Histogramm berechnet, welches jedoch nur jene Pixel berücksichtigt, die überwiegend den entsprechenden Farbstoff beinhalten.
@@ -265,8 +265,8 @@ Die berechnete Wahrscheinlichkeit wird für zwei verschiedene Zwecke genutzt:
 \item{Berechnung der normalisierten Stainvektoren für jede Klasse $s_n$.}
 \item{Zuordnung zu einer Klasse $\theta(c) \in \lbrace \text{GEFÄRBT, HINTERGRUND, SONSTIGES}\rbrace$ mit Hilfe der folgenden Regel \ref{equ:thres_rule}:
 \begin{align}\label{equ:thres_rule}
-&if \quad P(bgd\mid\mathcal{F} > T_{bgd}:\quad &&\zeta(c)= \text{HINTERGRUND}\nonumber \\
-&elseif \quad P(s_n\mid\mathcal{F} > T_{fgd}:\quad &&\zeta(c)= \text{GEFÄRBT}\\
+&if \quad P(bgd\mid\mathcal{F}) > T_{bgd}:\quad &&\zeta(c)= \text{HINTERGRUND}\nonumber \\
+&elseif \quad P(s_n\mid\mathcal{F}) > T_{fgd}:\quad &&\zeta(c)= \text{GEFÄRBT}\\
 &else \quad \quad &&\zeta(c) = \text{SONSTIGES}\nonumber
 \end{align}}
 $T_{bgd}$ und $T_{fgd}$ sind dabei Grenzwerte für die jeweiligen Entscheidungen. \citeauthor{khan2014nonlinear} geben beide mit $0.75$ an und stellen fest, dass die Wahrscheinlichkeiten in den meisten Fällen entweder nahe $0$ bzw. $1$ liegen, weshalb die Grenzwerte sehr stabil sind.
@@ -274,7 +274,7 @@ $T_{bgd}$ und $T_{fgd}$ sind dabei Grenzwerte für die jeweiligen Entscheidungen.
 Eine Übersicht über den Klassifikationsvorgangs von \citeauthor{khan2014nonlinear} gibt Abbildung \ref{fig:khan_classifier}.
 \begin{figure}[h]
 \center
-\includegraphics[width = 0.9\textwidth]
+\includegraphics[width = 0.8\textwidth]
 {pics/StandTechnik/khan_classifier}
 \caption[Klassifikationsvorgang Khan]{Übersicht über den Klassifikationsansatz von \citeeig{khan2014nonlinear}.\label{fig:khan_classifier} }
 \end{figure}

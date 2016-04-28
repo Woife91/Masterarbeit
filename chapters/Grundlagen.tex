@@ -20,7 +20,7 @@ Das Knochenmark ist im menschlichen Körper ab dem 4.-5. Schwangerschaftsmonat zu
 \begin{figure}
 \center
 \includegraphics[width = 0.9\textwidth]{pics/Grundlagen/haematopoese}
-\caption[Schema Hämatopoese]{Die Abbildung zeigt die Entwicklung einer Stammzelle über Zwischenstadien zur reifen Zelle\cite{url_haematopoese}\label{fig:haematopoese}}
+\caption[Schema Hämatopoese]{Die Abbildung zeigt die Entwicklung einer Stammzelle über Zwischenstadien zur reifen Zelle \cite{url_haematopoese}\label{fig:haematopoese}}
 \end{figure}  
 
 Die Gründe für eine zytologische Untersuchung des Knochenmarks sind vielfältig und reichen von außerhalb der Norm liegenden Differentialblutausstrichen bis zum Verdacht auf \leukaemie. Beim konventionellen Vorgehen wird zunächst mit einer Punktionsnadel eine geringe Menge an Knochenmark entnommen. Für die weitere Bearbeitung wird die Probe mit einer gerinnungshemmenden Lösung vermischt und auf einem Objektträger ausgestrichen. Im Anschluss muss die Schicht eine Stunde trocknen und wird dann gemäß dem Verfahren nach Pappenheim gefärbt, welches eine Kombination aus den zwei verschiedenen Methoden May-Grünwald und Giemsa darstellt. Bei May-Grünwald kommt eine Eosin-Methylenblau-Lösung zum Einsatz, bei Giemsa dagegen Azur-Eosin-Methylenblau-Lösung, wobei Azur-Eosin eine Abwandlung zu Eosin darstellt. Diese Aufgabe übernimmt ein Automat, der hierfür ca. 45 Minuten benötigt. Das Methylenblau ist positiv geladen und färbt somit negativ geladene Zellbestandteile. Gelöstes Eosin verfügt über eine negative Ladung, wodurch vor allem positive Proteinstrukturen der Zelle gefärbt werden. Als Stabilisator dient indes Glycerin und als Fixiermittel wird Methanol verwendet \cite{fuchs2011manual}. Wie verschiedene Zellarten/Zellbestandteile bei einer korrekt durchgeführten Färbung aussehen ist in Abbildung \ref{fig:pappenheim} gezeigt. Die Pappenheimfärbung ist eine panoptische (alles zeigende) Färbung, welche Zytoplasma, Granula und Zellkern unterschiedlich gefärbt und detailliert darstellt \cite{binder2012pappenheim}. 
@@ -51,7 +51,7 @@ N^0_i(u) & :=
 N_i^k(u) & := \frac{u-t_i}{t_{i+k}}N^{k-1}_i(u)+\frac{t_{i+k+1}-u}{t_{i+k+1}-t_{i+1}}N^{k-1}_{i+1}(u), k =1,\ldots, n \nonumber
 \end{align}
 
-Die Berechnung eines B-Splines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline}\cite{gm2014}.
+Die Berechnung eines B-Splines $F$ mit Grad $n$, Kontrollpunkten $\mathbf{D} = \lbrace \mathbf{d}_0, \ldots \mathbf{d}_{m-1}\rbrace$ und einem Knotenvektor $\mathbf{T}$ erfolgt nach Formel \ref{equ:bspline} \cite{gm2014}.
 \begin{equation}\label{equ:bspline}
 F(u) := \sum^{m-1}_{i=0} N^n_i(u)\mathbf{d}_i 
 \end{equation}
@@ -82,14 +82,14 @@ Abbildung \ref{fig:bsplines_example} zeigt den Verlauf von vier B-Splines. Die K
 \includegraphics[width=0.49\textwidth]
 {pics/Grundlagen/bspline_endpoint_deg4}\label{fig:bspline_inter_4}}
 \quad
-\caption[Beispiele B-Splines]{Unterschiedliche B-Splines, abhängig von Grad und Verteilung auf Knotenvektor. Die Farbe des B-Spline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor \cite{gm2014}. \label{fig:bsplines_example}}
+\caption[Beispiele B-Splines]{Unterschiedliche B-Splines, abhängig von Grad und Verteilung auf dem Knotenvektor. Die Farbe des B-Spline Teilstücks verweist auf das entsprechende Teilintervall auf dem Knotenvektor \cite{gm2014}. \label{fig:bsplines_example}}
 \end{figure}
 
 \section{Color Deconvolution}\label{sec:color_deconvolution}
 
 Die sogenannte Color Deconvolution ist eine für die Pathologie bzw. Hämotologie spezifische \Farbraumtransformation, da hier Farbstoffe mit definiertem Absorptionsverhalten zum Einsatz kommen. Das Ziel ist es, das Bild durch eben diese Färbemittel auszudrücken. \citeeig{ruifrok2001quantification} schlagen dieses Verfahren vor, mit dem Ziel genauere Aussagen über die Färbung machen zu können. Die maximale Anzahl verschiedener Farbstoffe ist dabei drei, da die Zahl der Kanäle gegenüber dem Ausgangsfarbraum nicht erhöht werden darf. 
 
-Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz (siehe Formel \ref{equ:lambert_beer}), wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also rot, grün oder blau. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
+Die Absorption von Licht durch das chemische Mittel folgt dem Lambert-Beerschen-Gesetz (siehe Formel \ref{equ:lambert_beer}), wobei $I_k$ als die Lichtintensität nach Passieren der Probe und $I_{0,k}$ vor der Probe festgelegt ist. Der Index $k$ steht für den detektierenden Kanal, also Rot, Grün oder Blau. $A$ entspricht der Menge an Färbemittel und  $c_k$ dem Absorptionsfaktor. 
 
 \begin{equation}\label{equ:lambert_beer}
 I_k = I_{0,k}e^{-Ac_k}
